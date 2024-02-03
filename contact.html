@@ -2,14 +2,14 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Arcadia, votre univers préhistorique</title>
+        <title>Arcadia, nous contacter</title>
         <meta name="description" content="Arcadia, votre univers préhistorique vous acceuil du lundi au vendredi, venez découvrir en famille nos créatures !">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <header>
             <a class="login" href="connexion.html">Connexion</a>
-            <h1 class="title">Arcadia</h1>
+            <h1 class="title">Nous contacter</h1>
             <!--  <img src="img/banner.jpg" alt="Banniere Arcadia" width="1920" height="550"> -->
             <nav class="navbar">
                 <ul>
@@ -28,15 +28,25 @@
                 </ul>
             </nav>
         </header>
-        <p class="left-box">
-            <img src="img/presentation.jpg" alt="Image de présentation du zoo" width="400" height="300">
-            Fondé en 1995 par l'explorateur passionné de la nature, José Rodriguez, Arcadia offre une immersion unique dans trois habitats distincts : le marais, la savane et la jungle. </br></br>Depuis son ouverture, ce zoo familial s'engage à sensibiliser à la conservation tout en offrant des expériences captivantes. Aujourd'hui dirigé par la fille de José, Josette Rodriguez, Arcadia continue de perpétuer la vision originale, invitant les visiteurs à découvrir la magie de la vie sauvage.
-        </p>
-        <p class="right-box">
-            <img src="img/ecologie.jpg" alt="Illustration système autonomie énergétique" width="400" height="300">
-            Arcadia est bien plus qu'un zoo, c'est un havre écologique. Engagé envers la préservation de la biodiversité, le parc met en avant des habitats soigneusement conçus pour reproduire les écosystèmes naturels. Sa particularité réside dans son engagement envers l'écologie, avec des initiatives innovantes. Arcadia s'autoalimente en énergie grâce à des sources durables, témoignant ainsi de son engagement envers un avenir respectueux de l'environnement. En visitant Arcadia, vous participez à une expérience où la préservation de la nature va de pair avec le plaisir de la découverte.
-        </p>
-        <hr>
+        <div class="form">
+            <form action="index.html">
+                <div>
+                    <label for="email">eMail</label>
+                    <input type="email" required id="email" name="email" placeholder="hervedupont@gmail.fr">
+                </div>
+                <div>
+                    <label for="title">Titre</label>
+                    <input type="text" required id="title" name="title" placeholder="Merci de donner un titre a votre message">
+                </div>
+                <div>
+                    <label for="message">Description</label>
+                    <textarea required id="message" name="message" placeholder="Ce zoo est fantastique !" style="height:200px"></textarea>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Envoyer">
+                </div>
+            </form>
+        </div>
         <footer>
             <p>© 2024 Arcadia, tous droits réservés</p>
             <div class="horaires">
