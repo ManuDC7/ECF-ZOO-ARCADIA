@@ -15,7 +15,7 @@ header {
     to bottom,
     #0002,
     #0008
-  ), url("img/banner.jpg");
+), url("img/banner.jpg");
     height: auto;
     color: #FFF;
 }
@@ -171,4 +171,118 @@ input[type=submit]:hover {
     background-color: #f2f2f2;
     padding: 20px;
     margin: 100px 40px;
+}
+
+/* HABITATS */
+
+.horizontal-section {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.horizontal-box1 {
+    background-image: linear-gradient(
+    to bottom,
+    #0002,
+    #0008
+), url("img/habitats/swamp.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box1:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/swamp.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box2 {
+    background-image: linear-gradient(
+        to bottom,
+        #0002,
+        #0008
+    ), url("img/habitats/savannah.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box2:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/savannah.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box3 {
+    background-image: linear-gradient(
+    to bottom,
+    #0002,
+    #0008
+), url("img/habitats/jungle.jpg");
+    background-size: cover; 
+    margin: 40px 0 100px;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box3:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/jungle.jpg");
+    background-size: cover; 
+    margin: 40px 0 100px;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-section a {
+    padding: 0 30px;
+    color: #FFF;
+    text-decoration: none;
+    font-size: 64px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 12px;
+    font-weight: bold;
+}
+
+.horizontal-section p {
+    color: #FFF;
+    font-size: 12px;
 }
