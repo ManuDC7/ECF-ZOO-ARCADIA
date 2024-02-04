@@ -213,18 +213,6 @@ input[type=submit]:hover {
     font-size: 12px;
 }
 
-.box {
-    width: 200px;
-    height: 200px;
-    border: 1px solid black;
-    padding: 10px;
-    margin: 100px 50px;
-    border-radius: 4px;
-    display: inline-block;
-    align-items: center;
-    justify-content: center;
-}
-
 /* SERVICES */
 
 .container-services {
@@ -279,4 +267,35 @@ input[type=submit]:hover {
 
 .Back:hover, .forward:hover {
     background-color: rgba(0,0,0,0.8);
+}
+
+/* ANIMALS */
+
+.annonce {
+    display: block;
+    margin: 80px !important;
+    border: 1px solid black;
+    padding: 10px !important;
+}
+
+.animals p {
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.animals img {
+    border-radius: 8px;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 100px 50px;
+    border-radius: 4px;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
 }
