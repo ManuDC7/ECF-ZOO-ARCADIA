@@ -15,7 +15,7 @@ header {
     to bottom,
     #0002,
     #0008
-  ), url("img/banner.jpg");
+), url("img/banner.jpg");
     height: auto;
     color: #FFF;
 }
@@ -171,11 +171,9 @@ input[type=submit]:hover {
     background-color: #f2f2f2;
     padding: 20px;
     margin: 100px 40px;
-<<<<<<< Updated upstream
-=======
 }
 
-/* HABITATS */
+/* HOUSING */
 
 .horizontal-section {
     display: grid;
@@ -188,7 +186,7 @@ input[type=submit]:hover {
     to bottom,
     #0002,
     #0008
-), url("img/habitats/swamp.jpg");
+), url("img/housing/swamp.jpg");
     background-size: cover;   
     margin: 40px 0;
     border-radius: 12px;
@@ -203,7 +201,7 @@ input[type=submit]:hover {
     to bottom,
     #0008,
     #0002
-), url("img/habitats/swamp.jpg");
+), url("img/housing/swamp.jpg");
     background-size: cover;   
     margin: 40px 0;
     border-radius: 12px;
@@ -218,7 +216,7 @@ input[type=submit]:hover {
         to bottom,
         #0002,
         #0008
-    ), url("img/habitats/savannah.jpg");
+    ), url("img/housing/savannah.jpg");
     background-size: cover;   
     margin: 40px 0;
     border-radius: 12px;
@@ -233,7 +231,7 @@ input[type=submit]:hover {
     to bottom,
     #0008,
     #0002
-), url("img/habitats/savannah.jpg");
+), url("img/housing/savannah.jpg");
     background-size: cover;   
     margin: 40px 0;
     border-radius: 12px;
@@ -248,7 +246,7 @@ input[type=submit]:hover {
     to bottom,
     #0002,
     #0008
-), url("img/habitats/jungle.jpg");
+), url("img/housing/jungle.jpg");
     background-size: cover; 
     margin: 40px 0 100px;
     border-radius: 12px;
@@ -263,7 +261,7 @@ input[type=submit]:hover {
     to bottom,
     #0008,
     #0002
-), url("img/habitats/jungle.jpg");
+), url("img/housing/jungle.jpg");
     background-size: cover; 
     margin: 40px 0 100px;
     border-radius: 12px;
@@ -324,5 +322,4 @@ input[type=submit]:hover {
 .service h3 {
     text-transform: uppercase;
     text-align: center;
->>>>>>> Stashed changes
 }
