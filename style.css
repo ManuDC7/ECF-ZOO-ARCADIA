@@ -181,89 +181,9 @@ input[type=submit]:hover {
     align-items: center;
 }
 
-.horizontal-box1 {
-    background-image: linear-gradient(
-    to bottom,
-    #0002,
-    #0008
-), url("img/housing/swamp.jpg");
+.horizontal-box {
     background-size: cover;   
     margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box1:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/housing/swamp.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box2 {
-    background-image: linear-gradient(
-        to bottom,
-        #0002,
-        #0008
-    ), url("img/housing/savannah.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box2:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/housing/savannah.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box3 {
-    background-image: linear-gradient(
-    to bottom,
-    #0002,
-    #0008
-), url("img/housing/jungle.jpg");
-    background-size: cover; 
-    margin: 40px 0 100px;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box3:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/housing/jungle.jpg");
-    background-size: cover; 
-    margin: 40px 0 100px;
     border-radius: 12px;
     color: #FFF;
     text-decoration: none;
@@ -285,6 +205,18 @@ input[type=submit]:hover {
 .horizontal-section p {
     color: #FFF;
     font-size: 12px;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+    padding: 10px;
+    margin: 100px 50px;
+    border-radius: 4px;
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
 }
 
 /* SERVICES */
