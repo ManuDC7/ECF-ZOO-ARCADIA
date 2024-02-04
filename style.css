@@ -171,4 +171,158 @@ input[type=submit]:hover {
     background-color: #f2f2f2;
     padding: 20px;
     margin: 100px 40px;
+<<<<<<< Updated upstream
+=======
+}
+
+/* HABITATS */
+
+.horizontal-section {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.horizontal-box1 {
+    background-image: linear-gradient(
+    to bottom,
+    #0002,
+    #0008
+), url("img/habitats/swamp.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box1:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/swamp.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box2 {
+    background-image: linear-gradient(
+        to bottom,
+        #0002,
+        #0008
+    ), url("img/habitats/savannah.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box2:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/savannah.jpg");
+    background-size: cover;   
+    margin: 40px 0;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box3 {
+    background-image: linear-gradient(
+    to bottom,
+    #0002,
+    #0008
+), url("img/habitats/jungle.jpg");
+    background-size: cover; 
+    margin: 40px 0 100px;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-box3:hover {
+    background-image: linear-gradient(
+    to bottom,
+    #0008,
+    #0002
+), url("img/habitats/jungle.jpg");
+    background-size: cover; 
+    margin: 40px 0 100px;
+    border-radius: 12px;
+    color: #FFF;
+    text-decoration: none;
+    padding: 30px 190px;
+    text-align: center;
+}
+
+.horizontal-section a {
+    padding: 0 30px;
+    color: #FFF;
+    text-decoration: none;
+    font-size: 64px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 12px;
+    font-weight: bold;
+}
+
+.horizontal-section p {
+    color: #FFF;
+    font-size: 12px;
+}
+
+/* SERVICES */
+
+.container-services {
+    display: flex;
+    align-items: center; 
+    margin: 100px 40px;
+}
+
+.service {
+    background-color: rgba(000, 000, 000, 0.6);;
+    width: 25%;
+    padding: 10px;
+    margin: 40px;
+    margin-top: 60px;
+    border-radius: 12px;
+    color: #FFF;
+}
+
+.service:hover {
+    background-color: rgba(000, 000, 000, 0.2);
+    width: 25%;
+    padding: 10px;
+    margin: 40px;
+    margin-top: 60px;
+    border-radius: 12px;
+    color: #000;
+}
+
+.service img {
+    border-radius: 4%;
+}
+
+.service h3 {
+    text-transform: uppercase;
+    text-align: center;
+>>>>>>> Stashed changes
 }
