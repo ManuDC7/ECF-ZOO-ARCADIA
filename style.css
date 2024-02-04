@@ -164,13 +164,17 @@ input[type=submit] {
 
 input[type=submit]:hover {
     background-color: rgba(000, 000, 000, 0.2);
+    color: #000;
 }
 
 .form {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
-    margin: 100px 40px;
+    margin: 100px 540px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
 }
 
 /* HOUSING */
@@ -230,26 +234,18 @@ input[type=submit]:hover {
 
 .service {
     background-color: rgba(000, 000, 000, 0.6);;
-    width: 25%;
+    width: 60%;
     padding: 10px;
     margin: 40px;
     margin-top: 60px;
     border-radius: 12px;
     color: #FFF;
-}
-
-.service:hover {
-    background-color: rgba(000, 000, 000, 0.2);
-    width: 25%;
-    padding: 10px;
-    margin: 40px;
-    margin-top: 60px;
-    border-radius: 12px;
-    color: #000;
+    display: none;
 }
 
 .service img {
     border-radius: 4%;
+    padding: 0 9px 0 4px;
 }
 
 .service h3 {
@@ -257,97 +253,28 @@ input[type=submit]:hover {
     text-align: center;
 }
 
-/* CAROUSEL */
-.slideshow-container {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
-}
-
-  /* Make the images invisible by default */
-.service {
-    display: none;
-}
-
-  /* forward & Back buttons */
 .Back, .forward {
     cursor: pointer;
     position: absolute;
-    top: 48%;
+    top: 107%;
+    right: 450px;
     width: auto;
     margin-top: -23px;
+    margin-right: 475px;
     padding: 17px;
-    color: grey;
+    color: #FFF;
     font-weight: bold;
     font-size: 19px;
     transition: 0.4s ease;
-    border-radius: 0 5px 5px 0;
+    border-radius: 5px 0 0 5px;
     user-select: none;
 }
 
-  /* Place the "forward button" to the right */
 .forward {
     right: 0;
-    border-radius: 4px 0 0 4px;
+    border-radius: 0 5px 5px 0;
 }
 
-  /*when the user hovers,add a black background with some little opacity */
 .Back:hover, .forward:hover {
     background-color: rgba(0,0,0,0.8);
-}
-
-  /* Caption Info */
-.info {
-    color: #e3e3e3;
-    font-size: 16px;
-    padding: 10px 14px;
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-}
-
-  /* Content */
-.info {
-    color: #f2f2f3;
-    font-size: 14px;
-    padding: 10px 14px;
-    position: absolute;
-    top: 0;
-}
-
-  /* The circles or bullets indicators */
-.dots {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    margin: 0 3px 20px 3px;
-    background: linear-gradient(92.18deg, #a049e9 -25.78%, #6643db 123.02%);
-    opacity: 0.3;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.5s ease;
-}
-
-.enable, .dots:hover {
-    background: linear-gradient(92.18deg, #a049e9 -25.78%, #6643db 123.02%);
-    opacity: 1;
-}
-
-  /* Faint animation */
-.fade {
-    -webkit-animation-name: fade;
-    -webkit-animation-duration: 1.4s;
-    animation-name: fade;
-    animation-duration: 1.4s;
-}
-
-@-webkit-keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
-}
-
-@keyframes fade {
-    from {opacity: .5}
-    to {opacity: 2}
 }
