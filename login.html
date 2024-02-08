@@ -37,10 +37,19 @@
                     <label for="pass">Mot de passe</label>
                     <input type="password" required id="pass" name="password" minlength="8">
                 </div>
+                <div>
+                    <label for="role">Rôle</label>
+                    <select id="role" name="role">
+                        <option value="admin">Administrateur</option>
+                        <option value="employee">Employé</option>
+                        <option value="veterinarian">Vétérinaire</option>
+                        <option value="visitor">Visiteur</option>
+                    </select>
+                </div>
                 <div class="button">
                     <input type="submit" value="Connexion">
                 </div>
-            </form>
+            </form>            
         </div>
         <footer>
             <p>© 2024 Arcadia, tous droits réservés</p>
