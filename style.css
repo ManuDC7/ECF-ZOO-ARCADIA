@@ -345,3 +345,209 @@ blockquote ::after {
     align-items: center;
     justify-content: center;
 }
+
+/* RESPONSIVE */
+
+@media only screen and (max-width: 1370px) {
+    .form {
+        margin: 100px 440px;
+    }
+    .service img {
+        transform: scale(0.96, 1) translate(-25px, 0%) !important;
+    }
+    .Back {
+        right: 330px;
+    }
+    .forward {
+        right: 40px;
+    }
+}
+@media only screen and (max-width: 1190px) {
+    blockquote {
+        padding: 40px 20px;
+        margin: 40px 20px;
+    }
+    blockquote ::before {
+        position: absolute;
+        top: 35px;
+        left: -20px;
+    }
+    blockquote ::after {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
+    .form {
+        margin: 100px 340px;
+    }
+    .service img {
+        transform: scale(0.83, 1) translate(-92px, 0%) !important;
+    }
+    .Back {
+        right: 230px;
+    }
+    .forward {
+        right: -35px;
+    }
+}
+@media only screen and (max-width: 1100px) {
+    .left-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 90%;
+        padding: 10px;
+        margin-right: 0px;
+        margin: 30px;
+    }
+    .left-box img {
+        transform: scale(0.9, 0.9);
+        margin-top: 20px; 
+        margin-right: 0px;
+    }
+    .right-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        padding: 10px;
+        margin: 40px;
+    }
+    .right-box img {
+        transform: scale(0.9, 0.9);
+        margin-top: 20px; 
+        margin-left: 0px;
+    }
+    blockquote {
+        padding: 40px 20px;
+        margin: 40px 20px;
+    }
+    blockquote ::before {
+        position: absolute;
+        top: 35px;
+        left: -20px;
+    }
+    blockquote ::after {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
+    .form {
+        margin: 100px 340px;
+    }
+    .service img {
+        transform: scale(0.75, 1) translate(-140px, 0%) !important;
+    }
+    .Back {
+        right: 185px;
+    }
+    .forward {
+        right: -80px;
+    }
+}
+@media only screen and (max-width: 965px) {
+    blockquote {
+        padding: 40px 20px;
+        margin: 40px 20px;
+    }
+    blockquote ::before {
+        position: absolute;
+        top: 35px;
+        left: -20px;
+    }
+    blockquote ::after {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
+    .form {
+        margin: 100px 300px;
+    }
+    .service img {
+        transform: scale(0.65, 1) translate(-220px, 0%) !important;
+    }
+    .Back {
+        right: 120px;
+    }
+    .forward {
+        right: -150px;
+    }
+}
+@media only screen and (max-width: 860px) {
+    header {
+        background-position: -150% 10%;;
+    }
+    .form {
+        margin: 100px 260px;
+    }
+    .service img {
+        transform: scale(0.58, 1) translate(-305px, 0%) !important;
+    }
+    .Back {
+        right: 70px;
+    }
+    .forward {
+        right: -210px;
+    }
+}
+@media only screen and (max-width: 740px) {
+    header {
+        background-position: -100% 10%;;
+    }
+    blockquote {
+        padding: 40px 20px;
+        margin: 40px 20px;
+    }
+    blockquote ::before {
+        position: absolute;
+        top: 35px;
+        left: -20px;
+    }
+    blockquote ::after {
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+    }
+    .form {
+        margin: 100px 40px;
+    }
+    
+    footer {
+        text-align: justify;
+    }
+    footer p {
+        margin-left: 40px;
+    }
+    .service img {
+        transform: scale(0.50, 1) translate(-425px, 0%) !important;
+    }
+    .Back {
+        right: 20px;
+    }
+    .forward {
+        right: -280px;
+    }
+    .box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        padding: 10px;
+        margin: 40px;
+        border: none;
+    }
+}
+@media only screen and (max-width: 574px) {
+    .service img {
+        transform: scale(0.38, 1) translate(-690px, 0%) !important;
+    }
+    .Back {
+        right: -80px;
+    }
+    .forward {
+        right: -340px;
+    }
+}
