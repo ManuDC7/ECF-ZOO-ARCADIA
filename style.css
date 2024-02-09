@@ -223,6 +223,40 @@ blockquote ::after {
     color: #999;
 }
 
+.form p {
+    font-weight: bold;
+    text-align: center;
+}
+
+blockquote {
+    padding: 40px 290px;
+    margin: 40px 120px;
+    position: relative;
+    text-align: center;
+}
+
+blockquote cite {
+    float: right;
+} 
+
+blockquote ::before {
+    position: absolute;
+    top: 25px;
+    left: 250px;
+    content: '\00301D';
+    font-size: 40px;
+    color: #999;
+}
+
+blockquote ::after {
+    position: absolute;
+    bottom: 25px;
+    right: 250px;
+    content: '\00301E';
+    font-size: 40px;
+    color: #999;
+}
+
 /* HOUSING */
 
 .horizontal-section {
@@ -301,6 +335,9 @@ blockquote ::after {
     font-size: 19px;
     transition: 0.4s ease;
     border-radius: 5px 0 0 5px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
     -webkit-user-select: none;
        -moz-user-select: none;
             user-select: none;
