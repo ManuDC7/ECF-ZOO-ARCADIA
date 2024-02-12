@@ -4,9 +4,11 @@ html, body {
 
 body {
     margin: 0;
+    padding: 0;
     line-height: 1.4;
     letter-spacing: 0.2;
     font-family: "Source Sans Pro", sans-serif;
+    height: 100vh;
 }
 
 header {
@@ -16,7 +18,6 @@ header {
     #0002,
     #0008
 ), url("img/banner.jpg");
-    height: auto;
     color: #FFF;
 }
 
@@ -108,6 +109,7 @@ footer {
     background-color: lightgrey;
     text-align: center;
     padding-top: 10px;
+    margin-top: auto;
 }
 
 footer ul {
@@ -386,20 +388,30 @@ blockquote ::after {
 /* RESPONSIVE */
 
 @media only screen and (max-width: 1370px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     .form {
         margin: 100px 440px;
     }
     .service img {
-        transform: scale(0.96, 1) translate(-25px, 0%) !important;
+        transform: scale(0.90, 1) translate(-55px, 0%) !important;
     }
     .Back {
-        right: 330px;
+        top: 775px;
+        right: 280px;
     }
     .forward {
-        right: 40px;
+        top: 775px;
+        right: 10px;
     }
 }
 @media only screen and (max-width: 1190px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     blockquote {
         padding: 40px 20px;
         margin: 40px 20px;
@@ -428,6 +440,10 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 1100px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     .left-box {
         display: flex;
         flex-direction: column;
@@ -475,16 +491,22 @@ blockquote ::after {
         margin: 100px 340px;
     }
     .service img {
-        transform: scale(0.75, 1) translate(-140px, 0%) !important;
+        transform: scale(0.70, 1) translate(-180px, 0%) !important;
     }
     .Back {
-        right: 185px;
+        top: 775px;
+        right: 145px;
     }
     .forward {
-        right: -80px;
+        top: 775px;
+        right: -120px;
     }
 }
 @media only screen and (max-width: 965px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     blockquote {
         padding: 40px 20px;
         margin: 40px 20px;
@@ -513,6 +535,10 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 860px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     header {
         background-position: -150% 10%;;
     }
@@ -520,18 +546,25 @@ blockquote ::after {
         margin: 100px 260px;
     }
     .service img {
-        transform: scale(0.58, 1) translate(-305px, 0%) !important;
+        transform: scale(0.55, 1) translate(-341px, 0%) !important;
     }
     .Back {
-        right: 70px;
+        right: 40px;
     }
     .forward {
         right: -210px;
     }
 }
 @media only screen and (max-width: 740px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     header {
         background-position: -100% 10%;;
+    }
+    .navbar ul li {
+        padding: 10px 20px;
     }
     blockquote {
         padding: 40px 20px;
@@ -548,23 +581,27 @@ blockquote ::after {
         right: 10px;
     }
     .form {
-        margin: 100px 40px;
+        margin: 100px 180px;
     }
     
     footer {
-        text-align: justify;
+        display: flex;
+        flex-direction: column;
     }
-    footer p {
-        margin-left: 40px;
+    footer ul {
+        text-align: center;
+        margin: 0;
     }
     .service img {
-        transform: scale(0.50, 1) translate(-425px, 0%) !important;
+        transform: scale(0.40, 1) translate(-600px, 0%) !important;
     }
     .Back {
-        right: 20px;
+        top: 775px;
+        right: -70px;
     }
     .forward {
-        right: -280px;
+        top: 775px;
+        right: -300px;
     }
     .box {
         display: flex;
@@ -578,6 +615,10 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 574px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
     .service img {
         transform: scale(0.38, 1) translate(-690px, 0%) !important;
     }
@@ -586,5 +627,9 @@ blockquote ::after {
     }
     .forward {
         right: -340px;
+    }
+    footer ul {
+        text-align: center;
+        margin: 0;
     }
 }
