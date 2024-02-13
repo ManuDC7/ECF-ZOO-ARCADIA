@@ -614,19 +614,19 @@ blockquote ::after {
         border: none;
     }
 }
-@media only screen and (max-width: 574px) {
+@media only screen and (max-width: 650px) {
     body {
         height: 100vh;
         width: 100%
     }
     .service img {
-        transform: scale(0.38, 1) translate(-690px, 0%) !important;
+        transform: scale(0.38, 1) translate(-650px, 0%) !important;
     }
     .Back {
-        right: -80px;
+        right: -60px;
     }
     .forward {
-        right: -340px;
+        right: -300px;
     }
     footer ul {
         text-align: center;
