@@ -1,3 +1,22 @@
+<?php
+
+try {
+    // Connexion à la base de données SQLite
+    $bdd = new PDO('sqlite:db.sqlite');
+    // Activation du mode d'erreur PDO pour afficher les erreurs
+    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+     // Requête SQL pour récupérer les commentaires
+    $com = "SELECT * FROM commentaires;";
+    $resultCom = $bdd->query($com);
+    // Requête SQL pour récupérer les horaires
+    $sql = "SELECT * FROM horaires;";
+    $result = $bdd->query($sql);
+} catch (PDOException $e) {
+    // En cas d'erreur, affiche le message d'erreur
+    echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
+}
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,21 +28,21 @@
     </head>
     <body>
         <header>
-            <a class="login" href="login.html">Connexion</a>
+            <a class="login" href="login.php">Connexion</a>
             <h1 class="title">Arcadia</h1>
             <nav class="navbar">
                 <ul>
                     <li>
-                        <a href="index.html">Accueil</a>
+                        <a href="index.php">Accueil</a>
                     </li>
                     <li>
-                        <a href="services.html">Services</a>
+                        <a href="services.php">Services</a>
                     </li>
                     <li>
-                        <a href="housing.html">Habitats</a>
+                        <a href="housing.php">Habitats</a>
                     </li>
                     <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="contact.php">Contact</a>
                     </li>
                 </ul>
             </nav>
@@ -37,12 +56,29 @@
             Arcadia est bien plus qu'un zoo, c'est un havre écologique. Engagé envers la préservation de la biodiversité, le parc met en avant des habitats soigneusement conçus pour reproduire les écosystèmes naturels. Sa particularité réside dans son engagement envers l'écologie, avec des initiatives innovantes. Arcadia s'autoalimente en énergie grâce à des sources durables, témoignant ainsi de son engagement envers un avenir respectueux de l'environnement. En visitant Arcadia, vous participez à une expérience où la préservation de la nature va de pair avec le plaisir de la découverte.
         </p>
         <hr>
-        <blockquote>
-            <p>Zoo au top du top ! super après midi passé en famille, nous   1         
-                avons bien manger et le guide est super ! </br>
-                <cite>Antoine D.</cite>
-            </p>
-        </blockquote>
+        <?php
+            // Affichage des commentaires
+            $rowCom = $resultCom->fetch(PDO::FETCH_ASSOC);
+            if ($rowCom) {
+                do {
+                    $comText = $rowCom["message"];
+                    $comAutor = $rowCom["pseudo"];
+                    $comValid = $rowCom["validation"];
+                    if ($comValid == 1) {
+                        ?>
+                        <blockquote>
+                            <p><?php echo $comText; ?> </br>
+                                <cite><?php echo $comAutor; ?></cite>
+                            </p>
+                        </blockquote>
+        <?php
+                    }
+                    } while ($rowCom = $resultCom->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun commentaire trouvé.</li>";
+                    }
+        ?>
+
         <div class="form">
             <p>Laissez nous un commentaire : </br></p>
             <form action="index.html">
@@ -64,27 +100,24 @@
             <div class="horaires">
                 <ul>
                     <li>
-                        Horaire d'ouverture
+                        Horaires d'ouverture
                     </li>
-                </br>
-                    <li>
-                        Lundi: 10h - 18h,
-                    </li>
-                    <li>
-                        Mardi: 10h - 18h,
-                    </li>
-                    <li>
-                        Mercredi: 9h - 19h,
-                    </li>
-                    <li>
-                        Jeudi: 10h - 18h,
-                    </li>
-                    <li>
-                        Vendredi: 10h - 18h,
-                    </li>
-                    <li>
-                        Samedi: 9h - 19h,
-                    </li>
+                    <br>
+                    <?php
+                    // Affichage des horaires
+                    $row = $result->fetch(PDO::FETCH_ASSOC);
+                    if ($row) {
+                        do {
+                            $openDay = $row["jour"];
+                            $openHours = $row["heures"];
+                            ?>
+                            <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
+                            <?php
+                        } while ($row = $result->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    }
+                    ?>
                 </ul>
             </div>
         </footer>
