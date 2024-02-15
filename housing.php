@@ -67,7 +67,7 @@ try {
                                     text-align: center;"
                             onmouseover="this.style.backgroundImage='linear-gradient(to bottom, #0008, #0002), url(\'<?php echo $houseImg; ?>\')'"
                             onmouseout="this.style.backgroundImage='linear-gradient(to bottom, #0002, #0008), url(\'<?php echo $houseImg; ?>\')'">
-                            <a href="swamp.php"><?php echo $houseName; ?></a>
+                            <a href="housingNext.php?nom=<?php echo $houseName; ?>"><?php echo $houseName; ?></a>
                             <p>
                                 <?php echo $houseText; ?>             
                             </p>
