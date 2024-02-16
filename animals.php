@@ -77,7 +77,7 @@ $houseAnimal = $rowAnimal["habitat"];
                 Habitat : <strong><?php echo ucfirst($houseAnimal); ?></strong><br><br> 
             </p>
             <hr>
-            <p style="margin: 60px;">
+            <p style="margin: 60px; text-indent: 40px;">
                 <?php echo $descAnimal; ?>
             </p>
 

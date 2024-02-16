@@ -1,5 +1,21 @@
 <?php
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    $title = $_POST["title"];
+    $message = $_POST["message"];
+
+    $to = "dctmp@icloud.com"; 
+    $subject = "Nouveau message de $email: $title";
+    $headers = "From: $email";
+
+    if (mail($to, $subject, $message, $headers)) {
+        $message_success = "Votre message a bien été envoyé, une réponse vous sera donné par retour d'eMail.";
+    } else {
+        $message_fail = "Votre message n'a pas été envoyé, merci de réessayer plus tard.";
+    }
+}
+
 try {
     // Connexion à la base de données SQLite
     $bdd = new PDO('sqlite:db.sqlite');
@@ -45,7 +61,7 @@ try {
             </nav>
         </header>
         <div class="form">
-            <form action="index.html">
+            <form method="post">
                 <div>
                     <label for="email">eMail</label>
                     <input type="email" required id="email" name="email" placeholder="hervedupont@gmail.fr">
@@ -63,6 +79,19 @@ try {
                 </div>
             </form>
         </div>
+        <?php 
+        if (!empty($message_success)) : ?>
+            <div class="form">
+                <p><?php echo $message_success; ?></p>
+            </div>
+        <?php 
+        else: ?>
+            <div class="form">
+                <p><?php echo $message_fail; ?></p>
+            </div>
+        <?php 
+        endif; 
+        ?>
         <footer>
             <p>© 2024 Arcadia, tous droits réservés</p>
             <div class="horaires">

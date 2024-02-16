@@ -1,6 +1,8 @@
 <?php
 
 try {
+    // Déplacement temporaire de la base de données
+    putenv('SQLITE_TMPDIR=/img');
     // Connexion à la base de données SQLite
     $bdd = new PDO('sqlite:db.sqlite');
     // Activation du mode d'erreur PDO pour afficher les erreurs
@@ -12,6 +14,25 @@ try {
     // Requête SQL pour récupérer les horaires
     $sql = "SELECT * FROM horaires;";
     $result = $bdd->query($sql);
+    $message_success = '';
+
+    // Inscription du formulaire dans la base de donnée
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Nettoyage et vérif si VARCHAR
+        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
+
+        // Conversion des caractères spéciaux en entités HTML
+        $name = htmlspecialchars($name);
+        $message = htmlspecialchars($message);
+
+        $form = "INSERT INTO commentaires (pseudo, message, validation) VALUES (?, ?, 0)";
+        $stmt= $bdd->prepare($form);
+        $stmt->execute([$name, $message]);
+
+        $message_success = "Votre message a bien été envoyé et sera visible après sa validation.";
+    }
+
 } catch (PDOException $e) {
     // En cas d'erreur, affiche le message d'erreur
     echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
@@ -81,20 +102,25 @@ try {
 
         <div class="form">
             <p>Laissez nous un commentaire : </br></p>
-            <form action="index.html">
+            <form method="POST">
                 <div>
                     <label for="name">Pseudo</label>
-                    <input type="text" required id="name" name="name" placeholder="Votre pseudo">
+                    <input type="text" required id="name" name="name" placeholder="Votre pseudo" maxlength="20">
                 </div>
                 <div>
                     <label for="message">Commentaire</label>
-                    <textarea required id="message" name="message" placeholder="Ce zoo est fantastique !" style="height:200px"></textarea>
+                    <textarea required id="message" name="message" placeholder="Ce zoo est fantastique !" style="height:200px" maxlength="500"></textarea>
                 </div>
                 <div class="button">
                     <input type="submit" value="Envoyer">
                 </div>
             </form>
         </div>
+            <?php if (!empty($message_success)) : ?>
+                <div class="form">
+                <p><?php echo $message_success; ?></p>
+                </div>
+            <?php endif; ?>
         <footer>
             <p>© 2024 Arcadia, tous droits réservés</p>
             <div class="horaires">

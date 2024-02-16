@@ -9,6 +9,7 @@ try {
     // Requête SQL pour récupérer les habitats
     $house = "SELECT * FROM habitat;";
     $resultHouse = $bdd->query($house);
+    
     // Requête SQL pour récupérer les horaires
     $sql = "SELECT * FROM horaires;";
     $result = $bdd->query($sql);
