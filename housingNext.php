@@ -129,7 +129,7 @@ $result = $bdd->query($sql);
             var nameAnim = $(this).find('a').attr('href').split('=')[1];
 
             $.ajax({
-                url: 'increment_click.php',
+                url: 'incrementClick.php',
                 method: 'POST',
                 data: { name: nameAnim },
                 success: function(response) {
