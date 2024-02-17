@@ -15,9 +15,9 @@ try {
     $sql = "SELECT * FROM horaires;";
     $result = $bdd->query($sql);
 
-} catch (PDOException $e) {
-    // En cas d'erreur, affiche le message d'erreur
-    echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
+    } catch (PDOException $e) {
+        // En cas d'erreur, affiche le message d'erreur
+        echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
 }
 ?>
 
@@ -61,23 +61,23 @@ try {
                 // Affichage des services
                 $rowServ = $resultServ->fetch(PDO::FETCH_ASSOC);
                 if ($rowServ) {
-                    do {
-                        $servTitle = $rowServ["nom"];
-                        $servText = $rowServ["description"];
-                        $servImg = $rowServ["slug_img"]
-                        ?>
-                            <div class="service">
-                                <img src="<?php echo $servImg; ?>" alt="Image d'un service' du parc" width="810px" height="250px">
-                                <h3><?php echo $servTitle; ?></h3>
-                                <p>
-                                    <?php echo $servText; ?>                
-                                </p>
-                            </div>
-                        <?php
-                        } while ($rowServ = $resultServ->fetch(PDO::FETCH_ASSOC));
-                    } else {
-                        echo "Aucun service trouvé.";
-                    }
+                                do {
+                                    $servTitle = $rowServ["nom"];
+                                    $servText = $rowServ["description"];
+                                    $servImg = $rowServ["slug_img"]
+                                    ?>
+                                        <div class="service">
+                                            <img src="<?php echo $servImg; ?>" alt="Image d'un service' du parc" width="810px" height="250px">
+                                            <h3><?php echo $servTitle; ?></h3>
+                                            <p>
+                                                <?php echo $servText; ?>                
+                                            </p>
+                                        </div>
+                                    <?php
+                                    } while ($rowServ = $resultServ->fetch(PDO::FETCH_ASSOC));
+                            } else {
+                                echo "Aucun service trouvé.";
+                            }
             ?>
             <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
             <a class="forward" onclick="plusSlides(1)">&#10095;</a>
@@ -95,16 +95,16 @@ try {
                     // Affichage des horaires
                     $row = $result->fetch(PDO::FETCH_ASSOC);
                     if ($row) {
-                        do {
-                            $openDay = $row["jour"];
-                            $openHours = $row["heures"];
-                            ?>
-                            <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
-                            <?php
-                        } while ($row = $result->fetch(PDO::FETCH_ASSOC));
-                    } else {
-                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
-                    }
+                                do {
+                                    $openDay = $row["jour"];
+                                    $openHours = $row["heures"];
+                                    ?>
+                                    <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
+                                    <?php
+                                    } while ($row = $result->fetch(PDO::FETCH_ASSOC));
+                            } else {
+                                echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                            }
                     ?>
                 </ul>
             </div>
