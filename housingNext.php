@@ -43,6 +43,7 @@ $result = $bdd->query($sql);
         <title>Arcadia, <?php echo $nameHouse; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=2.0, minimum-scale=0.60">        
         <meta name="description" content="Explorez la biodiversité extraordinaire du parc animalier Arcadia, un lieu magique abritant plusieurs habitats uniques. Plongez au cœur de la nature sauvage et découvrez des espèces fascinantes, de la faune endémique aux majestueux prédateurs. Rejoignez-nous pour une aventure inoubliable au sein d'Arcadia, où la préservation de la vie sauvage est notre engagement passionné.">
+        <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="style.css">
     </head>
 
