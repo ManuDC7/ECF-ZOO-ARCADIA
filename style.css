@@ -385,6 +385,31 @@ blockquote ::after {
     justify-content: center;
 }
 
+/* PANEL */
+.panel {
+    margin: 40px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: lightyellow;
+    text-align: center
+}
+
+.container {
+    margin: 20px
+}
+
 /* RESPONSIVE */
 
 @media only screen and (max-width: 1370px) {

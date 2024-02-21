@@ -66,7 +66,6 @@ try {
                 <div>
                     <label for="role">Rôle</label>
                     <select id="role" name="role">
-                        <option value="visitor">Visiteur</option>
                         <option value="employee">Employé</option>
                         <option value="veterinarian">Vétérinaire</option>
                         <option value="admin">Administrateur</option>

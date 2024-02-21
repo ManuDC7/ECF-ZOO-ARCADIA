@@ -81,7 +81,6 @@ $result = $bdd->query($sql);
                                     $imgAnim = $rowAnim["slug_img"];
                                     $nameAnim = $rowAnim["prénom"];
                                     $raceAnim = $rowAnim["race"];
-                                    $clickAnim = $rowAnim["click"];
                                     ?>
                                 <div class="box">
                                     <a href="animals.php?prénom=<?php echo $nameAnim; ?>">
