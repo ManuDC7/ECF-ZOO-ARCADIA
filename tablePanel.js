@@ -86,6 +86,7 @@ function TableToCSV(t) {
 		}), "" != n && (n = n.substr(0, n.length - t.length)), i = i + n + "\n"
 	}), i
 }
+
 var $tab_en_edic = null,
 	params = null,
 	colsEdi = null,
@@ -138,7 +139,7 @@ function closeAddModal() {
 }
 
 function submitAddForm() {
-    // AJOUTER MA REQUETE SQL POUR AJOUTER LES MODIFS
+    // Ici, récupérez les données du formulaire et ajoutez une nouvelle ligne au tableau
     closeAddModal();
 }
 

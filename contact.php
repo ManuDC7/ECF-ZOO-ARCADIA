@@ -17,17 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 try {
-    // Connexion à la base de données SQLite
     $bdd = new PDO('sqlite:db.sqlite');
-    // Activation du mode d'erreur PDO pour afficher les erreurs
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Requête SQL pour récupérer les horaires
-    $sql = "SELECT * FROM horaires;";
-    $result = $bdd->query($sql);
+    $open = "SELECT * FROM opening;";
+    $resultOpen = $bdd->query($open);
 
     } catch (PDOException $e) {
-        // En cas d'erreur, affiche le message d'erreur
         echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
 }
 ?>
@@ -109,20 +105,21 @@ try {
                     <li>
                         Horaires d'ouverture
                     </li>
-                    <br>
+                    <li>
+                        <br>
+                    </li>
                     <?php
-                    // Affichage des horaires
-                    $row = $result->fetch(PDO::FETCH_ASSOC);
-                    if ($row) {
-                                do {
-                                    $openDay = $row["jour"];
-                                    $openHours = $row["heures"];
-                                    ?>
-                                    <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
-                                    <?php
-                                    } while ($row = $result->fetch(PDO::FETCH_ASSOC));
-                            } else {
-                                echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    $footer = $resultOpen->fetch(PDO::FETCH_ASSOC);
+                    if ($footer) {
+                        do {
+                            $footer_day = htmlspecialchars($footer["day"]);
+                            $footer_hours = htmlspecialchars($footer["hours"]);
+                            ?>
+                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                            <?php
+                        } while ($footer = $resultOpen->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
                     }
                     ?>
                 </ul>

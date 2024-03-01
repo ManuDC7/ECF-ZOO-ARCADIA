@@ -106,7 +106,7 @@ hr {
 
 footer {
     float: bottom;
-    background-color: lightgrey;
+    background-color: #d3d3d3;
     text-align: center;
     padding-top: 10px;
     margin-top: auto;
@@ -146,7 +146,7 @@ input[type=password] {
     margin-bottom: 16px; 
 }
 
-select[name=role] {
+select[name=job] {
     width: 100%; 
     padding: 12px;
     border: 1px solid #ccc; 
@@ -169,7 +169,7 @@ input[type=text], textarea {
 
 input[type=submit] {
     background-color: rgba(000, 000, 000, 0.6);
-    color: white;
+    color: #FFF;
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -213,7 +213,7 @@ blockquote ::before {
     left: 250px;
     content: '\00301D';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 blockquote ::after {
@@ -222,7 +222,7 @@ blockquote ::after {
     right: 250px;
     content: '\00301E';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 .form p {
@@ -247,7 +247,7 @@ blockquote ::before {
     left: 250px;
     content: '\00301D';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 blockquote ::after {
@@ -256,7 +256,7 @@ blockquote ::after {
     right: 250px;
     content: '\00301E';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 /* HOUSING */
@@ -402,7 +402,7 @@ th, td {
 }
 
 th {
-    background-color: lightyellow;
+    background-color: #ffffe0;
     text-align: center
 }
 

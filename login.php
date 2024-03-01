@@ -1,20 +1,40 @@
 <?php
-
-try {
-    // Connexion à la base de données SQLite
     $bdd = new PDO('sqlite:db.sqlite');
-
-    // Activation du mode d'erreur PDO pour afficher les erreurs
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Requête SQL pour récupérer les horaires
-    $sql = "SELECT * FROM horaires;";
-    $result = $bdd->query($sql);
+    $open = "SELECT * FROM opening;";
+    $resultOpen = $bdd->query($open);
 
-    } catch (PDOException $e) {
-        // En cas d'erreur, affiche le message d'erreur
-        echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['pass']);
+    $job = trim($_POST['job']);
+
+    $stmt = $bdd->prepare("SELECT * FROM users WHERE email = :email AND password = :pass AND job = :job;");
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':pass', $password);
+    $stmt->bindParam(':job', $job);
+
+    $stmt->execute();
+
+    $user = $stmt->fetch();
+
+    if ($user){
+    $_SESSION['user'] = $user;
+
+        if ($job == 'Administrator') {
+            header('Location: adminPanel.php');
+        } elseif ($job == 'Veterinarian') {
+            header('Location: veterPanel.php');
+        } elseif ($job == 'Employee') {
+            header('Location: employPanel.php');
+        }
+        exit;
+    } else {
+        echo "Email ou mot de passe incorrect";
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -54,21 +74,21 @@ try {
         </header>
 
         <div class="form">
-            <form action="index.html">
+            <form action="login.php" method="POST">
                 <div>
-                    <label for="username">Nom d'utilisateur</label>
-                    <input type="text" id="username" name="username">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" required>
                 </div>
                 <div>
                     <label for="pass">Mot de passe</label>
-                    <input type="password" required id="pass" name="password" minlength="8">
+                    <input type="password" required id="pass" name="pass" minlength="8">
                 </div>
                 <div>
-                    <label for="role">Rôle</label>
-                    <select id="role" name="role">
-                        <option value="employee">Employé</option>
-                        <option value="veterinarian">Vétérinaire</option>
-                        <option value="admin">Administrateur</option>
+                    <label for="job">Rôle</label>
+                    <select id="job" name="job">
+                        <option value="Employee">Employé</option>
+                        <option value="Veterinarian">Vétérinaire</option>
+                        <option value="Administrator">Administrateur</option>
                     </select>
                 </div>
                 <div class="button">
@@ -84,21 +104,22 @@ try {
                     <li>
                         Horaires d'ouverture
                     </li>
-                    <br>
+                    <li>
+                        <br>
+                    </li>
                     <?php
-                    // Affichage des horaires
-                    $row = $result->fetch(PDO::FETCH_ASSOC);
-                    if ($row) {
-                                do {
-                                    $openDay = $row["jour"];
-                                    $openHours = $row["heures"];
-                                    ?>
-                                    <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
-                                    <?php
-                                    } while ($row = $result->fetch(PDO::FETCH_ASSOC));
-                            } else {
-                                echo "<li>Aucun horaire d'ouverture trouvé.</li>";
-                            }
+                    $footer = $resultOpen->fetch(PDO::FETCH_ASSOC);
+                    if ($footer) {
+                        do {
+                            $footer_day = htmlspecialchars($footer["day"]);
+                            $footer_hours = htmlspecialchars($footer["hours"]);
+                            ?>
+                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                            <?php
+                        } while ($footer = $resultOpen->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    }
                     ?>
                 </ul>
             </div>
