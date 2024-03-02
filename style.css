@@ -259,6 +259,10 @@ blockquote ::after {
     color: #d3d3d3;
 }
 
+.mentions {
+    margin: 80px
+}
+
 /* HOUSING */
 
 .horizontal-section {
@@ -411,6 +415,27 @@ th {
 }
 
 /* RESPONSIVE */
+
+@media only screen and (min-width: 1800px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
+    .form {
+        margin: 100px 800px
+    }
+    .service img {
+        transform: scale(1.3, 1) translate(110px, 0%) !important;
+    }
+    .Back {
+        top: 775px;
+        right: 600px;
+    }
+    .forward {
+        top: 775px;
+        right: 320px;
+    }
+}
 
 @media only screen and (max-width: 1370px) {
     body {

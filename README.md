@@ -159,11 +159,11 @@ Si vous rencontrez une erreur de type 'SQLSTATE[HY000]: General error: 8 attempt
 
 - Vous pouvez utiliser la commande chmod pour modifier les permissions du fichier ou du répertoire :
 
-`sudo chmod +w NOM_DU_FICHIER_OU_REPERTOIRE`
+`sudo chmod g+w NOM_DU_FICHIER_OU_REPERTOIRE`
 
-- Assurez-vous également que le serveur web (Apache) est autorisé à écrire dans le répertoire où se trouve la base de données en modifiant les permissions du répertoire parent si nécessaire :
+- Puis vous pouvez changer le groupe du fichier de base de données pour "daemon":
 
-`sudo chmod +w CHEMIN_DU_REPERTOIRE_PARENT`
+`sudo chown :daemon NOM_DU_FICHIER_OU_REPERTOIRE`
 
 - Après avoir modifié les permissions, redémarrez XAMPP pour appliquer les modifications.
 

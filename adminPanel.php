@@ -239,7 +239,7 @@ $resultOpen = $bdd->query($open);
         </section>
 
         <footer>
-            <p>© 2024 Arcadia, tous droits réservés</p>
+            <p>© -Tous droits réservés - <a href="mentions_legales.php" style="text-decoration: underline; color: #000;">Mentions légales</a></p>
             <div class="horaires">
                 <ul>
                     <li>
