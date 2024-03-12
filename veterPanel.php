@@ -1,59 +1,35 @@
 <?php
-    $bdd = new PDO('sqlite:db.sqlite');
-    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$bdd = new PDO('sqlite:db.sqlite');
+$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $open = "SELECT * FROM opening;";
-    $resultOpen = $bdd->query($open);
+$username = "SELECT firstname FROM users WHERE job = 'Veterinarian';";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['pass']);
+$animal = "SELECT * FROM animals;";
+$resultAnimal = $bdd->query($animal);
 
-    $stmt = $bdd->prepare("SELECT * FROM users WHERE email = :email AND password = :pass;");
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':pass', $password);
+$house = "SELECT * FROM housings;";
+$resultHouse = $bdd->query($house);
 
-    $stmt->execute();
-
-    $user = $stmt->fetch();
-
-    if ($user){
-        $_SESSION['user'] = $user;
-        $job = $user['job'];
-
-        if ($job == 'Administrator') {
-            header('Location: adminPanel.php');
-        } elseif ($job == 'Veterinarian') {
-            header('Location: veterPanel.php');
-        } elseif ($job == 'Employee') {
-            header('Location: employPanel.php');
-        }
-        exit;
-    } else {
-        echo "Email ou mot de passe incorrect";
-    }
-}
-
+$open = "SELECT * FROM opening;";
+$resultOpen = $bdd->query($open);
 ?>
 
 <!DOCTYPE html>
-
 <html>
-
     <head>
         <meta charset="utf-8">
-        <title>Arcadia, connexion</title>
+        <title>Arcadia, vétérinaire</title>
         <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=2.0, minimum-scale=0.60">        
         <meta name="description" content="Explorez la biodiversité extraordinaire du parc animalier Arcadia, un lieu magique abritant plusieurs habitats uniques. Plongez au cœur de la nature sauvage et découvrez des espèces fascinantes, de la faune endémique aux majestueux prédateurs. Rejoignez-nous pour une aventure inoubliable au sein d'Arcadia, où la préservation de la vie sauvage est notre engagement passionné.">
         <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
 
     <body>
-
         <header>
-            <a class="login" href="login.php">Connexion</a>
-            <h1 class="title">Connexion</h1>
+            <a class="login" href="index.php">Se deconnecter</a>
+            <h1 class="title">Vétérinaire</h1>
             <nav class="navbar">
                 <ul>
                     <li>
@@ -72,21 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </nav>
         </header>
 
-        <div class="form">
-            <form action="login.php" method="POST">
-                <div>
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" required>
-                </div>
-                <div>
-                    <label for="pass">Mot de passe</label>
-                    <input type="password" required id="pass" name="pass" minlength="8">
-                </div>
-                <div class="button">
-                    <input type="submit" value="Connexion">
-                </div>
-            </form>            
-        </div>
+        <section class="panel">
+            <h2>Bienvenue <?php echo $username; ?> !</h2>
+
+            <div class="container">
+                
+
+        </section>
 
         <footer>
             <p>© -Tous droits réservés - <a href="mentions_legales.php" style="text-decoration: underline; color: #000;">Mentions légales</a></p>
@@ -116,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </footer>
 
-    </body>
+        <script src="tablePanel.js" defer></script>
 
+    </body>
 </html>

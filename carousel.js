@@ -5,10 +5,6 @@ function plusSlides(n) {
     SlideShow(slidePosition += n);
 }
 
-function currentSlide(n) {
-    SlideShow(slidePosition = n);
-}
-
 function SlideShow(n) {
     var i;
     var slides = document.getElementsByClassName("service");

@@ -72,7 +72,7 @@ $resultOpen = $bdd->query($open);
                                     $animal_breed = $rowAnimal["breed"];
                                     ?>
                                 <div class="box">
-                                    <a href="animals.php?firstname=<?php echo $animal_name; ?>">
+                                    <a href="animals.php?id=<?php echo $animal_name; ?>">
                                         <img src="<?php echo $animal_img; ?>" alt="Image d'un animal du parc'" width="200" height="200">
                                     </a>  
                                     <p><?php echo ucfirst($animal_name); ?>, notre <?php echo $animal_breed; ?></p>
@@ -116,12 +116,12 @@ $resultOpen = $bdd->query($open);
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
         $('.box').click(function() {
-            var name_animal = $(this).find('a').attr('href').split('=')[1];
+            var id_animal = $(this).find('a').attr('href').split('=')[1];
 
             $.ajax({
                 url: 'incrementClick.php',
                 method: 'POST',
-                data: { firstname: name_animal },
+                data: { id: id_animal },
                 success: function(response) {
                     console.log(response);
                 }

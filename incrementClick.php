@@ -5,9 +5,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$user = 'admin';
+$user = 'manu';
 $password = 'vanEtlaura7';
-$db = 'animal_click';
+$db = 'animals_click';
 
 $manager = new MongoDB\Driver\Manager("mongodb://{$user}:{$password}@localhost:27017/{$db}");
 

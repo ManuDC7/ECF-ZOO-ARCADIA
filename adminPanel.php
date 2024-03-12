@@ -216,6 +216,7 @@ $resultOpen = $bdd->query($open);
                     </thead>
                     <tbody>
                         <?php
+                        $openings = [];
                         $rowOpen = $resultOpen->fetch(PDO::FETCH_ASSOC);
                         if ($rowOpen) {
                             do {
@@ -249,18 +250,17 @@ $resultOpen = $bdd->query($open);
                         <br>
                     </li>
                     <?php
-                    $footer = $resultOpen->fetch(PDO::FETCH_ASSOC);
-                    if ($footer) {
-                        do {
-                            $footer_day = htmlspecialchars($footer["day"]);
-                            $footer_hours = htmlspecialchars($footer["hours"]);
-                            ?>
-                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
-                            <?php
-                        } while ($footer = $resultOpen->fetch(PDO::FETCH_ASSOC));
-                    } else {
-                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
-                    }
+                        if (!empty($openings)) {
+                            foreach ($openings as $opening) {
+                                $footer_day = $opening["day"];
+                                $footer_hours = $opening["hours"];
+                                ?>
+                                <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                                <?php
+                            }
+                        } else {
+                            echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                        }
                     ?>
                 </ul>
             </div>
