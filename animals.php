@@ -3,10 +3,10 @@ session_start();
 $bdd = new PDO('sqlite:db.sqlite');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$animal_name = $_GET['firstname'];
-$animal = "SELECT * FROM animals WHERE firstname = :firstname;";
+$animal_id = $_GET['id'];
+$animal = "SELECT * FROM animals WHERE id = :id;";
 $stmt = $bdd->prepare($animal);
-$stmt->bindParam(':firstname', $animal_name);
+$stmt->bindParam(':id', $animal_id);
 $stmt->execute();
 $rowAnimal = $stmt->fetch(PDO::FETCH_ASSOC);
 

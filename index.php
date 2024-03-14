@@ -78,27 +78,31 @@ try {
             Arcadia est bien plus qu'un zoo, c'est un havre écologique. Engagé envers la préservation de la biodiversité, le parc met en avant des habitats soigneusement conçus pour reproduire les écosystèmes naturels. Sa particularité réside dans son engagement envers l'écologie, avec des initiatives innovantes. Arcadia s'autoalimente en énergie grâce à des sources durables, témoignant ainsi de son engagement envers un avenir respectueux de l'environnement. En visitant Arcadia, vous participez à une expérience où la préservation de la nature va de pair avec le plaisir de la découverte.
         </p>
         <hr>
-        <?php
-            $rowComment = $resultComment->fetch(PDO::FETCH_ASSOC);
-            if ($rowComment) {
-                            do {
-                                $comment_message = $rowComment["message"];
-                                $comment_pseudo = $rowComment["pseudo"];
-                                $comment_validate = $rowComment["validate"];
-                                if ($comment_validate == 'true') {
-                                    ?>
-                                    <blockquote>
-                                        <p><?php echo $comment_message; ?> </br>
-                                            <cite><?php echo $comment_pseudo; ?></cite>
-                                        </p>
-                                    </blockquote>
-                                    <?php
-                                }
-                                } while ($rowComment = $resultComment->fetch(PDO::FETCH_ASSOC));
-                        } else {
-                            echo "<li>Aucun commentaire trouvé.</li>";
-                        }
-        ?>
+        <div class="scroller">
+            <div class="blockquotes">
+                <?php
+                    $rowComment = $resultComment->fetch(PDO::FETCH_ASSOC);
+                    if ($rowComment) {
+                        do {
+                            $comment_message = $rowComment["message"];
+                            $comment_pseudo = $rowComment["pseudo"];
+                            $comment_validate = $rowComment["validate"];
+                            if ($comment_validate == 'true') {
+                                ?>
+                                <blockquote>
+                                    <p><?php echo $comment_message; ?> </br>
+                                        <cite><?php echo $comment_pseudo; ?></cite>
+                                    </p>
+                                </blockquote>
+                                <?php
+                            }
+                        } while ($rowComment = $resultComment->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun commentaire trouvé.</li>";
+                    }
+                ?>
+            </div>
+        </div>
 
         <div class="form">
             <p>Laissez nous un commentaire : </br></p>

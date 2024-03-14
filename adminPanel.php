@@ -1,4 +1,5 @@
 <?php
+
 $bdd = new PDO('sqlite:db.sqlite');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -18,6 +19,25 @@ $resultAnimal = $bdd->query($animal);
 
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
+
+// Connection MongoDB Database 
+require 'vendor/autoload.php'; 
+
+$client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
+$database = $client->selectDatabase("animals_click"); 
+$collection = $database->selectCollection("animals_click"); 
+
+$options = ['sort' => ['click' => -1], 'limit' => 3];
+$cursor = $collection->find([], $options);
+$ids = [];
+foreach ($cursor as $document) {
+    $ids[] = $document['id'];
+}
+
+$placeholders = str_repeat('?,', count($ids) - 1) . '?';
+$sql = "SELECT * FROM animals WHERE id IN ($placeholders)";
+$stmtAnimal = $bdd->prepare($sql);
+$stmtAnimal->execute($ids);
 ?>
 
 <!DOCTYPE html>
@@ -57,9 +77,35 @@ $resultOpen = $bdd->query($open);
         <section class="panel">
             <h2>Bienvenue <?php echo $username; ?> !</h2>
 
+            <div class="favorite_animals">
+                <h3>Animaux les plus consulters</h3>
+                <?php
+                if ($rowAnimal = $stmtAnimal->fetch(PDO::FETCH_ASSOC)) {
+                    do {
+                        $animal_img = $rowAnimal["slug"];
+                        ?>
+                        <div class="box">
+                            <a href="animals.php?id=<?php echo $animal_id; ?>">
+                                <img src="<?php echo $animal_img; ?>" alt="Image d'un animal du parc'" width="200" height="200">
+                            </a>  
+                        </div>
+                        <?php
+                    } while ($rowAnimal = $stmtAnimal->fetch(PDO::FETCH_ASSOC));
+                } else {
+                    echo "Aucun animal favorit trouvé.";
+                }
+                ?>
+            </div>
+
             <div class="container">
-                <h3>Personnel <span style="float:right"><button class="but_add">Ajouter du personnel</button></span></h3>
-                <table class="makeEditable">
+                <h3>Gestion du personnel <span style="float:right"><button class="but_add">Ajouter du personnel</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 42%;">
+                        <col style="width: 26%;">
+                        <col style="width: 16%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Prénom</th>
@@ -75,8 +121,12 @@ $resultOpen = $bdd->query($open);
                             do {
                                 $name = htmlspecialchars($rowUser["firstname"]);
                                 $mail = htmlspecialchars($rowUser["email"]);
-                                $pass = htmlspecialchars($rowUser["password"]);
+                                $pass = str_repeat('*', strlen($rowUser["password"]));
                                 $job = htmlspecialchars($rowUser["job"]);
+
+                                if ($job == "Administrator") {
+                                    continue;
+                                }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
@@ -95,8 +145,13 @@ $resultOpen = $bdd->query($open);
             </div>
 
             <div class="container">
-                <h3>Services <span style="float:right"><button class="but_add">Ajouter un service</button></span></h3>
-                <table class="makeEditable">
+                <h3>Gestion des services <span style="float:right"><button class="but_add">Ajouter un service</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 42%;">
+                        <col style="width: 42%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -129,8 +184,13 @@ $resultOpen = $bdd->query($open);
             </div>
 
             <div class="container">
-                <h3>Habitats <span style="float:right"><button class="but_add">Ajouter un habitat</button></span></h3>
-                <table class="makeEditable">
+                <h3>Gestion des habitats <span style="float:right"><button class="but_add">Ajouter un habitat</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 42%;">
+                        <col style="width: 42%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -163,8 +223,16 @@ $resultOpen = $bdd->query($open);
             </div>
 
             <div class="container">
-                <h3>Animaux <span style="float:right"><button class="but_add">Ajouter un animal</button></span></h3>
-                <table class="makeEditable">
+                <h3>Gestion des animaux <span style="float:right"><button class="but_add">Ajouter un animal</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 7%;">
+                        <col style="width: 7%;">
+                        <col style="width: 7%;">
+                        <col style="width: 18%;">
+                        <col style="width: 52%;">
+                        <col style="width: 5%;">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Prénom</th>
@@ -206,8 +274,11 @@ $resultOpen = $bdd->query($open);
             </div>
 
             <div class="container">
-                <h3>Horaires d'ouverture <span style="float:right"><button class="but_add">Ajouter un jour</button></span></h3>
-                <table class="makeEditable">
+                <h3>Gestion des horaires d'ouverture <span style="float:right"><button class="but_add">Ajouter un jour</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 73%;">
                     <thead>
                         <tr>
                             <th>Jour</th>
@@ -222,6 +293,7 @@ $resultOpen = $bdd->query($open);
                             do {
                                 $open_day = htmlspecialchars($rowOpen["day"]);
                                 $open_hours = htmlspecialchars($rowOpen["hours"]);
+                                $openings[] = ['day' => $open_day, 'hours' => $open_hours];
                         ?>
                             <tr>
                                 <td><?php echo $open_day; ?></td>
@@ -250,17 +322,17 @@ $resultOpen = $bdd->query($open);
                         <br>
                     </li>
                     <?php
-                        if (!empty($openings)) {
-                            foreach ($openings as $opening) {
-                                $footer_day = $opening["day"];
-                                $footer_hours = $opening["hours"];
-                                ?>
-                                <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
-                                <?php
-                            }
-                        } else {
-                            echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    if (!empty($openings)) {
+                        foreach ($openings as $opening) {
+                            $footer_day = $opening["day"];
+                            $footer_hours = $opening["hours"];
+                    ?>
+                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                    <?php
                         }
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    }
                     ?>
                 </ul>
             </div>

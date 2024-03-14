@@ -70,9 +70,10 @@ $resultOpen = $bdd->query($open);
                                     $animal_img = $rowAnimal["slug"];
                                     $animal_name = $rowAnimal["firstname"];
                                     $animal_breed = $rowAnimal["breed"];
+                                    $animal_id = $rowAnimal["id"];
                                     ?>
                                 <div class="box">
-                                    <a href="animals.php?id=<?php echo $animal_name; ?>">
+                                    <a href="animals.php?id=<?php echo $animal_id; ?>">
                                         <img src="<?php echo $animal_img; ?>" alt="Image d'un animal du parc'" width="200" height="200">
                                     </a>  
                                     <p><?php echo ucfirst($animal_name); ?>, notre <?php echo $animal_breed; ?></p>

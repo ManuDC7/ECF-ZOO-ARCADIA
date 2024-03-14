@@ -146,7 +146,7 @@ input[type=password] {
     margin-bottom: 16px; 
 }
 
-select[name=job] {
+select[name=selectmenu] {
     width: 100%; 
     padding: 12px;
     border: 1px solid #ccc; 
@@ -258,6 +258,33 @@ blockquote ::after {
     font-size: 40px;
     color: #d3d3d3;
 }
+
+.scroller {
+    height: 200pt;
+    overflow: hidden;
+}
+
+.blockquotes {
+    animation: scroll 20s infinite;
+}
+
+.blockquotes blockquote {
+    height: 200pt;
+    overflow: hidden;
+}
+
+@keyframes scroll {
+    0%, 20% {
+        transform: translateY(+40pt);
+    }
+    25%, 45% {
+        transform: translateY(-250pt);
+    }
+    50%, 70% {
+        transform: translateY(-540pt);
+    }
+}
+
 
 .mentions {
     margin: 80px
@@ -395,8 +422,34 @@ blockquote ::after {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
+}
+
+th:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+th:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+tr:first-child td:first-child {
+    border-top-left-radius: 12px;
+}
+
+tr:first-child td:last-child {
+    border-top-right-radius: 12px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
 }
 
 th, td {

@@ -2,10 +2,16 @@
 $bdd = new PDO('sqlite:db.sqlite');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "SELECT firstname FROM users WHERE job = 'Veterinarian';";
+$username = "SELECT firstname FROM users WHERE job = 'Employee';";
 $resultUser = $bdd->query($username);
 $user = $resultUser->fetch(PDO::FETCH_ASSOC);
 $username = $user ? htmlspecialchars($user["firstname"]) : "Utilisateur inconnu";
+
+$com = "SELECT * FROM comments;";
+$resultCom = $bdd->query($com);
+
+$service = "SELECT * FROM services;";
+$resultService = $bdd->query($service);
 
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
@@ -15,7 +21,7 @@ $resultOpen = $bdd->query($open);
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Arcadia, espace vétérinaire</title>
+        <title>Arcadia, espace employé</title>
         <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=2.0, minimum-scale=0.60">        
         <meta name="description" content="Explorez la biodiversité extraordinaire du parc animalier Arcadia, un lieu magique abritant plusieurs habitats uniques. Plongez au cœur de la nature sauvage et découvrez des espèces fascinantes, de la faune endémique aux majestueux prédateurs. Rejoignez-nous pour une aventure inoubliable au sein d'Arcadia, où la préservation de la vie sauvage est notre engagement passionné.">
         <link rel="stylesheet" href="normalize.css">
@@ -26,7 +32,7 @@ $resultOpen = $bdd->query($open);
     <body>
         <header>
             <a class="login" href="index.php">Se deconnecter</a>
-            <h1 class="title">Vétérinaire</h1>
+            <h1 class="title">Employé</h1>
             <nav class="navbar">
                 <ul>
                     <li>
@@ -45,11 +51,86 @@ $resultOpen = $bdd->query($open);
             </nav>
         </header>
 
-        <section class="panel">
-            <h2>Bienvenue <?php echo $username; ?> !</h2>
+        <div class="container">
+                <h3>Gestion des avis clients</h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 72%;">
+                        <col style="width: 12%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Pseudo</th>
+                            <th>Message</th>
+                            <th>Validation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $rowCom = $resultCom->fetch(PDO::FETCH_ASSOC);
+                        if ($rowCom) {
+                            do {
+                                $com_pseudo = htmlspecialchars($rowCom["pseudo"]);
+                                $com_message = htmlspecialchars($rowCom["message"]);
+                                $com_validation = htmlspecialchars($rowCom["validate"]);
+                        ?>
+                            <tr>
+                                <td><?php echo $com_pseudo; ?></td>
+                                <td><?php echo $com_message; ?></td>
+                                <td><?php echo $com_validation; ?></td>
+                            </tr>
+                        <?php
+                            } while ($rowCom = $resultCom->fetch(PDO::FETCH_ASSOC));
+                        } else {
+                            echo "<tr><td colspan='4'>Aucun avis trouvé.</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+        <div class="container">
+                <h3>Gestion des services <span style="float:right"><button class="but_add">Ajouter un service</button></span></h3>
+                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 42%;">
+                        <col style="width: 42%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $rowService = $resultService->fetch(PDO::FETCH_ASSOC);
+                        if ($rowService) {
+                            do {
+                                $service_name = htmlspecialchars($rowService["name"]);
+                                $service_description = htmlspecialchars($rowService["description"]);
+                                $service_img = htmlspecialchars($rowService["slug"]);
+                        ?>
+                            <tr>
+                                <td><?php echo $service_name; ?></td>
+                                <td><?php echo $service_description; ?></td>
+                                <td><?php echo $service_img; ?></td>
+                            </tr>
+                        <?php
+                            } while ($rowService = $resultService->fetch(PDO::FETCH_ASSOC));
+                        } else {
+                            echo "<tr><td colspan='3'>Aucun service trouvé.</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="container">
-                <h3>Soumettre un compte rendu sur un animal</h3>
+                <h3>Gestion des comptes rendus sur un animal</h3>
                 <table style="table-layout: fixed; width: 100%;">
                     <colgroup>
                         <col style="width: 26%;">
@@ -77,7 +158,7 @@ $resultOpen = $bdd->query($open);
                                         $resultAnimal = $bdd->query("SELECT * FROM animals");
                                         while ($animal = $resultAnimal->fetch(PDO::FETCH_ASSOC)) {
                                             $animal_name = htmlspecialchars($animal["firstname"]);
-                                            echo "<option value=\"$animal_name\">". ucfirst($animal_name) ."</option>";
+                                            echo "<option value=\"$animal_name\">$animal_name</option>";
                                         }
                                         ?>
                                     </select>
@@ -122,95 +203,6 @@ $resultOpen = $bdd->query($open);
                 </table>
             </div>
 
-            <div class="container">
-                <h3>Soumettre un compte rendu sur un habitat</h3>
-                <table style="table-layout: fixed; width: 100%;">
-                    <colgroup>
-                        <col style="width: 26%;">
-                        <col style="width: 64%;">
-                        <col style="width: 10%;">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Habitat</th>
-                            <th>Compte rendu</th>
-                            <th> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <select name="selectmenu">
-                                    <?php
-                                    $resultHouse = $bdd->query("SELECT * FROM housings");
-                                    while ($housing = $resultHouse->fetch(PDO::FETCH_ASSOC)) {
-                                        $housing_name = htmlspecialchars($housing["name"]);
-                                        echo "<option>". ucfirst($housing_name) ."</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-                            <td>
-                                <form>
-                                    <div>
-                                        <input type="text" required name="text" placeholder="Compte rendu détaillé">
-                                    </div>
-                                </form>
-                            </td>
-                            <td>
-                                <form>
-                                    <div>
-                                        <input type="submit" value="Soumettre">
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>    
-
-            <div class="container">
-                <h3>Gestion des comptes rendus des animaux</h3>
-                <table style="table-layout: fixed; width: 100%;">
-                    <colgroup>
-                        <col style="width: 20%;">
-                        <col style="width: 20%;">
-                        <col style="width: 60%;">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Animal</th>
-                            <th>Date</th>
-                            <th>Compte rendu</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            <tr>
-                                <td>
-                                    <select id="animal-select" name="selectmenu">
-                                    <?php
-                                    $resultAnimals = $bdd->query("SELECT * FROM animals");
-                                    while ($animal = $resultAnimals->fetch(PDO::FETCH_ASSOC)) {
-                                        $animal_id = htmlspecialchars($animal["id"]);
-                                        $animal_name = htmlspecialchars($animal["firstname"]);
-                                        echo "<option value=\"$animal_id\">" . ucfirst($animal_name) . "</option>";
-                                    }
-                                    ?>
-                                    </select>
-                                </td>
-                                <td>
-                                <select id="date-select" name="selectmenu">
-                                    <option value=""> </option>
-                                </select>
-                                </td>
-                                <td>
-                                    <input id="report-field" type="text" value="Sélectionnez un animal et une date" readonly>
-                                </td>
-                            </tr>
-                    </tbody>
-                </table>
-            </div>
-
         </section>
 
         <footer>
@@ -241,26 +233,7 @@ $resultOpen = $bdd->query($open);
             </div>
         </footer>
 
-        <script src="selectMenu.js" defer></script>
-        <script>
-        $(document).ready(function() {
-            $('#date-select').change(function() {
-                var selectedDate = $(this).val();
-                var animalId = $('#animal-select').val(); 
-                if (selectedDate && animalId) {
-                    $.get('date_report.php', { date: selectedDate, animal_id: animalId }, function(data) {
-                        if (data.error) {
-                            $('#report-field').val(data.error);
-                        } else {
-                            $('#report-field').val(data.content);
-                        }
-                    });
-                } else {
-                    $('#report-field').val('Aucune date de compte rendu ou animal sélectionné.');
-                }
-            });
-        });
-        </script>
+        <script src="tablePanel.js" defer></script>
 
     </body>
 </html>
