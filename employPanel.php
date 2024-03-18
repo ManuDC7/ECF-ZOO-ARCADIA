@@ -1,11 +1,17 @@
 <?php
+session_start();
+
+$userId = $_SESSION['userId'];
+
 $bdd = new PDO('sqlite:db.sqlite');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "SELECT firstname FROM users WHERE job = 'Employee';";
-$resultUser = $bdd->query($username);
-$user = $resultUser->fetch(PDO::FETCH_ASSOC);
-$username = $user ? htmlspecialchars($user["firstname"]) : "Utilisateur inconnu";
+$username = "SELECT firstname FROM users WHERE userId = :userId;";
+$query = $bdd->prepare($username);
+$query->bindValue(':userId', $userId, PDO::PARAM_INT);
+$query->execute();
+$user = $query->fetch(PDO::FETCH_ASSOC);
+$firstname = htmlspecialchars($user['firstname']);
 
 $com = "SELECT * FROM comments;";
 $resultCom = $bdd->query($com);
@@ -50,6 +56,9 @@ $resultOpen = $bdd->query($open);
                 </ul>
             </nav>
         </header>
+
+        <section class="panel">
+            <h2>Bienvenue <?php echo $firstname; ?> !</h2>
 
         <div class="container">
                 <h3>Gestion des avis clients</h3>

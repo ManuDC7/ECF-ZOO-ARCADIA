@@ -13,11 +13,16 @@ CREATE TABLE comments (
     );
 
 CREATE TABLE users (
-    email PRIMARY KEY, 
-    firstname VARCHAR(20) NOT NULL, 
-    password VARCHAR(50) NOT NULL, 
-    job VARCHAR(15) NOT NULL
-    );
+    userId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    email VARCHAR(50) NOT NULL, 
+    firstname VARCHAR(50) NOT NULL, 
+    password_hash VARCHAR(20) NOT NULL);
+
+CREATE TABLE roles (
+    roleId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    label VARCHAR(20) NOT NULL, 
+    userId INTEGER NOT NULL, 
+    FOREIGN KEY(userId) REFERENCES users(userId));
 
 CREATE TABLE housings (
     name VARCHAR(20) PRIMARY KEY, 
@@ -35,7 +40,8 @@ CREATE TABLE reports (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     date INTEGER NOT NULL, 
     report TEXT NOT NULL, 
-    animal_id INTEGER, FOREIGN KEY (animal_id) REFERENCES animals(id)
+    animal_id INTEGER, 
+    FOREIGN KEY (animal_id) REFERENCES animals(id)
     );
 
 CREATE TABLE animals (
@@ -44,7 +50,8 @@ CREATE TABLE animals (
     breed VARCHAR(50) NOT NULL, 
     slug VARCHAR(255) NOT NULL, 
     description TEXT, 
-    housing VACHAR(20) NOT NULL, FOREIGN KEY (housing) REFERENCES housings(name)
+    housing VACHAR(20) NOT NULL, 
+    FOREIGN KEY (housing) REFERENCES housings(name)
     );
 
 CREATE TABLE foods (
@@ -53,7 +60,8 @@ CREATE TABLE foods (
     state VARCHAR(255) NOT NULL, 
     food VARCHAR(50) NOT NULL, 
     weight VARCHAR(20) NOT NULL, 
-    animal_id INTEGER NOT NULL, FOREIGN KEY (animal_id) REFERENCES animals(id)
+    animal_id INTEGER NOT NULL, 
+    FOREIGN KEY (animal_id) REFERENCES animals(id)
     );
 
 INSERT INTO services (name, description, slug)
@@ -66,11 +74,17 @@ INSERT INTO comments (pseudo, message, validate)
 VALUES 
     ('Antoine D.', 'Zoo au top du top ! super après midi passé en famille, nous avons bien mangé et le guide est super !', true);
 
-INSERT INTO users (email, firstname, password, job)
+INSERT INTO users (userId, email, firstname, password_hash)
 VALUES 
-    ('josearcadia@hotmail.fr', 'José', 'arcadmin', 'Administrator');
-    ('samheldib@gmail.fr', 'Samir', 'test', 'employe');
-    ('nadegeletelier@outlook.fr', 'Nadège', 'test', 'veterinarian');
+    ('', 'josearcadia@hotmail.fr', 'José', 'arcadmin');
+    ('', 'samheldib@gmail.fr', 'Samir', 'test');
+    ('', 'nadegeletelier@outlook.fr', 'Nadège', 'test');
+
+INSERT INTO roles (roleId, label, userId)
+VALUES
+    ('', 'Administrator', 1);
+    ('', 'Employee', 2);
+    ('', 'Veterinarian', 3);
 
 INSERT INTO housings (name, description, slug)
 VALUES 

@@ -1,32 +1,43 @@
 <?php
-    $bdd = new PDO('sqlite:db.sqlite');
-    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+session_start();
 
-    $open = "SELECT * FROM opening;";
-    $resultOpen = $bdd->query($open);
+$bdd = new PDO('sqlite:db.sqlite');
+$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$open = "SELECT * FROM opening;";
+$resultOpen = $bdd->query($open);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['pass']);
 
-    $stmt = $bdd->prepare("SELECT * FROM users WHERE email = :email AND password = :pass;");
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':pass', $password);
+    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email AND password_hash = :pass;");
+    $stmtUser->bindParam(':email', $email);
+    $stmtUser->bindParam(':pass', $password);
 
-    $stmt->execute();
+    $stmtUser->execute();
 
-    $user = $stmt->fetch();
+    $user = $stmtUser->fetch();
 
     if ($user){
         $_SESSION['user'] = $user;
-        $job = $user['job'];
+        $_SESSION['userId'] = $user['userId']; 
+        $userId = $user['userId'];
 
-        if ($job == 'Administrator') {
-            header('Location: adminPanel.php');
-        } elseif ($job == 'Veterinarian') {
-            header('Location: veterPanel.php');
-        } elseif ($job == 'Employee') {
-            header('Location: employPanel.php');
+        $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+        $stmtRole->execute(['userId' => $userId]);
+        $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+        if ($role) {
+            $label = $role['label'];
+
+            if ($label == 'Administrator') {
+                header('Location: adminPanel.php');
+            } elseif ($label == 'Veterinarian') {
+                header('Location: veterPanel.php');
+            } elseif ($label == 'Employee') {
+                header('Location: employPanel.php');
+            }
         }
         exit;
     } else {

@@ -1,9 +1,17 @@
 <?php
+session_start();
+
+$userId = $_SESSION['userId'];
 
 $bdd = new PDO('sqlite:db.sqlite');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "José";
+$username = "SELECT firstname FROM users WHERE userId = :userId;";
+$query = $bdd->prepare($username);
+$query->bindValue(':userId', $userId, PDO::PARAM_INT);
+$query->execute();
+$user = $query->fetch(PDO::FETCH_ASSOC);
+$firstname = htmlspecialchars($user['firstname']);
 
 $user = "SELECT * FROM users;";
 $resultUser = $bdd->query($user);
@@ -20,12 +28,17 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
+try {
 // Connection MongoDB Database 
 require 'vendor/autoload.php'; 
 
 $client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
 $database = $client->selectDatabase("animals_click"); 
 $collection = $database->selectCollection("animals_click"); 
+} catch (PDOException $e) {
+    echo "Erreur de connexion à la base de données : " . $e->getMessage();
+    exit;
+}
 
 $options = ['sort' => ['click' => -1], 'limit' => 3];
 $cursor = $collection->find([], $options);
@@ -35,8 +48,8 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$sql = "SELECT * FROM animals WHERE id IN ($placeholders)";
-$stmtAnimal = $bdd->prepare($sql);
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders)";
+$stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
 
@@ -75,7 +88,7 @@ $stmtAnimal->execute($ids);
         </header>
 
         <section class="panel">
-            <h2>Bienvenue <?php echo $username; ?> !</h2>
+            <h2>Bienvenue <?php echo $firstname; ?> !</h2>
 
             <div class="favorite_animals">
                 <h3>Animaux les plus consulters</h3>

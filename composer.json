@@ -12,5 +12,8 @@
     "minimum-stability": "stable",
     "require": {
         "mongodb/mongodb": "^1.17"
+    },
+    "require-dev": {
+        "psalm/plugin-phpunit": "^0.18"
     }
 }
