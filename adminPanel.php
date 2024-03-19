@@ -28,17 +28,6 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
-foreach ($users as $user) {
-    $userId = $user['id']; 
-
-    $jobs = "SELECT label FROM roles WHERE userId = :userId;";
-    $users_job = $bdd->prepare($jobs);
-    $users_job->bindValue(':userId', $userId, PDO::PARAM_INT);
-    $users_job->execute();
-    $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
-    $job = htmlspecialchars($resultJob['label']);
-}
-
 try {
 // Connection MongoDB Database 
 require 'vendor/autoload.php'; 
@@ -138,16 +127,24 @@ $stmtAnimal->execute($ids);
                     </thead>
                     <tbody>
                         <?php
-                        $rowUser = $resultUser->fetch(PDO::FETCH_ASSOC);
-                        if ($rowUser) {
-                            do {
-                                $name = htmlspecialchars($rowUser["firstname"]);
-                                $mail = htmlspecialchars($rowUser["email"]);
-                                $pass = str_repeat('*', strlen($rowUser["password_hash"]));
+                            $rowUser = $resultUser->fetch(PDO::FETCH_ASSOC);
+                            if ($rowUser) {
+                                do {
+                                    $name = htmlspecialchars($rowUser["firstname"]);
+                                    $mail = htmlspecialchars($rowUser["email"]);
+                                    $pass = str_repeat('*', strlen($rowUser["password_hash"]));
+                                    $id = htmlspecialchars($rowUser["id"]);
 
-                                if ($job == "Administrator") {
-                                    continue;
-                                }
+                                    $jobs = "SELECT label FROM roles WHERE userId = :userId";
+                                    $users_job = $bdd->prepare($jobs);
+                                    $users_job->bindValue(':userId', $id, PDO::PARAM_INT);
+                                    $users_job->execute();
+                                    $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
+                                    $job = htmlspecialchars($resultJob['label']);
+
+                                    if ($job == "Administrator") {
+                                        continue;
+                                    }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
@@ -157,8 +154,6 @@ $stmtAnimal->execute($ids);
                             </tr>
                         <?php
                             } while ($rowUser = $resultUser->fetch(PDO::FETCH_ASSOC));
-                        } else {
-                            echo "<tr><td colspan='3'>Aucun personnel trouvé.</td></tr>";
                         }
                         ?>
                     </tbody>
