@@ -1,15 +1,14 @@
 <?php
+try {
 require 'vendor/autoload.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-$user = 'manu';
-$password = 'vanEtlaura7';
-$db = 'animals_click';
-
-$manager = new MongoDB\Driver\Manager("mongodb://{$user}:{$password}@localhost:27017/{$db}");
+$client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
+$database = $client->selectDatabase("animals_click"); 
+$collection = $database->selectCollection("animals_click"); 
+} catch (PDOException $e) {
+    echo "Erreur de connexion à la base de données : " . $e->getMessage();
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_animal = $_POST['id'];
@@ -18,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $options = [];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $manager->executeQuery("{$db}.animal_click", $query);
+    $cursor = $manager->executeQuery("{$db}.animals_click", $query);
 
     $click_animal = 0;
     foreach ($cursor as $document) {
@@ -34,5 +33,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ['upsert' => true]
     );
 
-    $manager->executeBulkWrite("{$db}.animal_click", $bulk);
+    $manager->executeBulkWrite("{$db}.animals_click", $bulk);
 }

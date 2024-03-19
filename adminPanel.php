@@ -134,26 +134,22 @@ $stmtAnimal->execute($ids);
                                     $mail = htmlspecialchars($rowUser["email"]);
                                     $pass = str_repeat('*', strlen($rowUser["password_hash"]));
                                     $id = htmlspecialchars($rowUser["id"]);
-                            
-                                    $jobQuery = "SELECT label FROM roles WHERE userId = :userId";
-                                    $users_job = $bdd->prepare($jobQuery);
+
+                                    $job = "SELECT label FROM roles WHERE userId = :userId";
+                                    $users_job = $bdd->prepare($jobs);
                                     $users_job->bindValue(':userId', $id, PDO::PARAM_INT);
                                     $users_job->execute();
                                     $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
-                                    $job = "";
-                                    if ($resultJob) {
-                                        $job = htmlspecialchars($resultJob['label']);
-                                    }
-                            
-                                    ?>
-                                    <tr>
-                                        <td><?php echo $name; ?></td>
-                                        <td><?php echo $mail; ?></td>
-                                        <td><?php echo $pass; ?></td>
-                                        <td><?php echo $job; ?></td>
-                                    </tr>
-                                    <?php
-                                } while ($rowUser = $resultUser->fetch(PDO::FETCH_ASSOC));
+                                    $job = htmlspecialchars($resultJob['label']);
+                        ?>
+                            <tr>
+                                <td><?php echo $name; ?></td>
+                                <td><?php echo $mail; ?></td>
+                                <td><?php echo $pass; ?></td>
+                                <td><?php echo $job; ?></td>
+                            </tr>
+                        <?php
+                            } while ($rowUser = $resultUser->fetch(PDO::FETCH_ASSOC));
                         }
                         ?>
                     </tbody>
