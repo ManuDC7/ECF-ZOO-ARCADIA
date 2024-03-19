@@ -24,3 +24,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $collection->insertOne(['_id' => new MongoDB\BSON\ObjectId($id_animal), 'click' => 0]);
     }
 }
+?>

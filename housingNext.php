@@ -120,7 +120,7 @@ $resultOpen = $bdd->query($open);
             var id_animal = $(this).find('a').attr('href').split('=')[1];
 
             $.ajax({
-                url: 'incrementClick.php',
+                url: 'animals.php',
                 method: 'POST',
                 data: { id: id_animal },
                 success: function(response) {
