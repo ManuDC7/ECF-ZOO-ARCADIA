@@ -29,20 +29,7 @@ $state_animal = $resultFood ? $resultFood["state"] : "Se porte bien";
 $food_animal = $resultFood ? $resultFood["food"] : "Aucune information trouvée";
 $weight_food_animal = $resultFood ? $resultFood["weight"] : "null";
 
-require 'vendor/autoload.php';
-$client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
-$database = $client->selectDatabase("animals_click"); 
-$collection = $database->selectCollection("animals_click"); 
 
-$animal = $collection->findOne(['id' => new MongoDB\BSON\ObjectId($animal_id)]);
-    if ($animal) {
-        $collection->updateOne(
-            ['id' => new MongoDB\BSON\ObjectId($animal_id)],
-            ['$inc' => ['click' => 1]]
-        );
-    } else {
-        $collection->insertOne(['id' => new MongoDB\BSON\ObjectId($animal_id), 'click' => 0]);
-    }
 ?>
 
 <!DOCTYPE html>
