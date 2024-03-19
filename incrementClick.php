@@ -13,25 +13,14 @@ try {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_animal = $_POST['id'];
 
-    $filter = ['_id' => new MongoDB\BSON\ObjectId($id_animal)];
-    $options = [];
+    $animal = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id_animal)]);
 
-    $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $client->executeQuery("animals_click.animals_click", $query);
-
-    $click_animal = 0;
-    foreach ($cursor as $document) {
-        $click_animal = $document->click;
+    if ($animal) {
+        $collection->updateOne(
+            ['_id' => new MongoDB\BSON\ObjectId($id_animal)],
+            ['$inc' => ['click' => 1]]
+        );
+    } else {
+        $collection->insertOne(['_id' => new MongoDB\BSON\ObjectId($id_animal), 'click' => 0]);
     }
-
-    $click_animal++;
-
-    $bulk = new MongoDB\Driver\BulkWrite;
-    $bulk->update(
-        ['_id' => new MongoDB\BSON\ObjectId($id_animal)],
-        ['$set' => ['click' => $click_animal]],
-        ['upsert' => true]
-    );
-
-    $client->executeBulkWrite("animals_click.animals_click", $bulk);
 }
