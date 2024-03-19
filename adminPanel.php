@@ -29,7 +29,7 @@ $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
 foreach ($users as $user) {
-    $userId = $user['id'];
+    $userId = $user['id']; 
 
     $jobs = "SELECT roles.label FROM roles INNER JOIN users ON roles.userId = users.userId WHERE users.userId = :userId;";
     $users_job = $bdd->prepare($jobs);
@@ -59,7 +59,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY FIELD(id, " . implode(',', $ids) . ")";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY id DESC";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
