@@ -48,7 +48,7 @@ $collection = $database->selectCollection("animals_click");
     exit;
 }
 
-$options = ['sort' => ['click' => -1], 'limit' => 3];
+$options = ['sort' => ['click' => -1], 'limit' => 4];
 $cursor = $collection->find([], $options);
 $ids = [];
 foreach ($cursor as $document) {
@@ -142,9 +142,6 @@ $stmtAnimal->execute($ids);
                                 $mail = htmlspecialchars($rowUser["email"]);
                                 $pass = str_repeat('*', strlen($rowUser["password_hash"]));
 
-                                if ($job == "Administrator") {
-                                    continue;
-                                }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
@@ -273,10 +270,7 @@ $stmtAnimal->execute($ids);
                                 $animal_description = isset($rowAnimal["description"]) ? substr($rowAnimal["description"], 0, 200) : '';
                                 $animal_id = $rowAnimal["id"];
 
-                                // Rechercher le document dans la collection MongoDB qui correspond à l'ID de l'animal
                                 $document = $collection->findOne(['id' => $animal_id]);
-
-                                // Si un document a été trouvé, récupérer le nombre de clics, sinon utiliser 0
                                 $animal_visit = $document ? $document['click'] : 0;
                     ?>
                             <tr>
