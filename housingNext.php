@@ -114,22 +114,6 @@ $resultOpen = $bdd->query($open);
             </div>
         </footer>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-        $('.box').click(function() {
-            var id_animal = $(this).find('a').attr('href').split('=')[1];
-
-            $.ajax({
-                url: 'animals.php',
-                method: 'POST',
-                data: { id: id_animal },
-                success: function(response) {
-                    console.log(response);
-                }
-            });
-        });
-        </script>
-
     </body>
 
 </html>
