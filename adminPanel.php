@@ -141,6 +141,9 @@ $stmtAnimal->execute($ids);
                                 $mail = htmlspecialchars($rowUser["email"]);
                                 $pass = str_repeat('*', strlen($rowUser["password_hash"]));
 
+                                if ($job == "Administrator") {
+                                    continue;
+                                }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
@@ -270,10 +273,10 @@ $stmtAnimal->execute($ids);
                                 $animal_id = $rowAnimal["id"];
 
                                 // Rechercher le document dans la collection MongoDB qui correspond à l'ID de l'animal
-                                // $document = $collection->findOne(['id' => $animal_id]);
+                                $document = $collection->findOne(['id' => $animal_id]);
 
                                 // Si un document a été trouvé, récupérer le nombre de clics, sinon utiliser 0
-                                $animal_visit = 0;
+                                $animal_visit = $document ? $document['click'] : 0;
                     ?>
                             <tr>
                                 <td><?php echo $animal_name; ?></td>
