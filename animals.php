@@ -17,8 +17,17 @@ $description_animal = $rowAnimal["description"];
 $firstname_animal = $rowAnimal["firstname"];
 $breed_animal = $rowAnimal["breed"];
 $img_animal = $rowAnimal["slug"];
-$state_animal = 'Va bien';
 $house_animal = $rowAnimal["housing"];
+
+$food = "SELECT * FROM foods WHERE animal_id = :id ORDER BY date DESC LIMIT 1;";
+$animal_food = $bdd->prepare($food);
+$animal_food->execute([':id' => $animal_id]);
+
+$resultFood = $animal_food->fetch(PDO::FETCH_ASSOC);
+
+$state_animal = $resultFood ? $resultFood["state"] : "Se porte bien";
+$food_animal = $resultFood ? $resultFood["food"] : "Aucune information trouvée";
+$weight_food_animal = $resultFood ? $resultFood["weight"] : "null";
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +72,7 @@ $house_animal = $rowAnimal["housing"];
             Race : <strong><?php echo ucfirst($breed_animal); ?></strong><br><br> 
             Etat : <strong><?php echo ucfirst($state_animal); ?></strong><br><br> 
             Habitat : <strong><?php echo ucfirst($house_animal); ?></strong><br><br> 
+            Dernier repas (Quantité) : <strong><?php echo ucfirst($food_animal); ?></strong>(<strong><?php echo $weight_food_animal; ?>)<br><br>
         </p>
 
         <hr>

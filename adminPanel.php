@@ -28,6 +28,14 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
+$jobs = "SELECT * FROM roles WHERE userId = :userId;";
+$users_job = $bdd->prepare($jobs);
+$user_job->execute([':userId' => $userId]);
+
+$resultJob = $user_job->fetch(PDO::FETCH_ASSOC);
+
+$job = $resultJob["label"];
+
 try {
 // Connection MongoDB Database 
 require 'vendor/autoload.php'; 
@@ -134,8 +142,7 @@ $stmtAnimal->execute($ids);
                             do {
                                 $name = htmlspecialchars($rowUser["firstname"]);
                                 $mail = htmlspecialchars($rowUser["email"]);
-                                $pass = str_repeat('*', strlen($rowUser["password"]));
-                                $job = htmlspecialchars($rowUser["job"]);
+                                $pass = str_repeat('*', strlen($rowUser["password_hash"]));
 
                                 if ($job == "Administrator") {
                                     continue;
@@ -257,7 +264,7 @@ $stmtAnimal->execute($ids);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
+                    <?php
                         $rowAnimal = $resultAnimal->fetch(PDO::FETCH_ASSOC);
                         if ($rowAnimal) {
                             do {
@@ -266,8 +273,14 @@ $stmtAnimal->execute($ids);
                                 $animal_housing = htmlspecialchars($rowAnimal["housing"]);
                                 $animal_img = substr($rowAnimal["slug"], 0, 30);
                                 $animal_description = isset($rowAnimal["description"]) ? substr($rowAnimal["description"], 0, 200) : '';
-                                $animal_visit = 0;
-                        ?>
+                                $animal_id = $rowAnimal["id"];
+
+                                // Rechercher le document dans la collection MongoDB qui correspond à l'ID de l'animal
+                                $document = $collection->findOne(['id' => $animal_id]);
+
+                                // Si un document a été trouvé, récupérer le nombre de clics, sinon utiliser 0
+                                $animal_visit = $document ? $document['click'] : 0;
+                    ?>
                             <tr>
                                 <td><?php echo $animal_name; ?></td>
                                 <td><?php echo $animal_breed; ?></td>
@@ -276,12 +289,12 @@ $stmtAnimal->execute($ids);
                                 <td><?php echo $animal_description; ?></td>
                                 <td><?php echo $animal_visit; ?></td>
                             </tr>
-                        <?php
+                    <?php
                             } while ($rowAnimal = $resultAnimal->fetch(PDO::FETCH_ASSOC));
                         } else {
                             echo "<tr><td colspan='9'>Aucun animal trouvé.</td></tr>";
                         }
-                        ?>
+                    ?>
                     </tbody>
                 </table>
             </div>
