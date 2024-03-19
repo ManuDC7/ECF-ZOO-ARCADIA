@@ -28,13 +28,16 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
-var_dump($userId);
-$jobs = "SELECT roles.label FROM roles INNER JOIN users ON roles.userId = users.userId WHERE users.userId = :userId;";
-$users_job = $bdd->prepare($jobs);
-$users_job->bindValue(':userId', $userId, PDO::PARAM_INT);
-$users_job->execute();
-$resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
-$job = htmlspecialchars($resultJob['label']);
+foreach ($users as $user) {
+    $userId = $user['id'];
+
+    $jobs = "SELECT roles.label FROM roles INNER JOIN users ON roles.userId = users.userId WHERE users.userId = :userId;";
+    $users_job = $bdd->prepare($jobs);
+    $users_job->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $users_job->execute();
+    $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
+    $job = htmlspecialchars($resultJob['label']);
+}
 
 try {
 // Connection MongoDB Database 
@@ -56,7 +59,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY id DESC";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY FIELD(id, " . implode(',', $ids) . ")";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
@@ -142,6 +145,9 @@ $stmtAnimal->execute($ids);
                                 $mail = htmlspecialchars($rowUser["email"]);
                                 $pass = str_repeat('*', strlen($rowUser["password_hash"]));
 
+                                if ($job == "Administrator") {
+                                    continue;
+                                }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
