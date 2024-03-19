@@ -48,7 +48,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders)";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY id DESC";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
@@ -142,9 +142,6 @@ $stmtAnimal->execute($ids);
                                     $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
                                     $job = htmlspecialchars($resultJob['label']);
 
-                                    if ($job == "Administrator") {
-                                        continue;
-                                    }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
