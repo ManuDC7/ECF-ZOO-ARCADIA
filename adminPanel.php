@@ -135,7 +135,9 @@ $stmtAnimal->execute($ids);
                                     $pass = str_repeat('*', strlen($rowUser["password_hash"]));
                                     $id = $rowUser["id"];
 
-                                    $job = "SELECT label FROM roles WHERE userId = $id";
+                                    $jobQuery = "SELECT label FROM roles WHERE userId = $id";
+                                    $resultJob = $bdd->query($jobQuery);
+                                    $job = $resultJob->fetch(PDO::FETCH_ASSOC)['label'];
 
                         ?>
                             <tr>
