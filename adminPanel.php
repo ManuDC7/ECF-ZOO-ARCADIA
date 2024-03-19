@@ -28,14 +28,6 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
-$jobs = "SELECT * FROM roles WHERE userId = :userId;";
-$users_job = $bdd->prepare($jobs);
-$user_job->execute([':userId' => $userId]);
-
-$resultJob = $user_job->fetch(PDO::FETCH_ASSOC);
-
-$job = $resultJob["label"];
-
 try {
 // Connection MongoDB Database 
 require 'vendor/autoload.php'; 
