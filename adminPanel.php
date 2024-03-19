@@ -276,10 +276,10 @@ $stmtAnimal->execute($ids);
                                 $animal_id = $rowAnimal["id"];
 
                                 // Rechercher le document dans la collection MongoDB qui correspond à l'ID de l'animal
-                                $document = $collection->findOne(['id' => $animal_id]);
+                                // $document = $collection->findOne(['id' => $animal_id]);
 
                                 // Si un document a été trouvé, récupérer le nombre de clics, sinon utiliser 0
-                                $animal_visit = $document ? $document['click'] : 0;
+                                $animal_visit = 0;
                     ?>
                             <tr>
                                 <td><?php echo $animal_name; ?></td>
