@@ -1,10 +1,10 @@
 <?php
 try {
-require 'vendor/autoload.php';
+    require 'vendor/autoload.php';
 
-$client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
-$database = $client->selectDatabase("animals_click"); 
-$collection = $database->selectCollection("animals_click"); 
+    $client = new MongoDB\Client("mongodb://manu:vanEtlaura7@localhost:27017");
+    $database = $client->selectDatabase("animals_click"); 
+    $collection = $database->selectCollection("animals_click"); 
 } catch (PDOException $e) {
     echo "Erreur de connexion à la base de données : " . $e->getMessage();
     exit;
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $options = [];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $manager->executeQuery("{$db}.animals_click", $query);
+    $cursor = $client->executeQuery("animals_click.animals_click", $query);
 
     $click_animal = 0;
     foreach ($cursor as $document) {
@@ -33,5 +33,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ['upsert' => true]
     );
 
-    $manager->executeBulkWrite("{$db}.animals_click", $bulk);
+    $client->executeBulkWrite("animals_click.animals_click", $bulk);
 }
