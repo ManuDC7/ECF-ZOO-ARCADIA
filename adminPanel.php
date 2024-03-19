@@ -28,13 +28,12 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
-$jobs = "SELECT * FROM roles WHERE userId = :userId;";
+$jobs = "SELECT label FROM roles WHERE userId = :userId;";
 $users_job = $bdd->prepare($jobs);
-$users_job->execute([':userId' => $userId]);
-
+$users_job->bindValue(':userId', $userId, PDO::PARAM_INT);
+$users_job->execute();
 $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
-
-$job = $resultJob["label"];
+$job = htmlspecialchars($resultJob['label']);
 
 try {
 // Connection MongoDB Database 
