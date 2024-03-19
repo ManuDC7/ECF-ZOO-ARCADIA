@@ -44,7 +44,7 @@ $options = ['sort' => ['click' => -1], 'limit' => 4];
 $cursor = $collection->find([], $options);
 $ids = [];
 foreach ($cursor as $document) {
-    $ids[] = $document['id'];
+    $ids[] = $document['click'];
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
