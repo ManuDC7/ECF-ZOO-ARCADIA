@@ -28,7 +28,8 @@ $resultAnimal = $bdd->query($animal);
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
 
-$jobs = "SELECT label FROM roles WHERE userId = :userId;";
+var_dump($userId);
+$jobs = "SELECT roles.label FROM roles INNER JOIN users ON roles.userId = users.userId WHERE users.userId = :userId;";
 $users_job = $bdd->prepare($jobs);
 $users_job->bindValue(':userId', $userId, PDO::PARAM_INT);
 $users_job->execute();
@@ -55,7 +56,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders)";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY id DESC";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
