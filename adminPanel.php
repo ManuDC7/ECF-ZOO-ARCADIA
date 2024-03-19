@@ -48,7 +48,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY FIELD(id, " . implode(',', $ids) . ")";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders)";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
@@ -134,11 +134,12 @@ $stmtAnimal->execute($ids);
                                     $mail = htmlspecialchars($rowUser["email"]);
                                     $pass = str_repeat('*', strlen($rowUser["password_hash"]));
                                     $id = htmlspecialchars($rowUser["id"]);
-
-                                    $jobs = "SELECT label FROM roles WHERE userId = :userId";
+                                    echo $id;
+                                    $jobs = "SELECT label FROM roles WHERE userId = 1";
                                     $users_job = $bdd->prepare($jobs);
                                     $users_job->bindValue(':userId', $id, PDO::PARAM_INT);
                                     $users_job->execute();
+                                    var_dump($users_job->errorInfo());
                                     $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
                                     $job = htmlspecialchars($resultJob['label']);
 
