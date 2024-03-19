@@ -48,7 +48,7 @@ foreach ($cursor as $document) {
 }
 
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY id DESC";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY FIELD(id, " . implode(',', $ids) . ")";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
