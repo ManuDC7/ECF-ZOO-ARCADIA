@@ -98,16 +98,14 @@ $stmtAnimal->execute($ids);
             <h2>Bienvenue <?php echo $firstname; ?> !</h2>
 
             <div class="favorite_animals">
-                <h3>Animaux les plus consulters</h3>
+                <h3>Animaux les plus consultés</h3>
                 <?php
                 if ($rowAnimal = $stmtAnimal->fetch(PDO::FETCH_ASSOC)) {
                     do {
                         $animal_img = $rowAnimal["slug"];
                         ?>
                         <div class="box">
-                            <a href="animals.php?id=<?php echo $animal_id; ?>">
                                 <img src="<?php echo $animal_img; ?>" alt="Image d'un animal du parc'" width="200" height="200">
-                            </a>  
                         </div>
                         <?php
                     } while ($rowAnimal = $stmtAnimal->fetch(PDO::FETCH_ASSOC));
@@ -143,9 +141,6 @@ $stmtAnimal->execute($ids);
                                 $mail = htmlspecialchars($rowUser["email"]);
                                 $pass = str_repeat('*', strlen($rowUser["password_hash"]));
 
-                                if ($job == "Administrator") {
-                                    continue;
-                                }
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
