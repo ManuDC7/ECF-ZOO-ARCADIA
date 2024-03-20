@@ -47,8 +47,15 @@ foreach ($cursor as $document) {
     $ids[] = $document['id'];
 }
 
+//  chaîne pour la clause 
+$orderClause = 'CASE id ';
+foreach ($ids as $index => $id) {
+    $orderClause .= sprintf('WHEN %d THEN %d ', $id, $index);
+}
+$orderClause .= 'END';
+
 $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-$animals = "SELECT * FROM animals WHERE id IN ($placeholders)";
+$animals = "SELECT * FROM animals WHERE id IN ($placeholders) ORDER BY $orderClause";
 $stmtAnimal = $bdd->prepare($animals);
 $stmtAnimal->execute($ids);
 ?>
