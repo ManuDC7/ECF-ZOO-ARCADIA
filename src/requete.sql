@@ -38,7 +38,7 @@ CREATE TABLE opening (
 
 CREATE TABLE reports (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    date INTEGER NOT NULL, 
+    date VARCHAR(10) NOT NULL, 
     report TEXT NOT NULL, 
     animal_id INTEGER, 
     FOREIGN KEY (animal_id) REFERENCES animals(id)
@@ -56,7 +56,8 @@ CREATE TABLE animals (
 
 CREATE TABLE foods (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    date INTEGER NOT NULL, 
+    date VARCHAR(10) NOT NULL, 
+    hours VARCHAR(5) NOT NULL,
     state VARCHAR(255) NOT NULL, 
     food VARCHAR(50) NOT NULL, 
     weight VARCHAR(20) NOT NULL, 
@@ -107,7 +108,7 @@ VALUES
     ('victor', 'boa constrictor', 'https://image.noelshack.com/fichiers/2024/08/5/1708708051-snake.jpg', 'Victor est un boa constrictor impressionnant, avec un corps long et musclé qui serpente gracieusement à travers son habitat. Sa peau lisse et brillante est ornée de motifs complexes, allant du brun foncé au beige, lui permettant de se fondre parfaitement dans son environnement. Ses yeux perçants, souvent comparés à des joyaux étincelants, témoignent de sa vigilance constante. Victor se déplace avec une fluidité sinistre, traquant silencieusement sa proie avant de la ceinturer dans ses puissantes anneaux. Malgré sa réputation de prédateur redoutable, Victor est un animal paisible et discret, préférant éviter les confrontations inutiles. Il passe la plupart de ses journées à se reposer, dissimulé dans des buissons, attendant patiemment sa prochaine opportunité de chasse.', 'marais'),
     ('léon', 'lion', 'https://image.noelshack.com/fichiers/2024/08/5/1708708015-lion.jpg', 'Léon est un lion majestueux et imposant, avec une crinière flamboyante qui encadre son visage noble. Sa fourrure dorée brille sous le soleil de la savane, donnant à son pelage une aura de puissance et de beauté sauvage. Les yeux perçants de Leon reflètent la détermination et la fermeté de son caractère, témoignant de sa place dominante. Leon se déplace avec une grâce souveraine, faisant régner sa présence royale sur son territoire. Il chasse avec agilité et stratégie, traquant sa proie avec une précision redoutable. Malgré sa réputation de prédateur redoutable, Leon est également un leader bienveillant pour sa fière famille de lions, veillant sur eux avec vigilance et affection.', 'savane'),
     ('olaf', 'girafe', 'https://image.noelshack.com/fichiers/2024/08/5/1708707982-giraffe.jpg', 'Olaf est une girafe élégante et gracieuse, avec un long cou élancé et des taches distinctives réparties sur son pelage couleur fauve. Ses grands yeux doux reflètent la tranquillité et la sérénité de son habitat naturel. Olaf se déplace avec une démarche calme et paisible à travers les vastes étendues de la savane africaine, cherchant des feuilles tendres dans les cimes des arbres acacias. Sa silhouette élancée, remarquable au loin, fait de lui un emblème reconnaissable de la savane. Malgré sa taille imposante, Olaf est un animal doux et docile, préférant la tranquillité à la confrontation. Il est peu souvent en compagnie de ses semblables, échangeant des gestes agressifs de coups de tête.', 'savane'),
-    ('léonard', 'léopard', 'https://image.noelshack.com/fichiers/2024/08/5/1708707951-leopard.jpg', NULL, 'jungle'),
+    ('léonard', 'léopard', 'https://image.noelshack.com/fichiers/2024/08/5/1708707951-leopard.jpg', "Léonard le léopard est le souverain indiscuté des terres sauvages, avec son pelage doré tacheté et ses yeux perçants scrutant l'horizon. Agile et gracieux, il se déplace avec une élégance naturelle à travers la jungle, se fondant dans les hautes herbes ondulantes. Sa démarche révèle une assurance inébranlable, tandis qu'il grimpe aux arbres avec une agilité déconcertante pour guetter ses proies. Chasseur redoutable, il utilise sa rapidité fulgurante et sa ruse légendaire pour capturer sa nourriture, démontrant ainsi sa place prédominante au sommet de la chaîne alimentaire. Malgré sa nature solitaire, il peut parfois se joindre à d'autres félins pour chasser ou partager un moment de camaraderie sous la lueur de la lune. Léonard incarne la dualité de la nature sauvage, à la fois puissant prédateur et être sensible, captivant par sa beauté mystérieuse et sa majesté indéniable.", 'jungle'),
     ('adan', 'toucan', 'https://image.noelshack.com/fichiers/2024/08/5/1708707899-toucan.jpg', 'Adan est un toucan majestueux au plumage éclatant et coloré, orné de nuances vives de rouge, de jaune et de vert. Son bec distinctif, long et fin, est un noir profond, avec des touches de rouge vif à la base. Ses grands yeux bruns sont vifs et curieux, reflétant son intelligence et sa vivacité. Adan est un oiseau remarquablement gracieux, avec une démarche élégante et un vol puissant et agile. Il vit dans les profondeurs de la luxuriante jungle tropicale, où il passe ses journées à explorer les hauteurs des arbres et à se nourrir de fruits juteux, de baies et parfois même de petits insectes. Sa voix résonne à travers la canopée sous la forme de croassements rauques et mélodieux, ajoutant une touche de magie à la symphonie naturelle de la jungle. Malgré sa taille imposante, Adan est un oiseau doux et sociable, souvent vu en compagnie de ses semblables, se lançant dans des jeux aériens et des duels de becs amicaux. Sa personnalité enjouée et son charme irrésistible en font une figure appréciée de la faune de la jungle, un symbole de la beauté et de la diversité de la nature tropicale.', 'jungle');
 
 DELETE FROM users WHERE job = 'employe';
