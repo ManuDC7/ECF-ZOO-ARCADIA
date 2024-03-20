@@ -148,6 +148,10 @@ $stmtAnimal->execute($ids);
                                     $resultJob = $users_job->fetch(PDO::FETCH_ASSOC);
                                     $job = htmlspecialchars($resultJob['label']);
 
+                                    if ($job == "Administrator") {
+                                        continue;
+                                    }
+
                         ?>
                             <tr>
                                 <td><?php echo $name; ?></td>
