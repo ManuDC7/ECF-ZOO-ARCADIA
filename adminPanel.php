@@ -47,7 +47,6 @@ foreach ($cursor as $document) {
     $ids[] = $document['id'];
 }
 
-//  chaîne pour la clause 
 $orderClause = 'CASE id ';
 foreach ($ids as $index => $id) {
     $orderClause .= sprintf('WHEN %d THEN %d ', $id, $index);
@@ -140,7 +139,7 @@ $stmtAnimal->execute($ids);
                                     $name = htmlspecialchars($rowUser["firstname"]);
                                     $mail = htmlspecialchars($rowUser["email"]);
                                     $pass = str_repeat('*', strlen($rowUser["password_hash"]));
-                                    $id = htmlspecialchars($rowUser["id"]);
+                                    $id = $rowUser["userId"];
 
                                     $jobs = "SELECT label FROM roles WHERE userId = :userId";
                                     $users_job = $bdd->prepare($jobs);
