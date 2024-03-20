@@ -58,13 +58,13 @@ $resultOpen = $bdd->query($open);
                 <h3>Soumettre un compte rendu sur un animal</h3>
                 <table style="table-layout: fixed; width: 100%;">
                     <colgroup>
-                        <col style="width: 21%;">
+                        <col style="width: 20%;">
                         <col style="width: 14%;">
                         <col style="width: 14%;">
                         <col style="width: 14%;">
                         <col style="width: 14%;">
                         <col style="width: 14%;">
-                        <col style="width: 9%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                         <tr>
@@ -114,7 +114,7 @@ $resultOpen = $bdd->query($open);
                                 <td>
                                     <form>
                                         <div>
-                                            <input type="text" required name="text" placeholder="01/01/1970">
+                                            <input type="text" required name="text" placeholder="1970/01/01">
                                         </div>
                                     </form>
                                 </td>
