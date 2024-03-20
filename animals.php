@@ -88,7 +88,7 @@ if ($animal) {
             Race : <strong><?php echo ucfirst($breed_animal); ?></strong><br><br> 
             Etat : <strong><?php echo ucfirst($state_animal); ?></strong><br><br> 
             Habitat : <strong><?php echo ucfirst($house_animal); ?></strong><br><br> 
-            Dernier repas (Quantité) : <strong><?php echo ucfirst($food_animal); ?></strong>(<strong><?php echo $weight_food_animal; ?>)<br><br>
+            Dernier repas (Qté) : <strong><?php echo ucfirst($food_animal); ?></strong>(<strong><?php echo $weight_food_animal; ?>)<br><br>
         </p>
 
         <hr>

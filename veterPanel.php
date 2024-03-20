@@ -58,12 +58,13 @@ $resultOpen = $bdd->query($open);
                 <h3>Soumettre un compte rendu sur un animal</h3>
                 <table style="table-layout: fixed; width: 100%;">
                     <colgroup>
-                        <col style="width: 26%;">
-                        <col style="width: 16%;">
-                        <col style="width: 16%;">
-                        <col style="width: 16%;">
-                        <col style="width: 16%;">
-                        <col style="width: 10%;">
+                        <col style="width: 21%;">
+                        <col style="width: 14%;">
+                        <col style="width: 14%;">
+                        <col style="width: 14%;">
+                        <col style="width: 14%;">
+                        <col style="width: 14%;">
+                        <col style="width: 9%;">
                     </colgroup>
                     <thead>
                         <tr>
@@ -72,6 +73,7 @@ $resultOpen = $bdd->query($open);
                             <th>Nourriture</th>
                             <th>Grammage</th>
                             <th>Date</th>
+                            <th>Heure</th>
                             <th> </th>
                         </tr>
                     </thead>
@@ -91,28 +93,35 @@ $resultOpen = $bdd->query($open);
                                 <td>
                                     <form>
                                         <div>
-                                            <input type="text" required name="text" placeholder="Etat de l'animal">
+                                            <input type="text" required name="text" placeholder="Se porte bien">
                                         </div>
                                     </form>
                                 </td>
                                 <td>
                                     <form>
                                         <div>
-                                            <input type="text" required name="text" placeholder="Type de nourrite">
+                                            <input type="text" required name="text" placeholder="Poulet">
                                         </div>
                                     </form>
                                 </td>
                                 <td>
                                     <form>
                                         <div>
-                                            <input type="text" required name="text" placeholder="Grammage nourriture">
+                                            <input type="text" required name="text" placeholder="10 Kg">
                                         </div>
                                     </form>
                                 </td>
                                 <td>
                                     <form>
                                         <div>
-                                            <input type="text" required name="text" placeholder="Format 2024-03-15">
+                                            <input type="text" required name="text" placeholder="01/01/1970">
+                                        </div>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form>
+                                        <div>
+                                            <input type="text" required name="text" placeholder="00h00">
                                         </div>
                                     </form>
                                 </td>
