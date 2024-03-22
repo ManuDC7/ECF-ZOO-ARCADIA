@@ -7,7 +7,7 @@ try {
 
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $comment = "SELECT * FROM comments; ORDER BY id DESC;";
+    $comment = "SELECT * FROM comments ORDER BY id DESC;";
     $resultComment = $bdd->query($comment);
 
     $open = "SELECT * FROM opening;";

@@ -15,6 +15,45 @@ $firstname = htmlspecialchars($user['firstname']);
 
 $open = "SELECT * FROM opening;";
 $resultOpen = $bdd->query($open);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['firstFormInput'])) {
+    $animal = strtolower($_POST["animal"]);
+
+    $state = htmlspecialchars($_POST["state"], ENT_QUOTES, 'UTF-8');
+    $food = htmlspecialchars($_POST["food"], ENT_QUOTES, 'UTF-8');
+    $weight = htmlspecialchars($_POST["weight"], ENT_QUOTES, 'UTF-8');
+    $date = htmlspecialchars($_POST["date"], ENT_QUOTES, 'UTF-8');
+    $hours = htmlspecialchars($_POST["hours"], ENT_QUOTES, 'UTF-8');
+
+    $animal_id_query = "SELECT id FROM animals WHERE firstname = :animal;";
+    $stmt = $bdd->prepare($animal_id_query);
+    $stmt->bindValue(':animal', $animal);
+    $stmt->execute();
+    $animal_id = $stmt->fetchColumn();
+
+    $sql = "INSERT INTO foods (state, food, weight, date, hours, animal_id) VALUES (:state, :food, :weight, :date, :hours, :animal_id)";
+
+    $stmt = $bdd->prepare($sql);
+    $stmt->bindValue(':animal_id', $animal_id);
+    $stmt->bindValue(':state', $state);
+    $stmt->bindValue(':food', $food);
+    $stmt->bindValue(':weight', $weight);
+    $stmt->bindValue(':date', $date);
+    $stmt->bindValue(':hours', $hours);
+    $stmt->execute();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
+    $habitat = strtolower($_POST["selectmenu"]);
+    $report = htmlspecialchars($_POST["text"], ENT_QUOTES, 'UTF-8');
+
+    $sql = "UPDATE housings SET comments = :report WHERE name = :habitat";
+
+    $stmt = $bdd->prepare($sql);
+    $stmt->bindValue(':habitat', $habitat);
+    $stmt->bindValue(':report', $report);
+    $stmt->execute();
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,31 +95,33 @@ $resultOpen = $bdd->query($open);
 
             <div class="container">
                 <h3>Soumettre un compte rendu sur un animal</h3>
-                <table style="table-layout: fixed; width: 100%;">
-                    <colgroup>
-                        <col style="width: 20%;">
-                        <col style="width: 14%;">
-                        <col style="width: 14%;">
-                        <col style="width: 14%;">
-                        <col style="width: 14%;">
-                        <col style="width: 14%;">
-                        <col style="width: 10%;">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Animal</th>
-                            <th>Etat</th>
-                            <th>Nourriture</th>
-                            <th>Grammage</th>
-                            <th>Date</th>
-                            <th>Heure</th>
-                            <th> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <form action="veterPanel.php" method="post">
+                    <input type="hidden" name="firstFormInput" value="1">
+                    <table style="table-layout: fixed; width: 100%;">
+                        <colgroup>
+                            <col style="width: 20%;">
+                            <col style="width: 14%;">
+                            <col style="width: 14%;">
+                            <col style="width: 14%;">
+                            <col style="width: 14%;">
+                            <col style="width: 14%;">
+                            <col style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Animal</th>
+                                <th>Etat</th>
+                                <th>Nourriture</th>
+                                <th>Grammage</th>
+                                <th>Date</th>
+                                <th>Heure</th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr>
                                 <td>
-                                    <select name="selectmenu">
+                                    <select name="animal">
                                         <?php
                                         $resultAnimal = $bdd->query("SELECT * FROM animals");
                                         while ($animal = $resultAnimal->fetch(PDO::FETCH_ASSOC)) {
@@ -91,98 +132,86 @@ $resultOpen = $bdd->query($open);
                                     </select>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="text" required name="text" placeholder="Se porte bien">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="text" name="state" placeholder="Se porte bien">
+                                    </div>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="text" required name="text" placeholder="Poulet">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="text" name="food" placeholder="Poulet">
+                                    </div>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="text" required name="text" placeholder="10 Kg">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="text" name="weight" placeholder="10 Kg">
+                                    </div>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="text" required name="text" placeholder="1970/01/01">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="text" name="date" placeholder="1970/01/01">
+                                    </div>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="text" required name="text" placeholder="00h00">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="text" required name="hours" placeholder="00h00">
+                                    </div>
                                 </td>
                                 <td>
-                                    <form>
-                                        <div>
-                                            <input type="submit" value="Soumettre">
-                                        </div>
-                                    </form>
+                                    <div>
+                                        <input type="submit" value="Soumettre">
+                                    </div>
                                 </td>
                             </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </form>
             </div>
 
             <div class="container">
                 <h3>Soumettre un compte rendu sur un habitat</h3>
-                <table style="table-layout: fixed; width: 100%;">
-                    <colgroup>
-                        <col style="width: 26%;">
-                        <col style="width: 64%;">
-                        <col style="width: 10%;">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Habitat</th>
-                            <th>Compte rendu</th>
-                            <th> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <select name="selectmenu">
-                                    <?php
-                                    $resultHouse = $bdd->query("SELECT * FROM housings");
-                                    while ($housing = $resultHouse->fetch(PDO::FETCH_ASSOC)) {
-                                        $housing_name = htmlspecialchars($housing["name"]);
-                                        echo "<option>". ucfirst($housing_name) ."</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-                            <td>
-                                <form>
+                <form action="veterPanel.php" method="post">
+                    <input type="hidden" name="secondFormInput" value="2">
+                    <table style="table-layout: fixed; width: 100%;">
+                        <colgroup>
+                            <col style="width: 26%;">
+                            <col style="width: 64%;">
+                            <col style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Habitat</th>
+                                <th>Compte rendu</th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select name="selectmenu">
+                                        <?php
+                                        $resultHouse = $bdd->query("SELECT * FROM housings");
+                                        while ($housing = $resultHouse->fetch(PDO::FETCH_ASSOC)) {
+                                            $housing_name = htmlspecialchars($housing["name"]);
+                                            echo "<option>". ucfirst($housing_name) ."</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
+                                <td>
                                     <div>
                                         <input type="text" required name="text" placeholder="Compte rendu détaillé">
                                     </div>
-                                </form>
-                            </td>
-                            <td>
-                                <form>
+                                </td>
+                                <td>
                                     <div>
                                         <input type="submit" value="Soumettre">
                                     </div>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
 
             <div class="container">
                 <h3>Gestion des comptes rendus des animaux</h3>
