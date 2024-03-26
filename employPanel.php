@@ -31,6 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
     }
 
+    if (isset($_POST['com_message2'])) {
+        $com_message2 = $_POST['com_message2'];
+
+        $stmt = $bdd->prepare("UPDATE comments SET validate = 'false' WHERE message = :com_message2");
+        $stmt->bindParam(':com_message2', $com_message2);
+        $stmt->execute();
+    }
+
     if (isset($_POST['form_name']) && $_POST['form_name'] == 'addServiceForm') {
         $nom = $_POST['Nom'];
         $description = $_POST['Description'];
@@ -60,7 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['firstFormInput'])) {
         $animal = strtolower($_POST["animal"]);
 
-        $state = htmlspecialchars($_POST["state"], ENT_QUOTES, 'UTF-8');
         $food = htmlspecialchars($_POST["food"], ENT_QUOTES, 'UTF-8');
         $weight = htmlspecialchars($_POST["weight"], ENT_QUOTES, 'UTF-8');
         $date = htmlspecialchars($_POST["date"], ENT_QUOTES, 'UTF-8');
@@ -72,11 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $animal_id = $stmt->fetchColumn();
 
-        $sql = "INSERT INTO foods (state, food, weight, date, hours, animal_id) VALUES (:state, :food, :weight, :date, :hours, :animal_id)";
+        $sql = "INSERT INTO foods (food, weight, date, hours, animal_id) VALUES (:food, :weight, :date, :hours, :animal_id)";
 
         $stmt = $bdd->prepare($sql);
         $stmt->bindValue(':animal_id', $animal_id);
-        $stmt->bindValue(':state', $state);
         $stmt->bindValue(':food', $food);
         $stmt->bindValue(':weight', $weight);
         $stmt->bindValue(':date', $date);
@@ -161,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <td><?php echo $com_message; ?></td>
                                 <td style="text-align: center;">
                                     <?php if ($validate == 'true') { ?>
-                                        <button class="validateButton" disabled>✔️</button>
+                                        <button class="unvalidateButton" data-com-message2="<?php echo $com_message; ?>">✔️</button>
                                     <?php } else { ?>
                                         <button class="validateButton" data-com-message="<?php echo $com_message; ?>">❌</button>
                                     <?php } ?>
@@ -230,17 +236,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <table style="table-layout: fixed; width: 100%;">
                         <colgroup>
                             <col style="width: 20%;">
-                            <col style="width: 14%;">
-                            <col style="width: 14%;">
-                            <col style="width: 14%;">
-                            <col style="width: 14%;">
-                            <col style="width: 14%;">
+                            <col style="width: 18%;">
+                            <col style="width: 18%;">
+                            <col style="width: 17%;">
+                            <col style="width: 17%;">
                             <col style="width: 10%;">
                         </colgroup>
                         <thead>
                             <tr>
                                 <th>Animal</th>
-                                <th>Etat</th>
                                 <th>Nourriture</th>
                                 <th>Grammage</th>
                                 <th>Date</th>
@@ -251,7 +255,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <tbody>
                             <tr>
                                 <td>
-                                    <select name="animal">
+                                    <select name="animal" required>
+                                        <option value="" disabled selected>Sélectionnez</option>
                                         <?php
                                         $resultAnimal = $bdd->query("SELECT * FROM animals");
                                         while ($animal = $resultAnimal->fetch(PDO::FETCH_ASSOC)) {
@@ -260,11 +265,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         }
                                         ?>
                                     </select>
-                                </td>
-                                <td>
-                                    <div>
-                                        <input type="text" name="state" placeholder="Se porte bien">
-                                    </div>
                                 </td>
                                 <td>
                                     <div>
@@ -363,6 +363,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     data: {com_message: com_message},
                     success: function(response) {
                         alert("L'avis a été validé avec succès");
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function(){
+            $(".unvalidateButton").click(function(){
+                var com_message2 = $(this).data('com-message2');
+                $.ajax({
+                    url: 'employPanel.php',
+                    type: 'post',
+                    data: {com_message2: com_message2},
+                    success: function(response) {
+                        alert("L'avis a été dévalidé avec succès");
                     }
                 });
             });

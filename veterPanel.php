@@ -54,6 +54,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
     $stmt->bindValue(':report', $report);
     $stmt->execute();
 }
+
+if (isset($_GET['id'])) {
+    $animalId = $_GET['id'];
+    $result = $bdd->query("SELECT * FROM foods WHERE animal_id = $animalId ORDER BY id DESC LIMIT 1");
+    $report = $result->fetch(PDO::FETCH_ASSOC);
+    echo json_encode($report); 
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -121,7 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
                         <tbody>
                             <tr>
                                 <td>
-                                    <select name="animal">
+                                <select name="animal" required>
+                                        <option value="" disabled selected>Sélectionnez</option>
                                         <?php
                                         $resultAnimal = $bdd->query("SELECT * FROM animals");
                                         while ($animal = $resultAnimal->fetch(PDO::FETCH_ASSOC)) {
@@ -187,7 +196,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
                         <tbody>
                             <tr>
                                 <td>
-                                    <select name="selectmenu">
+                                    <select name="selectmenu" required>
+                                        <option value="" disabled selected>Sélectionnez</option>
                                         <?php
                                         $resultHouse = $bdd->query("SELECT * FROM housings");
                                         while ($housing = $resultHouse->fetch(PDO::FETCH_ASSOC)) {
@@ -219,19 +229,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
                     <colgroup>
                         <col style="width: 20%;">
                         <col style="width: 20%;">
-                        <col style="width: 60%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
+                        <col style="width: 20%;">
                     </colgroup>
                     <thead>
                         <tr>
                             <th>Animal</th>
+                            <th>Nourriture</th>
+                            <th>Grammage</th>
                             <th>Date</th>
-                            <th>Compte rendu</th>
+                            <th>Heure</th>
                         </tr>
                     </thead>
                     <tbody>
                             <tr>
                                 <td>
-                                    <select id="animal-select" name="selectmenu">
+                                    <select id="animal-select" name="selectmenu"> required>
+                                        <option value="" disabled selected>Sélectionnez</option>
                                     <?php
                                     $resultAnimals = $bdd->query("SELECT * FROM animals");
                                     while ($animal = $resultAnimals->fetch(PDO::FETCH_ASSOC)) {
@@ -243,12 +258,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
                                     </select>
                                 </td>
                                 <td>
-                                <select id="date-select" name="selectmenu">
-                                    <option value=""> </option>
-                                </select>
+                                    <input id="report-field-food" type="text" value="Nourriture" readonly>
                                 </td>
                                 <td>
-                                    <input id="report-field" type="text" value="Sélectionnez un animal et une date" readonly>
+                                    <input id="report-field-weight" type="text" value="Grammage" readonly>
+                                </td>
+                                <td>
+                                    <input id="report-field-date" type="text" value="Date" readonly>
+                                </td>
+                                <td>
+                                    <input id="report-field-hour" type="text" value="Heure" readonly>
                                 </td>
                             </tr>
                     </tbody>
@@ -285,23 +304,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
             </div>
         </footer>
 
-        <script src="selectMenu.js" defer></script>
         <script>
         $(document).ready(function() {
-            $('#date-select').change(function() {
-                var selectedDate = $(this).val();
-                var animalId = $('#animal-select').val(); 
-                if (selectedDate && animalId) {
-                    $.get('date_report.php', { date: selectedDate, animal_id: animalId }, function(data) {
-                        if (data.error) {
-                            $('#report-field').val(data.error);
-                        } else {
-                            $('#report-field').val(data.content);
-                        }
-                    });
-                } else {
-                    $('#report-field').val('Aucune date de compte rendu ou animal sélectionné.');
-                }
+            $('#animal-select').change(function(){
+                var animalId = $(this).val();
+                $.get('veterPanel.php', {id: animalId}, function(data){
+                    var food = JSON.parse(data); 
+                    $('#report-field-food').val(food.food);
+                    $('#report-field-weight').val(food.weight);
+                    $('#report-field-date').val(food.date);
+                    $('#report-field-hour').val(food.hours);
+                });
             });
         });
         </script>

@@ -11,15 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['pass']);
 
-    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email AND password_hash = :pass;");
+    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email");
     $stmtUser->bindParam(':email', $email);
-    $stmtUser->bindParam(':pass', $password);
 
     $stmtUser->execute();
 
     $user = $stmtUser->fetch();
 
-    if ($user){
+    if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user'] = $user;
         $_SESSION['userId'] = $user['userId']; 
         $userId = $user['userId'];
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div>
                     <label for="pass">Mot de passe</label>
-                    <input type="password" required id="pass" name="pass" minlength="8">
+                    <input type="password" required id="pass" name="pass" minlength="7">
                 </div>
                 <div class="button">
                     <input type="submit" value="Connexion">

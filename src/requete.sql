@@ -25,19 +25,21 @@ CREATE TABLE roles (
     FOREIGN KEY(userId) REFERENCES users(userId));
 
 CREATE TABLE housings (
-    name VARCHAR(20) PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(20) UNIQUE NOT NULL, 
     description TEXT NOT NULL, 
     slug VARCHAR(255) NOT NULL, 
     comments VARCHAR(255)
     );
 
 CREATE TABLE opening (
-    day VARCHAR(10) PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day VARCHAR(10) UNIQUE, 
     hours VARCHAR(15) NOT NULL
     );
 
 CREATE TABLE reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     date VARCHAR(10) NOT NULL, 
     report TEXT NOT NULL, 
     animal_id INTEGER, 
@@ -58,7 +60,7 @@ CREATE TABLE foods (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     date VARCHAR(10) NOT NULL, 
     hours VARCHAR(5) NOT NULL,
-    state VARCHAR(255) NOT NULL, 
+    state VARCHAR(255), 
     food VARCHAR(50) NOT NULL, 
     weight VARCHAR(20) NOT NULL, 
     animal_id INTEGER NOT NULL, 
@@ -111,5 +113,5 @@ VALUES
     ('léonard', 'léopard', 'https://image.noelshack.com/fichiers/2024/08/5/1708707951-leopard.jpg', "Léonard le léopard est le souverain indiscuté des terres sauvages, avec son pelage doré tacheté et ses yeux perçants scrutant l'horizon. Agile et gracieux, il se déplace avec une élégance naturelle à travers la jungle, se fondant dans les hautes herbes ondulantes. Sa démarche révèle une assurance inébranlable, tandis qu'il grimpe aux arbres avec une agilité déconcertante pour guetter ses proies. Chasseur redoutable, il utilise sa rapidité fulgurante et sa ruse légendaire pour capturer sa nourriture, démontrant ainsi sa place prédominante au sommet de la chaîne alimentaire. Malgré sa nature solitaire, il peut parfois se joindre à d'autres félins pour chasser ou partager un moment de camaraderie sous la lueur de la lune. Léonard incarne la dualité de la nature sauvage, à la fois puissant prédateur et être sensible, captivant par sa beauté mystérieuse et sa majesté indéniable.", 'jungle'),
     ('adan', 'toucan', 'https://image.noelshack.com/fichiers/2024/08/5/1708707899-toucan.jpg', 'Adan est un toucan majestueux au plumage éclatant et coloré, orné de nuances vives de rouge, de jaune et de vert. Son bec distinctif, long et fin, est un noir profond, avec des touches de rouge vif à la base. Ses grands yeux bruns sont vifs et curieux, reflétant son intelligence et sa vivacité. Adan est un oiseau remarquablement gracieux, avec une démarche élégante et un vol puissant et agile. Il vit dans les profondeurs de la luxuriante jungle tropicale, où il passe ses journées à explorer les hauteurs des arbres et à se nourrir de fruits juteux, de baies et parfois même de petits insectes. Sa voix résonne à travers la canopée sous la forme de croassements rauques et mélodieux, ajoutant une touche de magie à la symphonie naturelle de la jungle. Malgré sa taille imposante, Adan est un oiseau doux et sociable, souvent vu en compagnie de ses semblables, se lançant dans des jeux aériens et des duels de becs amicaux. Sa personnalité enjouée et son charme irrésistible en font une figure appréciée de la faune de la jungle, un symbole de la beauté et de la diversité de la nature tropicale.', 'jungle');
 
-DELETE FROM users WHERE job = 'employe';
-DELETE FROM users WHERE job = 'veterinarian';
+DELETE FROM users WHERE firstname = 'Samir';
+DELETE FROM users WHERE firstname = 'Nadège';
