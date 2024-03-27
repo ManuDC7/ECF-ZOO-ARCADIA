@@ -149,6 +149,10 @@ if (isset($_POST['form_name']) && $_POST['form_name'] == 'addServiceForm') {
 }
 
 if (isset($_POST['form_edit']) && $_POST['form_edit'] == 'editServiceForm') {
+    var_dump($_POST['Nom']);
+    var_dump($_POST['Description']);
+    var_dump($_POST['imageURL']);
+    var_dump($_POST['service_id']);
     $nom = $_POST['Nom'];
     $description = $_POST['Description'];
     $url = $_POST['imageURL'];
@@ -234,6 +238,62 @@ if (isset($_POST['house_name'])) {
     $stmt->bindValue(':house_name', $house_name);
     $stmt->execute();
 }
+
+if (isset($_POST['form_name']) && $_POST['form_name'] == 'addAnimalForm') {
+    $firstname = $_POST['firstname'];
+    $breed = $_POST['breed'];
+    $slug = $_POST['slug'];
+    $message = $_POST['message'];
+    $housing = $_POST['selectmenu'];
+    
+    $stmt = $bdd->prepare("INSERT INTO animals (firstname, breed, slug, description, housing) VALUES (:firstname, :breed, :slug, :message, :housing)");
+    $stmt->bindValue(':firstname', $firstname);
+    $stmt->bindValue(':breed', $breed);
+    $stmt->bindValue(':slug', $slug);
+    $stmt->bindValue(':message', $message);
+    $stmt->bindValue(':housing', $housing);
+    $stmt->execute();
+}
+
+if (isset($_POST['form_edit']) && $_POST['form_edit'] == 'editAnimalForm') {
+    $old_firstname = $_POST['old_firstname'];
+    $firstname = $_POST['firstname'];
+    $breed = $_POST['breed'];
+    $slug = $_POST['slug'];
+    $message = $_POST['message'];
+    $housing = $_POST['selectmenu'];
+    
+    $stmt = $bdd->prepare("UPDATE animals SET firstname = :firstname, breed = :breed, slug = :slug, description = :message, housing = :housing WHERE firstname = :old_firstname");    $stmt->bindValue(':firstname', $firstname);
+    $stmt->bindValue(':old_firstname', $old_firstname);
+    $stmt->bindValue(':breed', $breed);
+    $stmt->bindValue(':slug', $slug);
+    $stmt->bindValue(':message', $message);
+    $stmt->bindValue(':housing', $housing);
+    $stmt->execute();
+}
+
+if (isset($_POST['animal_id'])) {
+    $animal_id = $_POST['animal_id'];
+
+    $sql = "DELETE FROM animals WHERE id = :animal_id";
+    $stmt = $bdd->prepare($sql);
+    $stmt->bindValue(':animal_id', $animal_id);
+    $stmt->execute();
+}
+
+if (isset($_GET['id'])) {
+    $houseId = $_GET['id'];
+    $stmt = $bdd->prepare("SELECT * FROM housings WHERE id = :houseId");
+    $stmt->bindValue(':houseId', $houseId);
+    $stmt->execute();
+    $report = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($report === false) {
+        die("Aucun enregistrement trouvé avec l'ID $houseId");
+    }
+    echo json_encode($report); 
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -446,15 +506,16 @@ if (isset($_POST['house_name'])) {
             </div>
 
             <div class="container">
-                <h3>Gestion des animaux <span style="float:right"><button class="but_add">Ajouter un animal</button></span></h3>
-                <table class="makeEditable" style="table-layout: fixed; width: 100%;">
+                <h3>Gestion des animaux <span style="float:right"><button class="animal_add">Ajouter un animal</button></span></h3>
+                <table style="table-layout: fixed; width: 100%;">
                     <colgroup>
                         <col style="width: 7%;">
                         <col style="width: 7%;">
                         <col style="width: 7%;">
                         <col style="width: 18%;">
-                        <col style="width: 52%;">
+                        <col style="width: 42%;">
                         <col style="width: 5%;">
+                        <col style="width: 10%;">
                     </colgroup>
                     <thead>
                         <tr>
@@ -464,6 +525,7 @@ if (isset($_POST['house_name'])) {
                             <th>Image</th>
                             <th>Description</th>
                             <th>Visite</th>
+                            <th> </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -488,6 +550,10 @@ if (isset($_POST['house_name'])) {
                                 <td><?php echo $animal_img; ?></td>
                                 <td><?php echo $animal_description; ?></td>
                                 <td><?php echo $animal_visit; ?></td>
+                                <td style="text-align: center;">
+                                    <button class="animal_edit" data-animal_name="<?php echo $animal_name; ?>">✏️</button>
+                                    <button class="animal_delete" data-animal_id="<?php echo $animal_id; ?>">🗑️</button>
+                                </td>
                             </tr>
                     <?php
                             } while ($rowAnimal = $resultAnimal->fetch(PDO::FETCH_ASSOC));
@@ -542,6 +608,42 @@ if (isset($_POST['house_name'])) {
                 </table>
             </div>
 
+            <div class="container">
+                <h3>Gestion des comptes rendus des habitats</h3>
+                <table style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 31%;">
+                        <col style="width: 69%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Habitat</th>
+                            <th>Compte rendu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>
+                                    <select id="housing-select" name="selectmenu"> required>
+                                        <option value="" disabled selected>Sélectionnez</option>
+                                    <?php
+                                    $resultHousing = $bdd->query("SELECT * FROM housings");
+                                    while ($housing = $resultHousing->fetch(PDO::FETCH_ASSOC)) {
+                                        $house_id = htmlspecialchars($housing["id"]);
+                                        $house_name = htmlspecialchars($housing["name"]);
+                                        echo "<option value=\"$house_id\">" . ucfirst($house_name) . "</option>";
+                                    }
+                                    ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="report-field-house" type="text" value="Compte rendu" readonly>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </section>
 
         <footer>
@@ -573,12 +675,12 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close1">&times;</span>
                 <form class="addUsersForm">
                     <input type="hidden" name="form_name" value="addUsersForm">
                     <input type="text" name="name" required placeholder="Le prénom de l'employé">
                     <input type="text" name="email" required placeholder="Son email">
-                    <input type="text" name="pass" required placeholder="Mot de passe provisoire">
+                    <input type="text" name="pass" required placeholder="Mot de passe provisoire" minlength="7">
                     <select name="selectmenu" required>
                         <option value="" disabled selected>Sélectionnez</option>
                         <option value="Veterinarian">Vétérinaire</option>
@@ -591,10 +693,10 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal2" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close2">&times;</span>
                 <form class="editUsersForm">
                     <input type="hidden" name="form_name" value="editUsersForm">
-                    <input type="text" name="name" required value="<?php echo $name; ?>" onFocus="this.value=''">
+                    <input type="text" name="name" required value="<?php echo $name ?>" onFocus="this.value=''">
                     <input type="text" name="email" required value="<?php echo $mail ?>" onFocus="this.value=''">
                     <select name="selectmenu" required>
                         <option value="" disabled selected>Sélectionnez</option>
@@ -608,7 +710,7 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal3" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close3">&times;</span>
                 <form class="addServiceForm">
                     <input type="hidden" name="form_name" value="addServiceForm">
                     <input type="text" name="Nom" required placeholder="Le nom du service">
@@ -621,9 +723,10 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal4" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close4">&times;</span>
                 <form class="editServiceForm">
                     <input type="hidden" name="form_edit" value="editServiceForm">
+                    <input type="hidden" name="service_id" value="">
                     <input type="text" name="Nom" required value="<? echo $service_name ?>" onFocus="this.value=''">
                     <input type="text" name="Description" required value="<? echo $service_description ?>" onFocus="this.value=''">
                     <input type="text" name="imageURL" required value="<? echo $service_img ?>" onFocus="this.value=''">
@@ -634,7 +737,7 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal5" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close5">&times;</span>
                 <form class="addOpenForm">
                     <input type="hidden" name="form_name" value="addOpenForm">
                     <input type="text" name="Day" required placeholder="lundi">
@@ -646,7 +749,7 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal6" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close6">&times;</span>
                 <form class="editOpenForm">
                     <input type="hidden" name="form_edit" value="editOpenForm">
                     <input type="text" name="Day" required value="<? echo $open_day ?>" onFocus="this.value=''">
@@ -658,7 +761,7 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal7" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close7">&times;</span>
                 <form class="addHouseForm">
                     <input type="hidden" name="form_name" value="addHouseForm">
                     <input type="text" name="Nom" required placeholder="Le nom du l'habitat">
@@ -671,7 +774,7 @@ if (isset($_POST['house_name'])) {
 
         <div id="myModal8" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close8">&times;</span>
                 <form class="editHouseForm">
                     <input type="hidden" name="form_edit" value="editHouseForm">
                     <input type="text" name="Nom" required value="<? echo $house_name ?>" onFocus="this.value=''">
@@ -682,24 +785,65 @@ if (isset($_POST['house_name'])) {
             </div>
         </div>
 
+        <div id="myModal9" class="modal">
+            <div class="modal-content">
+                <span class="close9">&times;</span>
+                <form class="addAnimalForm">
+                    <input type="hidden" name="form_name" value="addAnimalForm">
+                    <input type="text" name="firstname" required placeholder="Le prénom du l'animal">
+                    <input type="text" name="breed" required placeholder="La race de l'animal">
+                    <select name="selectmenu" required>
+                        <option value="" disabled selected>Sélectionnez</option>
+                        <option value="marais">Marais</option>
+                        <option value="savane">Savane</option>
+                        <option value="jungle">Jungle</option>
+                    </select>
+                    <input type="text" name="slug" required placeholder="https://maximum255caracteres.fr">
+                    <input type="text" name="message" required placeholder="La description - maximun 255 caractère">
+                    <input type="submit" value="Ajouter">
+                </form>
+            </div>
+        </div>
+
+        <div id="myModal10" class="modal">
+            <div class="modal-content">
+                <span class="close10">&times;</span>
+                <form class="editAnimalForm">
+                    <input type="hidden" name="form_edit" value="editAnimalForm">
+                    <input type="hidden" name="old_firstname">
+                    <input type="text" name="firstname" required value="<? echo $animal_name ?>" onFocus="this.value=''">
+                    <input type="text" name="breed" value="<? echo $animal_breed ?>" onFocus="this.value=''">
+                    <select name="selectmenu" required>
+                        <option value="" disabled selected>Sélectionnez</option>
+                        <option value="marais">Marais</option>
+                        <option value="savane">Savane</option>
+                        <option value="jungle">Jungle</option>
+                    </select>
+                    <input type="text" name="slug" required value="<? echo $animal_img ?>" onFocus="this.value=''">
+                    <input type="text" name="message" required value="<? echo $animal_description ?>" onFocus="this.value=''">
+                    <input type="submit" value="Modifier">
+                </form>
+            </div>
+        </div>
+
         <script>
         $(document).ready(function(){
-            var modal = document.getElementById("myModal");
-            var span = document.getElementsByClassName("close")[0];
+            var modal1 = document.getElementById("myModal");
+            var span1 = document.getElementsByClassName("close1")[0];
 
             $(".users_add").click(function(){
-                modal.style.display = "block";
+                modal1.style.display = "block";
             });
 
-            span.onclick = function() {
-            modal.style.display = "none";
+            span1.onclick = function() {
+            modal1.style.display = "none";
             }
 
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            window.addEventListener('click', function(event) {
+                if (event.target == modal1) {
+                    modal1.style.display = "none";
                 }
-            }
+            });
 
             $(".addUsersForm").submit(function(e){
                 e.preventDefault(); 
@@ -711,7 +855,7 @@ if (isset($_POST['house_name'])) {
                     success: function(response) {
                         console.log(response);
                         alert("L'utilisateur à bien été ajouté !");
-                        modal.style.display = "none";
+                        modal1.style.display = "none";
                         $(".addUsersForm")[0].reset(); 
                     }
                 });
@@ -720,12 +864,12 @@ if (isset($_POST['house_name'])) {
 
         $(".users_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer l'utilisateur ?")) {
-                var mail = $(this).data('mail');
-                console.log(mail);
+                var mail1 = $(this).data('mail');
+                console.log(mail1);
                 $.ajax({
                     url: 'adminPanel.php',
                     type: 'post',
-                    data: {mail: mail},
+                    data: {mail: mail1},
                 });
                 $(this).closest("tr").remove();
             } else {
@@ -733,37 +877,37 @@ if (isset($_POST['house_name'])) {
             }
         });
 
-        var $form = $('.editUsersForm');
-        var $modal = $('#myModal2');
+        var $editUsers = $('.editUsersForm');
+        var $modal2 = $('#myModal2');
 
         $('.users_edit').click(function() {
-            var $row = $(this).closest('tr');
-            var name = $row.find('td:eq(0)').text();
-            var mail = $row.find('td:eq(1)').text();
+            var $row2 = $(this).closest('tr');
+            var name2 = $row2.find('td:eq(0)').text();
+            var mail2 = $row2.find('td:eq(1)').text();
 
-            $form.find('input[name="name"]').val(name);
-            $form.find('input[name="email"]').val(mail);
+            $editUsers.find('input[name="name"]').val(name2);
+            $editUsers.find('input[name="email"]').val(mail2);
 
-            $modal.show();
+            $modal2.show();
         });
 
-        $('.close').click(function() {
-            $modal.hide();
+        $('.close2').click(function() {
+            $modal2.hide();
         });
 
-        $form.on('submit', function(e) {
+        $editUsers.on('submit', function(e) {
             e.preventDefault();
 
-            var url = $form.attr('action');
+            var url2 = $editUsers.attr('action');
 
             $.ajax({
                 type: "POST",
-                url: url,
-                data: $form.serialize(),
+                url: url2,
+                data: $editUsers.serialize(),
                 success: function(data)
                 {
-                    alert('Les données ont été modifiés avec succès.'); 
-                    $modal.hide(); 
+                    alert("L'utilisateur à été modifiés avec succès."); 
+                    $modal2.hide(); 
                 },
                 error: function()
                 {
@@ -773,22 +917,22 @@ if (isset($_POST['house_name'])) {
         });
 
         $(document).ready(function(){
-            var modal = document.getElementById("myModal3");
-            var span = document.getElementsByClassName("close")[0];
+            var modal3 = document.getElementById("myModal3");
+            var span2 = document.getElementsByClassName("close3")[0];
 
             $(".serv_add").click(function(){
-                modal.style.display = "block";
+                modal3.style.display = "block";
             });
 
-            span.onclick = function() {
-            modal.style.display = "none";
+            span2.onclick = function() {
+            modal3.style.display = "none";
             }
 
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            window.addEventListener('click', function(event) {
+                if (event.target == modal3) {
+                    modal3.style.display = "none";
                 }
-            }
+            });
 
             $(".addServiceForm").submit(function(e){
                 e.preventDefault(); 
@@ -800,7 +944,7 @@ if (isset($_POST['house_name'])) {
                     success: function(response) {
                         console.log(response);
                         alert("Le service à bien été ajouté !");
-                        modal.style.display = "none";
+                        modal3.style.display = "none";
                         $(".addServiceForm")[0].reset(); 
                     }
                 });
@@ -822,41 +966,42 @@ if (isset($_POST['house_name'])) {
             }
         });
 
-        var $modal = $('#myModal4');
-        var $form = $('.editServiceForm');
+        var $modal4 = $('#myModal4');
+        var $editServices = $('.editServiceForm');
         var service_id;
 
         $('.serv_edit').click(function() {
-            service_id = $(this).data('service_id');
-            var $row = $(this).closest('tr');
-            var name = $row.find('td:eq(0)').text();
-            var description = $row.find('td:eq(1)').text();
-            var img = $row.find('td:eq(2)').text();
+                service_id = $(this).data('service_id');
+                var $row3 = $(this).closest('tr');
+                var name3 = $row3.find('td:eq(0)').text();
+                var description3 = $row3.find('td:eq(1)').text();
+                var img3 = $row3.find('td:eq(2)').text();
 
-            $form.find('input[name="Nom"]').val(name);
-            $form.find('input[name="Description"]').val(description);
-            $form.find('input[name="imageURL"]').val(img);
+                $editServices.find('input[name="Nom"]').val(name3);
+                $editServices.find('input[name="Description"]').val(description3);
+                $editServices.find('input[name="imageURL"]').val(img3);
+                $editServices.find('input[name="service_id"]').val(service_id);
 
-            $modal.show();
+                $modal4.show();
+            });
+
+        $('.close4').click(function() {
+            $modal4.hide();
         });
 
-        $('.close').click(function() {
-            $modal.hide();
-        });
-
-        $form.on('submit', function(e) {
+        $editServices.on('submit', function(e) {
             e.preventDefault();
 
-            var url = $form.attr('action');
+            var url1 = $editServices.attr('action');
 
             $.ajax({
                 type: "POST",
-                url: url,
-                data: $form.serialize() + "&service_id=" + service_id,
+                url: url1,
+                data: $editServices.serialize(),
                 success: function(data)
                 {
                     alert('Les données ont été modifiés avec succès.'); 
-                    $modal.hide(); 
+                    $modal4.hide(); 
                 },
                 error: function()
                 {
@@ -866,22 +1011,22 @@ if (isset($_POST['house_name'])) {
         });
 
         $(document).ready(function(){
-            var modal = document.getElementById("myModal5");
-            var span = document.getElementsByClassName("close")[0];
+            var modal5 = document.getElementById("myModal5");
+            var span3 = document.getElementsByClassName("close5")[0];
 
             $(".open_add").click(function(){
-                modal.style.display = "block";
+                modal5.style.display = "block";
             });
 
-            span.onclick = function() {
-            modal.style.display = "none";
+            span3.onclick = function() {
+            modal5.style.display = "none";
             }
 
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            window.addEventListener('click', function(event) {
+                if (event.target == modal5) {
+                    modal5.style.display = "none";
                 }
-            }
+            });
 
             $(".addOpenForm").submit(function(e){
                 e.preventDefault(); 
@@ -893,7 +1038,7 @@ if (isset($_POST['house_name'])) {
                     success: function(response) {
                         console.log(response);
                         alert("Le jour à bien été ajouté !");
-                        modal.style.display = "none";
+                        modal5.style.display = "none";
                         $(".addOpenForm")[0].reset(); 
                     }
                 });
@@ -915,39 +1060,39 @@ if (isset($_POST['house_name'])) {
             }
         });
 
-        var $modal = $('#myModal6');
-        var $form = $('.editOpenForm');
+        var $modal6 = $('#myModal6');
+        var $editOpen = $('.editOpenForm');
         var open_day;
 
         $('.open_edit').click(function() {
             open_day = $(this).data('open_day');
-            var $row = $(this).closest('tr');
-            var day = $row.find('td:eq(0)').text();
-            var hours = $row.find('td:eq(1)').text();
+            var $row4 = $(this).closest('tr');
+            var day = $row4.find('td:eq(0)').text();
+            var hours = $row4.find('td:eq(1)').text();
 
-            $form.find('input[name="Day"]').val(day);
-            $form.find('input[name="Hours"]').val(hours);
+            $editOpen.find('input[name="Day"]').val(day);
+            $editOpen.find('input[name="Hours"]').val(hours);
 
-            $modal.show();
+            $modal6.show();
         });
 
-        $('.close').click(function() {
-            $modal.hide();
+        $('.close6').click(function() {
+            $modal6.hide();
         });
 
-        $form.on('submit', function(e) {
+        $editOpen.on('submit', function(e) {
             e.preventDefault();
 
-            var url = $form.attr('action');
+            var url3 = $editOpen.attr('action');
 
             $.ajax({
                 type: "POST",
-                url: url,
-                data: $form.serialize() + "&open_day=" + open_day,
+                url: url3,
+                data: $editOpen.serialize() + "&open_day=" + open_day,
                 success: function(data)
                 {
                     alert('Les données ont été modifiés avec succès.'); 
-                    $modal.hide(); 
+                    $modal6.hide(); 
                 },
                 error: function()
                 {
@@ -958,22 +1103,22 @@ if (isset($_POST['house_name'])) {
 
         //HOUSINGS
         $(document).ready(function(){
-            var modal = document.getElementById("myModal7");
-            var span = document.getElementsByClassName("close")[0];
+            var modal7 = document.getElementById("myModal7");
+            var span4 = document.getElementsByClassName("close7")[0];
 
             $(".house_add").click(function(){
-                modal.style.display = "block";
+                modal7.style.display = "block";
             });
 
-            span.onclick = function() {
-            modal.style.display = "none";
+            span4.onclick = function() {
+            modal7.style.display = "none";
             }
 
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+            window.addEventListener('click', function(event) {
+                if (event.target == modal7) {
+                    modal7.style.display = "none";
                 }
-            }
+            });
 
             $(".addHouseForm").submit(function(e){
                 e.preventDefault(); 
@@ -985,7 +1130,7 @@ if (isset($_POST['house_name'])) {
                     success: function(response) {
                         console.log(response);
                         alert("L'habitat à bien été ajouté !");
-                        modal.style.display = "none";
+                        modal7.style.display = "none";
                         $(".addHouseForm")[0].reset(); 
                     }
                 });
@@ -1007,46 +1152,154 @@ if (isset($_POST['house_name'])) {
             }
         });
 
-        var $modal = $('#myModal8');
-        var $form = $('.editHouseForm');
+        var $modal8 = $('#myModal8');
+        var $editHouse = $('.editHouseForm');
         var house_id;
 
         $('.house_edit').click(function() {
             house_id = $(this).data('house_id');
-            var $row = $(this).closest('tr');
-            var name = $row.find('td:eq(0)').text();
-            var description = $row.find('td:eq(1)').text();
-            var img = $row.find('td:eq(2)').text();
+            var $row4 = $(this).closest('tr');
+            var name2 = $row4.find('td:eq(0)').text();
+            var description2 = $row4.find('td:eq(1)').text();
+            var img2 = $row4.find('td:eq(2)').text();
 
-            $form.find('input[name="Nom"]').val(name);
-            $form.find('input[name="Description"]').val(description);
-            $form.find('input[name="imageURL"]').val(img);
+            $editHouse.find('input[name="Nom"]').val(name2);
+            $editHouse.find('input[name="Description"]').val(description2);
+            $editHouse.find('input[name="imageURL"]').val(img2);
 
-            $modal.show();
+            $modal8.show();
         });
 
-        $('.close').click(function() {
-            $modal.hide();
+        $('.close8').click(function() {
+            $modal8.hide();
         });
 
-        $form.on('submit', function(e) {
+        $editHouse.on('submit', function(e) {
             e.preventDefault();
 
-            var url = $form.attr('action');
+            var url4 = $editHouse.attr('action');
 
             $.ajax({
                 type: "POST",
-                url: url,
-                data: $form.serialize() + "&house_id=" + house_id,
+                url: url4,
+                data: $editHouse.serialize() + "&house_id=" + house_id,
                 success: function(data)
                 {
                     alert('Les données ont été modifiés avec succès.'); 
-                    $modal.hide(); 
+                    $modal8.hide(); 
                 },
                 error: function()
                 {
                     alert('Une erreur est survenue lors de l\'envoi des données.');
                 }
+            });
+        });
+
+        //ANIMALS
+        $(document).ready(function(){
+            var modal8 = document.getElementById("myModal9");
+            var span5 = document.getElementsByClassName("close9")[0];
+
+            $(".animal_add").click(function(){
+                modal8.style.display = "block";
+            });
+
+            span5.onclick = function() {
+            modal8.style.display = "none";
+            }
+
+            window.addEventListener('click', function(event) {
+                if (event.target == modal8) {
+                    modal8.style.display = "none";
+                }
+            });
+
+            $(".addAnimalForm").submit(function(e){
+                e.preventDefault(); 
+
+                $.ajax({
+                    url: 'adminPanel.php',
+                    type: 'post',
+                    data: $(this).serialize(), 
+                    success: function(response) {
+                        console.log(response);
+                        alert("L'animal à bien été ajouté !");
+                        modal8.style.display = "none";
+                        $(".addAnimalForm")[0].reset(); 
+                    }
+                });
+            });
+        });
+
+        $(".animal_delete").click(function(){
+            if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
+                var animal_id = $(this).data('animal_id');
+                console.log(animal_id);
+                $.ajax({
+                    url: 'adminPanel.php',
+                    type: 'post',
+                    data: {animal_id: animal_id},
+                });
+                $(this).closest("tr").remove();
+            } else {
+                // Si l'utilisateur clique sur Annuler, ne rien faire
+            }
+        });
+
+        var $modal10 = $('#myModal10');
+        var $editAnimal = $('.editAnimalForm');
+        var animal_name;
+
+        $('.animal_edit').click(function() {
+            animal_name = $(this).data('animal_name');
+            var $row5 = $(this).closest('tr');
+            var firstname = $row5.find('td:eq(0)').text();
+            var breed = $row5.find('td:eq(1)').text();
+            var slug = $row5.find('td:eq(3)').text();
+            var message = $row5.find('td:eq(4)').text();
+
+            $editAnimal.find('input[name="old_firstname"]').val(firstname);
+            $editAnimal.find('input[name="firstname"]').val(firstname);
+            $editAnimal.find('input[name="breed"]').val(breed);
+            $editAnimal.find('input[name="slug"]').val(slug);
+            $editAnimal.find('input[name="message"]').val(message);
+
+            $modal10.show();
+        });
+
+        $('.close10').click(function() {
+            $modal10.hide();
+        });
+
+        $editAnimal.on('submit', function(e) {
+            e.preventDefault();
+
+            var url5 = $editAnimal.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: url5,
+                data: $editAnimal.serialize() + "&animal_name=" + animal_name,
+                success: function(data)
+                {
+                    alert("L'animal a été modifiés avec succès."); 
+                    $modal10.hide(); 
+                },
+                error: function()
+                {
+                    alert('Une erreur est survenue lors de l\'envoi des données.');
+                }
+            });
+        });
+
+        //CONSULTER LES COMPTES RENDUS DES HABITATS
+        $(document).ready(function() {
+            $('#housing-select').change(function(){
+                var houseId = $(this).val();
+                $.get('adminPanel.php', {id: houseId}, function(data){
+                    var house = JSON.parse(data); 
+                    $('#report-field-house').val(house.comments);
+                });
             });
         });
         </script>
