@@ -294,6 +294,29 @@ if (isset($_GET['id'])) {
     exit;
 }
 
+if (isset($_GET['selected_animal_id'])) {
+    $animalId = $_GET['selected_animal_id'];
+    $stmt = $bdd->prepare("SELECT date FROM foods WHERE animal_id = :animalId");
+    $stmt->bindValue(':animalId', $animalId);
+    $stmt->execute();
+    $dates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($dates); 
+    exit;
+}
+
+if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
+    $animalId = $_GET['report_animal_id'];
+    $date = $_GET['report_date'];
+    
+    $stmt = $bdd->prepare("SELECT * FROM foods WHERE animal_id = :animalId AND date = :date ORDER BY date DESC;");
+    $stmt->bindValue(':animalId', $animalId);
+    $stmt->bindValue(':date', $date);
+    $stmt->execute();
+    $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($reports); 
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -612,8 +635,8 @@ if (isset($_GET['id'])) {
                 <h3>Gestion des comptes rendus des habitats</h3>
                 <table style="table-layout: fixed; width: 100%;">
                     <colgroup>
-                        <col style="width: 31%;">
-                        <col style="width: 69%;">
+                        <col style="width: 20%;">
+                        <col style="width: 80%;">
                     </colgroup>
                     <thead>
                         <tr>
@@ -638,6 +661,59 @@ if (isset($_GET['id'])) {
                                 </td>
                                 <td>
                                     <input id="report-field-house" type="text" value="Compte rendu" readonly>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container">
+                <h3>Gestion des comptes rendus des animaux</h3>
+                <table style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 20%;">
+                        <col style="width: 15%;">
+                        <col style="width: 40%;">
+                        <col style="width: 15%;">
+                        <col style="width: 10%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Animal</th>
+                            <th>Date</th>
+                            <th>Etat</th>
+                            <th>Nourriture</th>
+                            <th>Grammage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>
+                                    <select id="animal-select" name="selectmenu"> required>
+                                        <option value="" disabled selected>Sélectionnez</option>
+                                    <?php
+                                    $resultAnimal = $bdd->query("SELECT * FROM animals");
+                                    while ($animals = $resultAnimal->fetch(PDO::FETCH_ASSOC)) {
+                                        $animal_id = htmlspecialchars($animals["id"]);
+                                        $animal_name = htmlspecialchars($animals["firstname"]);
+                                        echo "<option value=\"$animal_id\">" . ucfirst($animal_name) . "</option>";
+                                    }
+                                    ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="date-select" name="selectmenu">
+                                        <option value="" disabled selected>Choisir une date</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input id="report-field-state" type="text" value="Etat" readonly>
+                                </td>
+                                <td>
+                                    <input id="report-field-food" type="text" value="Nourriture" readonly>
+                                </td>
+                                <td>
+                                    <input id="report-field-weight" type="text" value="Grammage" readonly>
                                 </td>
                             </tr>
                     </tbody>
@@ -1299,6 +1375,36 @@ if (isset($_GET['id'])) {
                 $.get('adminPanel.php', {id: houseId}, function(data){
                     var house = JSON.parse(data); 
                     $('#report-field-house').val(house.comments);
+                });
+            });
+        });
+
+        //CONSULTER LES COMPTES RENDUS DES ANIMAUX
+        $(document).ready(function() {
+            $('#animal-select').change(function(){
+                var animalId = $(this).val();
+                $.get('adminPanel.php', {selected_animal_id: animalId}, function(data){
+                    var dates = JSON.parse(data);
+                    var dateSelect = $('#date-select');
+                    dateSelect.empty();
+                    dateSelect.append('<option value="" disabled selected>Choisir une date</option>');
+                    dates.forEach(function(date) {
+                        dateSelect.append('<option value="' + date.date + '">' + date.date + '</option>'); // Modifier cette ligne
+                    });
+                });
+            });
+
+            $('#date-select').change(function(){
+                var animalId = $('#animal-select').val();
+                var date = $(this).val();
+                $.get('adminPanel.php', {report_animal_id: animalId, report_date: date}, function(data){
+                    var reports = JSON.parse(data);
+                    if(reports.length > 0) {
+                        var report = reports[0]; // Prendre le premier rapport si plusieurs sont retournés
+                        $('#report-field-state').val(report.state);
+                        $('#report-field-food').val(report.food);
+                        $('#report-field-weight').val(report.weight);
+                    }
                 });
             });
         });
