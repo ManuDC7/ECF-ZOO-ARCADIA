@@ -1,22 +1,16 @@
 <?php
-
 try {
-    // Connexion à la base de données SQLite
     $bdd = new PDO('sqlite:db.sqlite');
 
-    // Activation du mode d'erreur PDO pour afficher les erreurs
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Requête SQL pour récupérer les services
-    $serv = "SELECT * FROM services;";
-    $resultServ = $bdd->query($serv);
+    $service = "SELECT * FROM services;";
+    $resultService = $bdd->query($service);
 
-    // Requête SQL pour récupérer les horaires
-    $sql = "SELECT * FROM horaires;";
-    $result = $bdd->query($sql);
+    $open = "SELECT * FROM opening;";
+    $resultOpen = $bdd->query($open);
 
     } catch (PDOException $e) {
-        // En cas d'erreur, affiche le message d'erreur
         echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
 }
 ?>
@@ -30,6 +24,7 @@ try {
         <title>Arcadia, services</title>
         <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=2.0, minimum-scale=0.60">        
         <meta name="description" content="Explorez la biodiversité extraordinaire du parc animalier Arcadia, un lieu magique abritant plusieurs habitats uniques. Plongez au cœur de la nature sauvage et découvrez des espèces fascinantes, de la faune endémique aux majestueux prédateurs. Rejoignez-nous pour une aventure inoubliable au sein d'Arcadia, où la préservation de la vie sauvage est notre engagement passionné.">
+        <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="style.css">
     </head>
 
@@ -58,23 +53,22 @@ try {
 
         <div class="container-services">
             <?php
-                // Affichage des services
-                $rowServ = $resultServ->fetch(PDO::FETCH_ASSOC);
-                if ($rowServ) {
+                $rowService = $resultService->fetch(PDO::FETCH_ASSOC);
+                if ($rowService) {
                                 do {
-                                    $servTitle = $rowServ["nom"];
-                                    $servText = $rowServ["description"];
-                                    $servImg = $rowServ["slug_img"]
+                                    $service_name = $rowService["name"];
+                                    $service_description = $rowService["description"];
+                                    $service_img = $rowService["slug"];
                                     ?>
                                         <div class="service">
-                                            <img src="<?php echo $servImg; ?>" alt="Image d'un service' du parc" width="810px" height="250px">
-                                            <h3><?php echo $servTitle; ?></h3>
+                                            <img src="<?php echo $service_img; ?>" alt="Image d'un service' du parc" width="810px" height="250px">
+                                            <h3><?php echo $service_name; ?></h3>
                                             <p>
-                                                <?php echo $servText; ?>                
+                                                <?php echo $service_description; ?>                
                                             </p>
                                         </div>
                                     <?php
-                                    } while ($rowServ = $resultServ->fetch(PDO::FETCH_ASSOC));
+                                    } while ($rowService = $resultService->fetch(PDO::FETCH_ASSOC));
                             } else {
                                 echo "Aucun service trouvé.";
                             }
@@ -84,27 +78,28 @@ try {
         </div>
 
         <footer>
-            <p>© 2024 Arcadia, tous droits réservés</p>
+            <p>© -Tous droits réservés - <a href="mentions_legales.php" style="text-decoration: underline; color: #000;">Mentions légales</a></p>
             <div class="horaires">
                 <ul>
                     <li>
                         Horaires d'ouverture
                     </li>
-                    <br>
+                    <li>
+                        <br>
+                    </li>
                     <?php
-                    // Affichage des horaires
-                    $row = $result->fetch(PDO::FETCH_ASSOC);
-                    if ($row) {
-                                do {
-                                    $openDay = $row["jour"];
-                                    $openHours = $row["heures"];
-                                    ?>
-                                    <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
-                                    <?php
-                                    } while ($row = $result->fetch(PDO::FETCH_ASSOC));
-                            } else {
-                                echo "<li>Aucun horaire d'ouverture trouvé.</li>";
-                            }
+                    $footer = $resultOpen->fetch(PDO::FETCH_ASSOC);
+                    if ($footer) {
+                        do {
+                            $footer_day = htmlspecialchars($footer["day"]);
+                            $footer_hours = htmlspecialchars($footer["hours"]);
+                            ?>
+                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                            <?php
+                        } while ($footer = $resultOpen->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    }
                     ?>
                 </ul>
             </div>

@@ -1,0 +1,19 @@
+{
+    "name": "manu/ecf-zoo-arcadia",
+    "description": "A short description of your package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Manuel De Carvalho",
+            "email": "dctmp@icloud.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "mongodb/mongodb": "^1.17"
+    },
+    "require-dev": {
+        "psalm/plugin-phpunit": "^0.18"
+    }
+}

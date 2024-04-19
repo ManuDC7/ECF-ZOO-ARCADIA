@@ -1,20 +1,49 @@
 <?php
+session_start();
 
-try {
-    // Connexion à la base de données SQLite
-    $bdd = new PDO('sqlite:db.sqlite');
+$bdd = new PDO('sqlite:db.sqlite');
+$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Activation du mode d'erreur PDO pour afficher les erreurs
-    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$open = "SELECT * FROM opening;";
+$resultOpen = $bdd->query($open);
 
-    // Requête SQL pour récupérer les horaires
-    $sql = "SELECT * FROM horaires;";
-    $result = $bdd->query($sql);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['pass']);
 
-    } catch (PDOException $e) {
-        // En cas d'erreur, affiche le message d'erreur
-        echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
+    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email");
+    $stmtUser->bindParam(':email', $email);
+
+    $stmtUser->execute();
+
+    $user = $stmtUser->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['user'] = $user;
+        $_SESSION['userId'] = $user['userId']; 
+        $userId = $user['userId'];
+
+        $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+        $stmtRole->execute(['userId' => $userId]);
+        $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+        if ($role) {
+            $label = $role['label'];
+
+            if ($label == 'Administrator') {
+                header('Location: adminPanel.php');
+            } elseif ($label == 'Veterinarian') {
+                header('Location: veterPanel.php');
+            } elseif ($label == 'Employee') {
+                header('Location: employPanel.php');
+            }
+        }
+        exit;
+    } else {
+        echo "Email ou mot de passe incorrect";
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +55,7 @@ try {
         <title>Arcadia, connexion</title>
         <meta name="viewport" content="width=device-width, initial-scale=0.60, maximum-scale=2.0, minimum-scale=0.60">        
         <meta name="description" content="Explorez la biodiversité extraordinaire du parc animalier Arcadia, un lieu magique abritant plusieurs habitats uniques. Plongez au cœur de la nature sauvage et découvrez des espèces fascinantes, de la faune endémique aux majestueux prédateurs. Rejoignez-nous pour une aventure inoubliable au sein d'Arcadia, où la préservation de la vie sauvage est notre engagement passionné.">
+        <link rel="stylesheet" href="normalize.css">
         <link rel="stylesheet" href="style.css">
     </head>
 
@@ -53,23 +83,14 @@ try {
         </header>
 
         <div class="form">
-            <form action="index.html">
+            <form action="login.php" method="POST">
                 <div>
-                    <label for="username">Nom d'utilisateur</label>
-                    <input type="text" id="username" name="username">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" required>
                 </div>
                 <div>
                     <label for="pass">Mot de passe</label>
-                    <input type="password" required id="pass" name="password" minlength="8">
-                </div>
-                <div>
-                    <label for="role">Rôle</label>
-                    <select id="role" name="role">
-                        <option value="visitor">Visiteur</option>
-                        <option value="employee">Employé</option>
-                        <option value="veterinarian">Vétérinaire</option>
-                        <option value="admin">Administrateur</option>
-                    </select>
+                    <input type="password" required id="pass" name="pass" minlength="7">
                 </div>
                 <div class="button">
                     <input type="submit" value="Connexion">
@@ -78,27 +99,28 @@ try {
         </div>
 
         <footer>
-            <p>© 2024 Arcadia, tous droits réservés</p>
+            <p>© -Tous droits réservés - <a href="mentions_legales.php" style="text-decoration: underline; color: #000;">Mentions légales</a></p>
             <div class="horaires">
                 <ul>
                     <li>
                         Horaires d'ouverture
                     </li>
-                    <br>
+                    <li>
+                        <br>
+                    </li>
                     <?php
-                    // Affichage des horaires
-                    $row = $result->fetch(PDO::FETCH_ASSOC);
-                    if ($row) {
-                                do {
-                                    $openDay = $row["jour"];
-                                    $openHours = $row["heures"];
-                                    ?>
-                                    <li><?php echo $openDay; ?>: <?php echo $openHours; ?></li>
-                                    <?php
-                                    } while ($row = $result->fetch(PDO::FETCH_ASSOC));
-                            } else {
-                                echo "<li>Aucun horaire d'ouverture trouvé.</li>";
-                            }
+                    $footer = $resultOpen->fetch(PDO::FETCH_ASSOC);
+                    if ($footer) {
+                        do {
+                            $footer_day = htmlspecialchars($footer["day"]);
+                            $footer_hours = htmlspecialchars($footer["hours"]);
+                            ?>
+                            <li><?php echo $footer_day; ?>: <?php echo $footer_hours; ?></li>
+                            <?php
+                        } while ($footer = $resultOpen->fetch(PDO::FETCH_ASSOC));
+                    } else {
+                        echo "<li>Aucun horaire d'ouverture trouvé.</li>";
+                    }
                     ?>
                 </ul>
             </div>

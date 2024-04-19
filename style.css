@@ -17,8 +17,7 @@ header {
     to bottom,
     #0002,
     #0008
-  ), url("img/banner.jpg");
-    height: auto;
+), url("img/banner.jpg");
     color: #FFF;
 }
 
@@ -107,7 +106,7 @@ hr {
 
 footer {
     float: bottom;
-    background-color: lightgrey;
+    background-color: #d3d3d3;
     text-align: center;
     padding-top: 10px;
     margin-top: auto;
@@ -147,7 +146,17 @@ input[type=password] {
     margin-bottom: 16px; 
 }
 
-select[name=role] {
+select[name=animal] {
+    width: 100%; 
+    padding: 12px;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    box-sizing: border-box;
+    margin-top: 6px; 
+    margin-bottom: 16px; 
+}
+
+select[name=selectmenu] {
     width: 100%; 
     padding: 12px;
     border: 1px solid #ccc; 
@@ -170,7 +179,7 @@ input[type=text], textarea {
 
 input[type=submit] {
     background-color: rgba(000, 000, 000, 0.6);
-    color: white;
+    color: #FFF;
     padding: 12px 20px;
     border: none;
     border-radius: 4px;
@@ -214,7 +223,7 @@ blockquote ::before {
     left: 250px;
     content: '\00301D';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 blockquote ::after {
@@ -223,7 +232,7 @@ blockquote ::after {
     right: 250px;
     content: '\00301E';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 .form p {
@@ -248,7 +257,7 @@ blockquote ::before {
     left: 250px;
     content: '\00301D';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
 }
 
 blockquote ::after {
@@ -257,7 +266,38 @@ blockquote ::after {
     right: 250px;
     content: '\00301E';
     font-size: 40px;
-    color: #999;
+    color: #d3d3d3;
+}
+
+.scroller {
+    height: 200pt;
+    overflow: hidden;
+}
+
+.blockquotes {
+    animation: scroll 20s infinite;
+}
+
+.blockquotes blockquote {
+    height: 200pt;
+    overflow: hidden;
+}
+
+@keyframes scroll {
+    0%, 20% {
+        transform: translateY(+40pt);
+    }
+    25%, 45% {
+        transform: translateY(-250pt);
+    }
+    50%, 70% {
+        transform: translateY(-540pt);
+    }
+}
+
+
+.mentions {
+    margin: 80px
 }
 
 /* HOUSING */
@@ -386,7 +426,102 @@ blockquote ::after {
     justify-content: center;
 }
 
+/* PANEL */
+.panel {
+    margin: 40px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+th:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+th:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+tr:first-child td:first-child {
+    border-top-left-radius: 12px;
+}
+
+tr:first-child td:last-child {
+    border-top-right-radius: 12px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #ffffe0;
+    text-align: center
+}
+
+.container {
+    margin: 20px
+}
+
+/* MODAL WINDOWS */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    border-radius: 12px;
+}
+
 /* RESPONSIVE */
+
+@media only screen and (min-width: 1800px) {
+    body {
+        height: 100vh;
+        width: 100%
+    }
+    .form {
+        margin: 100px 800px
+    }
+    .service img {
+        transform: scale(1.3, 1) translate(110px, 0%) !important;
+    }
+    .Back {
+        top: 775px;
+        right: 600px;
+    }
+    .forward {
+        top: 775px;
+        right: 320px;
+    }
+}
 
 @media only screen and (max-width: 1370px) {
     body {
@@ -536,9 +671,12 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 860px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     header {
         background-position: -150% 10%;;
@@ -557,9 +695,12 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 740px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     header {
         background-position: -100% 10%;;
@@ -616,9 +757,12 @@ blockquote ::after {
     }
 }
 @media only screen and (max-width: 650px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     .service img {
         transform: scale(0.38, 1) translate(-650px, 0%) !important;
@@ -633,118 +777,4 @@ blockquote ::after {
         text-align: center;
         margin: 0;
     }
-}
-
-/* HABITATS */
-
-.horizontal-section {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-}
-
-.horizontal-box1 {
-    background-image: linear-gradient(
-    to bottom,
-    #0002,
-    #0008
-), url("img/habitats/swamp.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box1:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/habitats/swamp.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box2 {
-    background-image: linear-gradient(
-        to bottom,
-        #0002,
-        #0008
-    ), url("img/habitats/savannah.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box2:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/habitats/savannah.jpg");
-    background-size: cover;   
-    margin: 40px 0;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box3 {
-    background-image: linear-gradient(
-    to bottom,
-    #0002,
-    #0008
-), url("img/habitats/jungle.jpg");
-    background-size: cover; 
-    margin: 40px 0 100px;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-box3:hover {
-    background-image: linear-gradient(
-    to bottom,
-    #0008,
-    #0002
-), url("img/habitats/jungle.jpg");
-    background-size: cover; 
-    margin: 40px 0 100px;
-    border-radius: 12px;
-    color: #FFF;
-    text-decoration: none;
-    padding: 30px 190px;
-    text-align: center;
-}
-
-.horizontal-section a {
-    padding: 0 30px;
-    color: #FFF;
-    text-decoration: none;
-    font-size: 64px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 12px;
-    font-weight: bold;
-}
-
-.horizontal-section p {
-    color: #FFF;
-    font-size: 12px;
 }
