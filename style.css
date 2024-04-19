@@ -671,9 +671,12 @@ th {
     }
 }
 @media only screen and (max-width: 860px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     header {
         background-position: -150% 10%;;
@@ -692,9 +695,12 @@ th {
     }
 }
 @media only screen and (max-width: 740px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     header {
         background-position: -100% 10%;;
@@ -751,9 +757,12 @@ th {
     }
 }
 @media only screen and (max-width: 650px) {
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         height: 100vh;
-        width: 100%
+        width: 100%;
     }
     .service img {
         transform: scale(0.38, 1) translate(-650px, 0%) !important;

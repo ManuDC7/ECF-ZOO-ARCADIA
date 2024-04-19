@@ -60,14 +60,13 @@ try {
                                 $house_description = $rowHouse["description"];
                                 ?>
                                     <div class="horizontal-box"
-                                        style="margin: 40px 0;
-                                                border-radius: 12px;
-                                                color: #FFF;
-                                                text-decoration: none;
-                                                padding: 30px 190px;
-                                                text-align: center;"
-                                        onmouseover="this.style.backgroundImage='linear-gradient(to bottom, #0008, #0002), url(\'<?php echo $house_img; ?>\')'"
-                                        onmouseout="this.style.backgroundImage='linear-gradient(to bottom, #0002, #0008), url(\'<?php echo $house_img; ?>\')'">
+                                style="margin: 40px 0;
+                                    border-radius: 12px;
+                                    color: #FFF;
+                                    text-decoration: none;
+                                    padding: 30px 190px;
+                                    text-align: center;
+                                    background-image: linear-gradient(to bottom, #0002, #0008), url('<?php echo $house_img; ?>');">
                                         <a href="housingNext.php?firstname=<?php echo $house_name; ?>"><?php echo $house_name; ?></a>
                                         <p>
                                             <?php echo $house_description; ?>             
