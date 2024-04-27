@@ -643,6 +643,9 @@ th {
         height: 100vh;
         width: 100%
     }
+    header .title {
+        font-size: 34px;
+    }
     blockquote {
         padding: 40px 20px;
         margin: 40px 20px;

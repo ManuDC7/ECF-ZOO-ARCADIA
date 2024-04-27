@@ -904,8 +904,8 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         <script>
         $(document).ready(function(){
-            var modal1 = document.getElementById("myModal");
-            var span1 = document.getElementsByClassName("close1")[0];
+            let modal1 = document.getElementById("myModal");
+            let span1 = document.getElementsByClassName("close1")[0];
 
             $(".users_add").click(function(){
                 modal1.style.display = "block";
@@ -940,7 +940,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         $(".users_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer l'utilisateur ?")) {
-                var mail1 = $(this).data('mail');
+                let mail1 = $(this).data('mail');
                 console.log(mail1);
                 $.ajax({
                     url: 'adminPanel.php',
@@ -953,13 +953,13 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             }
         });
 
-        var $editUsers = $('.editUsersForm');
-        var $modal2 = $('#myModal2');
+        let $editUsers = $('.editUsersForm');
+        let $modal2 = $('#myModal2');
 
         $('.users_edit').click(function() {
-            var $row2 = $(this).closest('tr');
-            var name2 = $row2.find('td:eq(0)').text();
-            var mail2 = $row2.find('td:eq(1)').text();
+            let $row2 = $(this).closest('tr');
+            let name2 = $row2.find('td:eq(0)').text();
+            let mail2 = $row2.find('td:eq(1)').text();
 
             $editUsers.find('input[name="name"]').val(name2);
             $editUsers.find('input[name="email"]').val(mail2);
@@ -974,7 +974,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         $editUsers.on('submit', function(e) {
             e.preventDefault();
 
-            var url2 = $editUsers.attr('action');
+            let url2 = $editUsers.attr('action');
 
             $.ajax({
                 type: "POST",
@@ -993,8 +993,8 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         });
 
         $(document).ready(function(){
-            var modal3 = document.getElementById("myModal3");
-            var span2 = document.getElementsByClassName("close3")[0];
+            let modal3 = document.getElementById("myModal3");
+            let span2 = document.getElementsByClassName("close3")[0];
 
             $(".serv_add").click(function(){
                 modal3.style.display = "block";
@@ -1029,7 +1029,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         $(".serv_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                var service_name = $(this).data('service_name');
+                let service_name = $(this).data('service_name');
                 console.log(service_name);
                 $.ajax({
                     url: 'adminPanel.php',
@@ -1042,16 +1042,16 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             }
         });
 
-        var $modal4 = $('#myModal4');
-        var $editServices = $('.editServiceForm');
-        var service_id;
+        let $modal4 = $('#myModal4');
+        let $editServices = $('.editServiceForm');
+        let service_id;
 
         $('.serv_edit').click(function() {
                 service_id = $(this).data('service_id');
-                var $row3 = $(this).closest('tr');
-                var name3 = $row3.find('td:eq(0)').text();
-                var description3 = $row3.find('td:eq(1)').text();
-                var img3 = $row3.find('td:eq(2)').text();
+                let $row3 = $(this).closest('tr');
+                let name3 = $row3.find('td:eq(0)').text();
+                let description3 = $row3.find('td:eq(1)').text();
+                let img3 = $row3.find('td:eq(2)').text();
 
                 $editServices.find('input[name="Nom"]').val(name3);
                 $editServices.find('input[name="Description"]').val(description3);
@@ -1068,7 +1068,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         $editServices.on('submit', function(e) {
             e.preventDefault();
 
-            var url1 = $editServices.attr('action');
+            let url1 = $editServices.attr('action');
 
             $.ajax({
                 type: "POST",
@@ -1087,8 +1087,8 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         });
 
         $(document).ready(function(){
-            var modal5 = document.getElementById("myModal5");
-            var span3 = document.getElementsByClassName("close5")[0];
+            let modal5 = document.getElementById("myModal5");
+            let span3 = document.getElementsByClassName("close5")[0];
 
             $(".open_add").click(function(){
                 modal5.style.display = "block";
@@ -1123,7 +1123,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         $(".open_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                var open_id = $(this).data('open_id');
+                let open_id = $(this).data('open_id');
                 console.log(open_id);
                 $.ajax({
                     url: 'adminPanel.php',
@@ -1136,15 +1136,15 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             }
         });
 
-        var $modal6 = $('#myModal6');
-        var $editOpen = $('.editOpenForm');
-        var open_day;
+        let $modal6 = $('#myModal6');
+        let $editOpen = $('.editOpenForm');
+        let open_day;
 
         $('.open_edit').click(function() {
             open_day = $(this).data('open_day');
-            var $row4 = $(this).closest('tr');
-            var day = $row4.find('td:eq(0)').text();
-            var hours = $row4.find('td:eq(1)').text();
+            let $row4 = $(this).closest('tr');
+            let day = $row4.find('td:eq(0)').text();
+            let hours = $row4.find('td:eq(1)').text();
 
             $editOpen.find('input[name="Day"]').val(day);
             $editOpen.find('input[name="Hours"]').val(hours);
@@ -1159,7 +1159,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         $editOpen.on('submit', function(e) {
             e.preventDefault();
 
-            var url3 = $editOpen.attr('action');
+            let url3 = $editOpen.attr('action');
 
             $.ajax({
                 type: "POST",
@@ -1179,8 +1179,8 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         //HOUSINGS
         $(document).ready(function(){
-            var modal7 = document.getElementById("myModal7");
-            var span4 = document.getElementsByClassName("close7")[0];
+            let modal7 = document.getElementById("myModal7");
+            let span4 = document.getElementsByClassName("close7")[0];
 
             $(".house_add").click(function(){
                 modal7.style.display = "block";
@@ -1215,7 +1215,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         $(".house_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                var house_name = $(this).data('house_name');
+                let house_name = $(this).data('house_name');
                 console.log(house_name);
                 $.ajax({
                     url: 'adminPanel.php',
@@ -1228,16 +1228,16 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             }
         });
 
-        var $modal8 = $('#myModal8');
-        var $editHouse = $('.editHouseForm');
-        var house_id;
+        let $modal8 = $('#myModal8');
+        let $editHouse = $('.editHouseForm');
+        let house_id;
 
         $('.house_edit').click(function() {
             house_id = $(this).data('house_id');
-            var $row4 = $(this).closest('tr');
-            var name2 = $row4.find('td:eq(0)').text();
-            var description2 = $row4.find('td:eq(1)').text();
-            var img2 = $row4.find('td:eq(2)').text();
+            let $row4 = $(this).closest('tr');
+            let name2 = $row4.find('td:eq(0)').text();
+            let description2 = $row4.find('td:eq(1)').text();
+            let img2 = $row4.find('td:eq(2)').text();
 
             $editHouse.find('input[name="Nom"]').val(name2);
             $editHouse.find('input[name="Description"]').val(description2);
@@ -1253,7 +1253,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         $editHouse.on('submit', function(e) {
             e.preventDefault();
 
-            var url4 = $editHouse.attr('action');
+            let url4 = $editHouse.attr('action');
 
             $.ajax({
                 type: "POST",
@@ -1273,8 +1273,8 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         //ANIMALS
         $(document).ready(function(){
-            var modal8 = document.getElementById("myModal9");
-            var span5 = document.getElementsByClassName("close9")[0];
+            let modal8 = document.getElementById("myModal9");
+            let span5 = document.getElementsByClassName("close9")[0];
 
             $(".animal_add").click(function(){
                 modal8.style.display = "block";
@@ -1309,7 +1309,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
         $(".animal_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                var animal_id = $(this).data('animal_id');
+                let animal_id = $(this).data('animal_id');
                 console.log(animal_id);
                 $.ajax({
                     url: 'adminPanel.php',
@@ -1322,17 +1322,17 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             }
         });
 
-        var $modal10 = $('#myModal10');
-        var $editAnimal = $('.editAnimalForm');
-        var animal_name;
+        let $modal10 = $('#myModal10');
+        let $editAnimal = $('.editAnimalForm');
+        let animal_name;
 
         $('.animal_edit').click(function() {
             animal_name = $(this).data('animal_name');
-            var $row5 = $(this).closest('tr');
-            var firstname = $row5.find('td:eq(0)').text();
-            var breed = $row5.find('td:eq(1)').text();
-            var slug = $row5.find('td:eq(3)').text();
-            var message = $row5.find('td:eq(4)').text();
+            let $row5 = $(this).closest('tr');
+            let firstname = $row5.find('td:eq(0)').text();
+            let breed = $row5.find('td:eq(1)').text();
+            let slug = $row5.find('td:eq(3)').text();
+            let message = $row5.find('td:eq(4)').text();
 
             $editAnimal.find('input[name="old_firstname"]').val(firstname);
             $editAnimal.find('input[name="firstname"]').val(firstname);
@@ -1350,7 +1350,7 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         $editAnimal.on('submit', function(e) {
             e.preventDefault();
 
-            var url5 = $editAnimal.attr('action');
+            let url5 = $editAnimal.attr('action');
 
             $.ajax({
                 type: "POST",
@@ -1371,9 +1371,9 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         //CONSULTER LES COMPTES RENDUS DES HABITATS
         $(document).ready(function() {
             $('#housing-select').change(function(){
-                var houseId = $(this).val();
+                let houseId = $(this).val();
                 $.get('adminPanel.php', {id: houseId}, function(data){
-                    var house = JSON.parse(data); 
+                    let house = JSON.parse(data); 
                     $('#report-field-house').val(house.comments);
                 });
             });
@@ -1382,10 +1382,10 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         //CONSULTER LES COMPTES RENDUS DES ANIMAUX
         $(document).ready(function() {
             $('#animal-select').change(function(){
-                var animalId = $(this).val();
+                let animalId = $(this).val();
                 $.get('adminPanel.php', {selected_animal_id: animalId}, function(data){
-                    var dates = JSON.parse(data);
-                    var dateSelect = $('#date-select');
+                    let dates = JSON.parse(data);
+                    let dateSelect = $('#date-select');
                     dateSelect.empty();
                     dateSelect.append('<option value="" disabled selected>Choisir une date</option>');
                     dates.forEach(function(date) {
@@ -1395,12 +1395,12 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
             });
 
             $('#date-select').change(function(){
-                var animalId = $('#animal-select').val();
-                var date = $(this).val();
+                let animalId = $('#animal-select').val();
+                let date = $(this).val();
                 $.get('adminPanel.php', {report_animal_id: animalId, report_date: date}, function(data){
-                    var reports = JSON.parse(data);
+                    let reports = JSON.parse(data);
                     if(reports.length > 0) {
-                        var report = reports[0]; // Prendre le premier rapport si plusieurs sont retournés
+                        let report = reports[0]; // Prendre le premier rapport si plusieurs sont retournés
                         $('#report-field-state').val(report.state);
                         $('#report-field-food').val(report.food);
                         $('#report-field-weight').val(report.weight);

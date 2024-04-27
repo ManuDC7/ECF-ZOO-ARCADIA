@@ -42,7 +42,7 @@ if ($animal) {
         ['$inc' => ['click' => 1]]
     );
 } else {
-    $collection->insertOne(['id' => (int)$animal_id, 'click' => 0]);
+    $collection->insertOne(['id' => (int)$animal_id, 'click' => 1]);
 }
 ?>
 

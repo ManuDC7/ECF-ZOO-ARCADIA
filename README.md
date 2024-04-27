@@ -12,9 +12,9 @@ Avant de commencer le processus de déploiement, assurez-vous d'avoir les élém
 
 - **Homebrew** : Un gestionnaire de paquets pour macOS.
 
-## ETAPE 1: Installation de Podman (Facultatif)
+## ETAPE 1: Installation de Gestionnaire de Conteneurs (Facultatif)
 
-Podman est un gestionnaire de conteneurs conçu pour les environnements Linux. Vous pouvez l'installer via Homebrew pour maintenir un environnement de développement propre.
+Un gestionnaire de conteneurs tel que Docker ou Podman est essentiel pour gérer vos environnements de développement de manière isolée. Dans cet exemple, nous allons utiliser Podman, qui est un gestionnaire de conteneurs conçu pour les environnements Linux.
 
 `brew install podman`
 

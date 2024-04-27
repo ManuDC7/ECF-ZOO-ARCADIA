@@ -356,7 +356,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <script>
         $(document).ready(function(){
             $(".validateButton").click(function(){
-                var com_message = $(this).data('com-message');
+                let com_message = $(this).data('com-message');
                 $.ajax({
                     url: 'employPanel.php',
                     type: 'post',
@@ -370,7 +370,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $(document).ready(function(){
             $(".unvalidateButton").click(function(){
-                var com_message2 = $(this).data('com-message2');
+                let com_message2 = $(this).data('com-message2');
                 $.ajax({
                     url: 'employPanel.php',
                     type: 'post',
@@ -383,8 +383,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
 
         $(document).ready(function(){
-            var modal = document.getElementById("myModal");
-            var span = document.getElementsByClassName("close")[0];
+            let modal = document.getElementById("myModal");
+            let span = document.getElementsByClassName("close")[0];
 
             $(".serv_add").click(function(){
                 modal.style.display = "block";
@@ -419,7 +419,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $(".serv_delete").click(function(){
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                var service_name = $(this).data('service_name');
+                let service_name = $(this).data('service_name');
                 console.log(service_name);
                 $.ajax({
                     url: 'employPanel.php',
@@ -432,16 +432,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
-        var $modal = $('#myModal2');
-        var $form = $('.editServiceForm');
-        var service_id;
+        let $modal = $('#myModal2');
+        let $form = $('.editServiceForm');
+        let service_id;
 
         $('.serv_edit').click(function() {
             service_id = $(this).data('service_id');
-            var $row = $(this).closest('tr');
-            var name = $row.find('td:eq(0)').text();
-            var description = $row.find('td:eq(1)').text();
-            var img = $row.find('td:eq(2)').text();
+            let $row = $(this).closest('tr');
+            let name = $row.find('td:eq(0)').text();
+            let description = $row.find('td:eq(1)').text();
+            let img = $row.find('td:eq(2)').text();
 
             $form.find('input[name="Nom"]').val(name);
             $form.find('input[name="Description"]').val(description);
@@ -457,7 +457,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $form.on('submit', function(e) {
             e.preventDefault();
 
-            var url = $form.attr('action');
+            let url = $form.attr('action');
 
             $.ajax({
                 type: "POST",
