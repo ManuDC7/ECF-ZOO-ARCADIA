@@ -305,17 +305,17 @@ if (isset($_GET['id'])) {
         </footer>
 
         <script>
-        $(document).ready(function() {
-            $('#animal-select').change(function(){
-                let animalId = $(this).val();
-                $.get('veterPanel.php', {id: animalId}, function(data){
-                    let food = JSON.parse(data); 
-                    $('#report-field-food').val(food.food);
-                    $('#report-field-weight').val(food.weight);
-                    $('#report-field-date').val(food.date);
-                    $('#report-field-hour').val(food.hours);
-                });
-            });
+        document.querySelector('#animal-select').addEventListener('change', function() {
+            let animalId = this.value;
+            fetch('veterPanel.php?id=' + animalId)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('#report-field-food').value = data.food;
+                    document.querySelector('#report-field-weight').value = data.weight;
+                    document.querySelector('#report-field-date').value = data.date;
+                    document.querySelector('#report-field-hour').value = data.hours;
+                })
+                .catch(error => console.error('Error:', error));
         });
         </script>
 
