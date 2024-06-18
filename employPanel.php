@@ -353,128 +353,151 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-        <script>
-        $(document).ready(function(){
-            $(".validateButton").click(function(){
-                let com_message = $(this).data('com-message');
-                $.ajax({
-                    url: 'employPanel.php',
-                    type: 'post',
-                    data: {com_message: com_message},
-                    success: function(response) {
-                        alert("L'avis a été validé avec succès");
-                    }
-                });
+    <script>
+    document.querySelectorAll('.validateButton').forEach(button => {
+        button.addEventListener('click', function() {
+            let com_message = this.dataset.comMessage;
+            fetch('employPanel.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({com_message: com_message})
+            })
+            .then(response => response.text())
+            .then(response => {
+                alert("L'avis a été validé avec succès");
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+        document.querySelectorAll('.unvalidateButton').forEach(button => {
+            button.addEventListener('click', function() {
+                let com_message2 = this.dataset.comMessage2;
+                fetch('employPanel.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({com_message2: com_message2})
+                })
+                .then(response => response.text())
+                .then(response => {
+                    alert("L'avis a été dévalidé avec succès");
+                })
+                .catch(error => console.error('Error:', error));
             });
         });
 
-        $(document).ready(function(){
-            $(".unvalidateButton").click(function(){
-                let com_message2 = $(this).data('com-message2');
-                $.ajax({
-                    url: 'employPanel.php',
-                    type: 'post',
-                    data: {com_message2: com_message2},
-                    success: function(response) {
-                        alert("L'avis a été dévalidé avec succès");
-                    }
-                });
-            });
-        });
+        document.addEventListener('DOMContentLoaded', function(){
+    let modal = document.getElementById("myModal");
+    let span = document.getElementsByClassName("close")[0];
 
-        $(document).ready(function(){
-            let modal = document.getElementById("myModal");
-            let span = document.getElementsByClassName("close")[0];
-
-            $(".serv_add").click(function(){
+    document.querySelectorAll(".serv_add").forEach(button => {
+        button.addEventListener('click', function() {
                 modal.style.display = "block";
             });
-
-            span.onclick = function() {
-            modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-
-            $(".addServiceForm").submit(function(e){
-                e.preventDefault(); 
-
-                $.ajax({
-                    url: 'employPanel.php',
-                    type: 'post',
-                    data: $(this).serialize(), 
-                    success: function(response) {
-                        console.log(response);
-                        alert("Le service à bien été ajouté !");
-                        modal.style.display = "none";
-                        $(".addServiceForm")[0].reset(); 
-                    }
-                });
-            });
         });
 
-        $(".serv_delete").click(function(){
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.querySelector(".addServiceForm").addEventListener('submit', function(e){
+            e.preventDefault(); 
+
+            let formData = new FormData(this);
+            fetch('employPanel.php', {
+                method: 'post',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(response => {
+                console.log(response);
+                alert("Le service à bien été ajouté !");
+                modal.style.display = "none";
+                document.querySelector(".addServiceForm").reset(); 
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+    document.querySelectorAll(".serv_delete").forEach(button => {
+        button.addEventListener('click', function() {
             if (confirm("Êtes-vous sûr de vouloir supprimer la ligne entière ?")) {
-                let service_name = $(this).data('service_name');
+                let service_name = this.dataset.service_name;
                 console.log(service_name);
-                $.ajax({
-                    url: 'employPanel.php',
-                    type: 'post',
-                    data: {service_name: service_name},
-                });
-                $(this).closest("tr").remove();
+                fetch('employPanel.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({service_name: service_name})
+                })
+                .then(response => response.text())
+                .then(response => {
+                    this.closest("tr").remove();
+                })
+                .catch(error => console.error('Error:', error));
             } else {
                 // Si l'utilisateur clique sur Annuler, ne rien faire
             }
         });
+    });
 
-        let $modal = $('#myModal2');
-        let $form = $('.editServiceForm');
-        let service_id;
+    let modal = document.getElementById("myModal2");
+    let form = document.querySelector('.editServiceForm');
+    let service_id;
 
-        $('.serv_edit').click(function() {
-            service_id = $(this).data('service_id');
-            let $row = $(this).closest('tr');
-            let name = $row.find('td:eq(0)').text();
-            let description = $row.find('td:eq(1)').text();
-            let img = $row.find('td:eq(2)').text();
+    document.querySelectorAll('.serv_edit').forEach(button => {
+        button.addEventListener('click', function() {
+            service_id = this.dataset.service_id;
+            let row = this.closest('tr');
+            let name = row.cells[0].textContent;
+            let description = row.cells[1].textContent;
+            let img = row.cells[2].textContent;
 
-            $form.find('input[name="Nom"]').val(name);
-            $form.find('input[name="Description"]').val(description);
-            $form.find('input[name="imageURL"]').val(img);
+            form.querySelector('input[name="Nom"]').value = name;
+            form.querySelector('input[name="Description"]').value = description;
+            form.querySelector('input[name="imageURL"]').value = img;
 
-            $modal.show();
+            modal.style.display = "block";
         });
+    });
 
-        $('.close').click(function() {
-            $modal.hide();
+    document.querySelector('.close').addEventListener('click', function() {
+        modal.style.display = "none";
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let url = form.getAttribute('action');
+        let formData = new FormData(form);
+        formData.append("service_id", service_id);
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(response => {
+            alert('Les données ont été modifiés avec succès.'); 
+            modal.style.display = "none"; 
+        })
+        .catch(error => {
+            alert('Une erreur est survenue lors de l\'envoi des données.');
+            console.error('Error:', error);
         });
-
-        $form.on('submit', function(e) {
-            e.preventDefault();
-
-            let url = $form.attr('action');
-
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: $form.serialize() + "&service_id=" + service_id,
-                success: function(data)
-                {
-                    alert('Les données ont été modifiés avec succès.'); 
-                    $modal.hide(); 
-                },
-                error: function()
-                {
-                    alert('Une erreur est survenue lors de l\'envoi des données.');
-                }
-            });
-        });
-        </script>
+    });
+    </script>
 
     </body>
 </html>
