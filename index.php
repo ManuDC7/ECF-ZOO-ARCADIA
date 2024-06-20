@@ -1,10 +1,17 @@
 <?php
 
 try {
-    putenv('SQLITE_TMPDIR=/img');
+    require 'vendor/autoload.php';
 
-    $bdd = new PDO('sqlite:db.sqlite');
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
 
+    $host = $_ENV['DB_HOST'];
+    $dbname = $_ENV['DB_NAME'];
+    $username = $_ENV['DB_USER'];
+    $password = $_ENV['DB_PASS'];
+
+    $bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $comment = "SELECT * FROM comments ORDER BY id DESC;";

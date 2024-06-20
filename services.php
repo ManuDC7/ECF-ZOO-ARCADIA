@@ -1,7 +1,16 @@
 <?php
 try {
-    $bdd = new PDO('sqlite:db.sqlite');
+    require 'vendor/autoload.php';
 
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    $host = $_ENV['DB_HOST'];
+    $dbname = $_ENV['DB_NAME'];
+    $username = $_ENV['DB_USER'];
+    $password = $_ENV['DB_PASS'];
+
+    $bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $service = "SELECT * FROM services;";
@@ -10,8 +19,8 @@ try {
     $open = "SELECT * FROM opening;";
     $resultOpen = $bdd->query($open);
 
-    } catch (PDOException $e) {
-        echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
+} catch (PDOException $e) {
+    echo "Erreur de connexion ou d'exécution de la requête : " . $e->getMessage();
 }
 ?>
 
