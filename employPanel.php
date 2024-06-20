@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $description = $_POST['Description'];
         $url = $_POST['imageURL'];
         $service_id = $_POST['service_id'];
-        
+
         $stmt = $bdd->prepare("UPDATE services SET name = :nom, description = :description, slug = :url WHERE id = :service_id");
         $stmt->bindValue(':nom', $nom);
         $stmt->bindValue(':description', $description);
@@ -452,49 +452,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     });
 
-    let modal = document.getElementById("myModal2");
-    let form = document.querySelector('.editServiceForm');
-    let service_id;
+    var $modal = $('#myModal2');
+    var $form = $('.editServiceForm');
+    var service_id;
 
-    document.querySelectorAll('.serv_edit').forEach(button => {
-        button.addEventListener('click', function() {
-            service_id = this.dataset.service_id;
-            let row = this.closest('tr');
-            let name = row.cells[0].textContent;
-            let description = row.cells[1].textContent;
-            let img = row.cells[2].textContent;
+        $('.serv_edit').click(function() {
+        service_id = $(this).data('service_id');
+        var $row = $(this).closest('tr');
+        var name = $row.find('td:eq(0)').text();
+        var description = $row.find('td:eq(1)').text();
+        var img = $row.find('td:eq(2)').text();
 
-            form.querySelector('input[name="Nom"]').value = name;
-            form.querySelector('input[name="Description"]').value = description;
-            form.querySelector('input[name="imageURL"]').value = img;
+        $form.find('input[name="Nom"]').val(name);
+        $form.find('input[name="Description"]').val(description);
+        $form.find('input[name="imageURL"]').val(img);
 
-            modal.style.display = "block";
-        });
+        $modal.show();
     });
 
-    document.querySelector('.close').addEventListener('click', function() {
-        modal.style.display = "none";
+    $('.close').click(function() {
+        $modal.hide();
     });
 
-    form.addEventListener('submit', function(e) {
+    $form.on('submit', function(e) {
         e.preventDefault();
 
-        let url = form.getAttribute('action');
-        let formData = new FormData(form);
-        formData.append("service_id", service_id);
+        var url = $form.attr('action');
 
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(response => {
-            alert('Les données ont été modifiés avec succès.'); 
-            modal.style.display = "none"; 
-        })
-        .catch(error => {
-            alert('Une erreur est survenue lors de l\'envoi des données.');
-            console.error('Error:', error);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $form.serialize() + "&service_id=" + service_id,
+            success: function(data)
+                {
+                    alert('Les données ont été modifiés avec succès.');
+                $modal.hide();
+            },
+            error: function()
+            {
+                alert('Une erreur est survenue lors de l\'envoi des données.');
+            }
         });
     });
     </script>

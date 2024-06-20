@@ -903,94 +903,115 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
         </div>
 
         <script>
-        $(document).ready(function(){
-            let modal1 = document.getElementById("myModal");
-            let span1 = document.getElementsByClassName("close1")[0];
+        document.addEventListener('DOMContentLoaded', function() {
+        let modal1 = document.getElementById("myModal");
+        let span1 = document.getElementsByClassName("close1")[0];
 
-            $(".users_add").click(function(){
-                modal1.style.display = "block";
-            });
-
-            span1.onclick = function() {
-            modal1.style.display = "none";
-            }
-
-            window.addEventListener('click', function(event) {
-                if (event.target == modal1) {
-                    modal1.style.display = "none";
-                }
-            });
-
-            $(".addUsersForm").submit(function(e){
-                e.preventDefault(); 
-
-                $.ajax({
-                    url: 'adminPanel.php',
-                    type: 'post',
-                    data: $(this).serialize(), 
-                    success: function(response) {
-                        console.log(response);
-                        alert("L'utilisateur à bien été ajouté !");
-                        modal1.style.display = "none";
-                        $(".addUsersForm")[0].reset(); 
-                    }
-                });
-            });
+        document.querySelector(".users_add").addEventListener('click', function() {
+            modal1.style.display = "block";
         });
 
-        $(".users_delete").click(function(){
+        span1.addEventListener('click', function() {
+            modal1.style.display = "none";
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal1) {
+                modal1.style.display = "none";
+            }
+        });
+
+        document.querySelector(".addUsersForm").addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let url = 'adminPanel.php';
+            let formData = new FormData(this);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(response => {
+                console.log(response);
+                alert("L'utilisateur à bien été ajouté !");
+                modal1.style.display = "none";
+                this.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    document.querySelectorAll(".users_delete").forEach(function(element) {
+        element.addEventListener('click', function() {
             if (confirm("Êtes-vous sûr de vouloir supprimer l'utilisateur ?")) {
-                let mail1 = $(this).data('mail');
+                let mail1 = this.getAttribute('data-mail');
                 console.log(mail1);
-                $.ajax({
-                    url: 'adminPanel.php',
-                    type: 'post',
-                    data: {mail: mail1},
+
+                fetch('adminPanel.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'mail=' + encodeURIComponent(mail1),
+                })
+                .then(response => response.text())
+                .then(response => {
+                    console.log(response);
+                    this.closest("tr").remove();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-                $(this).closest("tr").remove();
             } else {
                 // Si l'utilisateur clique sur Annuler, ne rien faire
             }
         });
+    });
 
-        let $editUsers = $('.editUsersForm');
-        let $modal2 = $('#myModal2');
+    let editUsers = document.querySelector('.editUsersForm');
+    let modal2 = document.getElementById('myModal2');
 
-        $('.users_edit').click(function() {
-            let $row2 = $(this).closest('tr');
-            let name2 = $row2.find('td:eq(0)').text();
-            let mail2 = $row2.find('td:eq(1)').text();
+    document.querySelectorAll('.users_edit').forEach(function(element) {
+        element.addEventListener('click', function() {
+            let row2 = this.closest('tr');
+            let name2 = row2.querySelector('td:nth-child(1)').textContent;
+            let mail2 = row2.querySelector('td:nth-child(2)').textContent;
 
-            $editUsers.find('input[name="name"]').val(name2);
-            $editUsers.find('input[name="email"]').val(mail2);
+            editUsers.querySelector('input[name="name"]').value = name2;
+            editUsers.querySelector('input[name="email"]').value = mail2;
 
-            $modal2.show();
+            modal2.style.display = "block";
         });
+    });
 
-        $('.close2').click(function() {
-            $modal2.hide();
+    document.querySelector('.close2').addEventListener('click', function() {
+        modal2.style.display = "none";
+    });
+
+    editUsers.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let url2 = this.getAttribute('action');
+        let formData = new FormData(this);
+
+        fetch(url2, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(response => {
+            console.log(response);
+            alert("L'utilisateur à été modifiés avec succès."); 
+            modal2.style.display = "none"; 
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Une erreur est survenue lors de l\'envoi des données.');
         });
-
-        $editUsers.on('submit', function(e) {
-            e.preventDefault();
-
-            let url2 = $editUsers.attr('action');
-
-            $.ajax({
-                type: "POST",
-                url: url2,
-                data: $editUsers.serialize(),
-                success: function(data)
-                {
-                    alert("L'utilisateur à été modifiés avec succès."); 
-                    $modal2.hide(); 
-                },
-                error: function()
-                {
-                    alert('Une erreur est survenue lors de l\'envoi des données.');
-                }
-            });
-        });
+    });
 
         $(document).ready(function(){
             let modal3 = document.getElementById("myModal3");
