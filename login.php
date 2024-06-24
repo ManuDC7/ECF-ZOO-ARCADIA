@@ -1,21 +1,51 @@
 <?php
-session_start();
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 require 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
-$dbname = $_ENV['DB_NAME'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
+try {
+    $bdd = new PDO("mysql:host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
+    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
 
-$bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+function redirectToRolePage($roleLabel) {
+    switch ($roleLabel) {
+        case 'Administrator':
+            header('Location: adminPanel.php');
+            break;
+        case 'Veterinarian':
+            header('Location: veterPanel.php');
+            break;
+        case 'Employee':
+            header('Location: employPanel.php');
+            break;
+        default:
+            header('Location: defaultPanel.php');
+            break;
+    }
+    exit;
+}
 
-$open = "SELECT * FROM opening;";
-$resultOpen = $bdd->query($open);
+if (isset($_SESSION['userId'])) {
+    $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+    $stmtRole->bindParam(':userId', $_SESSION['userId']);
+    $stmtRole->execute();
+    $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+    if ($role) {
+        redirectToRolePage($role['label']);
+    } else {
+        header('Location: login.php');
+        exit;
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
@@ -23,37 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email");
     $stmtUser->bindParam(':email', $email);
-
     $stmtUser->execute();
 
     $user = $stmtUser->fetch();
 
     if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user'] = $user;
-        $_SESSION['userId'] = $user['userId']; 
-        $userId = $user['userId'];
+        $_SESSION['userId'] = $user['userId'];
 
-        $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
-        $stmtRole->execute(['userId' => $userId]);
-        $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
-
-        if ($role) {
-            $label = $role['label'];
-
-            if ($label == 'Administrator') {
-                header('Location: adminPanel.php');
-            } elseif ($label == 'Veterinarian') {
-                header('Location: veterPanel.php');
-            } elseif ($label == 'Employee') {
-                header('Location: employPanel.php');
-            }
-        }
-        exit;
+        redirectToRolePage($user['role']); 
     } else {
         echo "Email ou mot de passe incorrect";
     }
 }
-
 ?>
 
 <!DOCTYPE html>

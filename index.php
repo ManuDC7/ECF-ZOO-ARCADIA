@@ -1,4 +1,7 @@
 <?php
+if(session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 try {
     require 'vendor/autoload.php';
@@ -21,7 +24,7 @@ try {
     $resultOpen = $bdd->query($open);
     $message_success = '';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['logout'])) {
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
 

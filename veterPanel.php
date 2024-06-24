@@ -1,75 +1,87 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-$userId = $_SESSION['userId'];
+if (!isset($_SESSION['userId'])) {
+    header('Location: login.php');
+    exit;
+}
 
 require 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
-$dbname = $_ENV['DB_NAME'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
-
-$bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$bdd = new PDO("mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "SELECT firstname FROM users WHERE userId = :userId;";
-$query = $bdd->prepare($username);
+$userId = $_SESSION['userId'];
+$stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+$stmtRole->bindParam(':userId', $userId, PDO::PARAM_INT);
+$stmtRole->execute();
+$userRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+if (!$userRole || $userRole['label'] !== 'Veterinarian') {
+    header('Location: login.php');
+    exit;
+}
+
+$query = $bdd->prepare("SELECT firstname FROM users WHERE userId = :userId;");
 $query->bindValue(':userId', $userId, PDO::PARAM_INT);
 $query->execute();
 $user = $query->fetch(PDO::FETCH_ASSOC);
 $firstname = htmlspecialchars($user['firstname']);
 
-$open = "SELECT * FROM opening;";
-$resultOpen = $bdd->query($open);
+$resultOpen = $bdd->query("SELECT * FROM opening;");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['firstFormInput'])) {
-    $animal = strtolower($_POST["animal"]);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['firstFormInput'])) {
+        $animal = strtolower($_POST["animal"]);
+        $state = htmlspecialchars($_POST["state"], ENT_QUOTES, 'UTF-8');
+        $food = htmlspecialchars($_POST["food"], ENT_QUOTES, 'UTF-8');
+        $weight = htmlspecialchars($_POST["weight"], ENT_QUOTES, 'UTF-8');
+        $date = htmlspecialchars($_POST["date"], ENT_QUOTES, 'UTF-8');
+        $hours = htmlspecialchars($_POST["hours"], ENT_QUOTES, 'UTF-8');
 
-    $state = htmlspecialchars($_POST["state"], ENT_QUOTES, 'UTF-8');
-    $food = htmlspecialchars($_POST["food"], ENT_QUOTES, 'UTF-8');
-    $weight = htmlspecialchars($_POST["weight"], ENT_QUOTES, 'UTF-8');
-    $date = htmlspecialchars($_POST["date"], ENT_QUOTES, 'UTF-8');
-    $hours = htmlspecialchars($_POST["hours"], ENT_QUOTES, 'UTF-8');
+        $stmt = $bdd->prepare("SELECT id FROM animals WHERE firstname = :animal;");
+        $stmt->bindValue(':animal', $animal);
+        $stmt->execute();
+        $animal_id = $stmt->fetchColumn();
 
-    $animal_id_query = "SELECT id FROM animals WHERE firstname = :animal;";
-    $stmt = $bdd->prepare($animal_id_query);
-    $stmt->bindValue(':animal', $animal);
-    $stmt->execute();
-    $animal_id = $stmt->fetchColumn();
+        $sql = "INSERT INTO foods (state, food, weight, date, hours, animal_id) VALUES (:state, :food, :weight, :date, :hours, :animal_id)";
+        $stmt = $bdd->prepare($sql);
+        $stmt->bindValue(':animal_id', $animal_id);
+        $stmt->bindValue(':state', $state);
+        $stmt->bindValue(':food', $food);
+        $stmt->bindValue(':weight', $weight);
+        $stmt->bindValue(':date', $date);
+        $stmt->bindValue(':hours', $hours);
+        $stmt->execute();
+    } elseif (isset($_POST['secondFormInput'])) {
+        $habitat = strtolower($_POST["selectmenu"]);
+        $report = htmlspecialchars($_POST["text"], ENT_QUOTES, 'UTF-8');
 
-    $sql = "INSERT INTO foods (state, food, weight, date, hours, animal_id) VALUES (:state, :food, :weight, :date, :hours, :animal_id)";
-
-    $stmt = $bdd->prepare($sql);
-    $stmt->bindValue(':animal_id', $animal_id);
-    $stmt->bindValue(':state', $state);
-    $stmt->bindValue(':food', $food);
-    $stmt->bindValue(':weight', $weight);
-    $stmt->bindValue(':date', $date);
-    $stmt->bindValue(':hours', $hours);
-    $stmt->execute();
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['secondFormInput'])) {
-    $habitat = strtolower($_POST["selectmenu"]);
-    $report = htmlspecialchars($_POST["text"], ENT_QUOTES, 'UTF-8');
-
-    $sql = "UPDATE housings SET comments = :report WHERE name = :habitat";
-
-    $stmt = $bdd->prepare($sql);
-    $stmt->bindValue(':habitat', $habitat);
-    $stmt->bindValue(':report', $report);
-    $stmt->execute();
+        $stmt = $bdd->prepare("UPDATE housings SET comments = :report WHERE name = :habitat");
+        $stmt->bindValue(':habitat', $habitat);
+        $stmt->bindValue(':report', $report);
+        $stmt->execute();
+    }
 }
 
 if (isset($_GET['id'])) {
     $animalId = $_GET['id'];
-    $result = $bdd->query("SELECT * FROM foods WHERE animal_id = $animalId ORDER BY id DESC LIMIT 1");
-    $report = $result->fetch(PDO::FETCH_ASSOC);
-    echo json_encode($report); 
+    $stmt = $bdd->prepare("SELECT * FROM foods WHERE animal_id = :animalId ORDER BY id DESC LIMIT 1");
+    $stmt->bindValue(':animalId', $animalId, PDO::PARAM_INT);
+    $stmt->execute();
+    $report = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo json_encode($report);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
     exit;
 }
 ?>
@@ -88,7 +100,12 @@ if (isset($_GET['id'])) {
 
     <body>
         <header>
-            <a class="login" href="index.php">Se deconnecter</a>
+            <form id="logoutForm" method="post" action="veterPanel.php" style="display: none;">
+                <input type="hidden" name="logout" value="1">
+            </form>
+
+            <a href="#" onclick="confirmLogout(); return false;" class ="login">Se deconnecter</a>
+
             <h1 class="title">Vétérinaire</h1>
             <nav class="navbar">
                 <ul>
@@ -327,6 +344,12 @@ if (isset($_GET['id'])) {
                 })
                 .catch(error => console.error('Error:', error));
         });
+
+        function confirmLogout() {
+            if (confirm('Voulez-vous vous déconnecter ?')) {
+                document.getElementById('logoutForm').submit();
+            }
+        }
         </script>
 
     </body>

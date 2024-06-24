@@ -1,36 +1,43 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-$userId = $_SESSION['userId'];
+if (!isset($_SESSION['userId'])) {
+    header('Location: login.php');
+    exit;
+}
 
 require 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
-$dbname = $_ENV['DB_NAME'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
-
-$bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$bdd = new PDO("mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "SELECT firstname FROM users WHERE userId = :userId;";
-$query = $bdd->prepare($username);
+$userId = $_SESSION['userId'];
+$stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+$stmtRole->bindParam(':userId', $userId, PDO::PARAM_INT);
+$stmtRole->execute();
+$userRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+if (!$userRole || $userRole['label'] !== 'Employee') {
+    header('Location: login.php');
+    exit;
+}
+
+$query = $bdd->prepare("SELECT firstname FROM users WHERE userId = :userId;");
 $query->bindValue(':userId', $userId, PDO::PARAM_INT);
 $query->execute();
 $user = $query->fetch(PDO::FETCH_ASSOC);
 $firstname = htmlspecialchars($user['firstname']);
 
-$com = "SELECT * FROM comments;";
-$resultCom = $bdd->query($com);
+$resultCom = $bdd->query("SELECT * FROM comments;");
 
-$service = "SELECT * FROM services;";
-$resultService = $bdd->query($service);
+$resultService = $bdd->query("SELECT * FROM services;");
 
-$open = "SELECT * FROM opening;";
-$resultOpen = $bdd->query($open);
+$resultOpen = $bdd->query("SELECT * FROM opening;");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['com_message'])) {
@@ -109,6 +116,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
     }
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -125,7 +138,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <body>
         <header>
-            <a class="login" href="index.php">Se deconnecter</a>
+            <form id="logoutForm" method="post" action="employPanel.php" style="display: none;">
+                <input type="hidden" name="logout" value="1">
+            </form>
+
+            <a href="#" onclick="confirmLogout(); return false;" class ="login">Se deconnecter</a>
+
             <h1 class="title">Employé</h1>
             <nav class="navbar">
                 <ul>
@@ -241,7 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="container">
                 <h3>Soumettre un compte rendu sur un animal</h3>
-                <form action="veterPanel.php" method="post">
+                <form action="employPanel.php" method="post">
                     <input type="hidden" name="firstFormInput" value="1">
                     <table style="table-layout: fixed; width: 100%;">
                         <colgroup>
@@ -504,6 +522,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
     });
+
+    function confirmLogout() {
+        if (confirm('Voulez-vous vous déconnecter ?')) {
+            document.getElementById('logoutForm').submit();
+        }
+    }
     </script>
 
     </body>

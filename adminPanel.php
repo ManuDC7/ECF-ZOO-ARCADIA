@@ -1,42 +1,47 @@
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
-$userId = $_SESSION['userId'];
+if (!isset($_SESSION['userId'])) {
+    header('Location: login.php');
+    exit;
+}
 
 require 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
-$dbname = $_ENV['DB_NAME'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
-
-$bdd = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+$bdd = new PDO("mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASS']);
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$username = "SELECT firstname FROM users WHERE userId = :userId;";
-$query = $bdd->prepare($username);
+$userId = $_SESSION['userId'];
+$stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+$stmtRole->bindParam(':userId', $userId, PDO::PARAM_INT);
+$stmtRole->execute();
+$userRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+if (!$userRole || $userRole['label'] !== 'Administrator') {
+    header('Location: login.php');
+    exit;
+}
+
+$query = $bdd->prepare("SELECT firstname FROM users WHERE userId = :userId;");
 $query->bindValue(':userId', $userId, PDO::PARAM_INT);
 $query->execute();
 $user = $query->fetch(PDO::FETCH_ASSOC);
 $firstname = htmlspecialchars($user['firstname']);
 
-$user = "SELECT * FROM users;";
-$resultUser = $bdd->query($user);
+$resultUser = $bdd->query("SELECT * FROM users;");
 
-$service = "SELECT * FROM services;";
-$resultService = $bdd->query($service);
+$resultService = $bdd->query("SELECT * FROM services;");
 
-$house = "SELECT * FROM housings;";
-$resultHouse = $bdd->query($house);
+$resultHouse = $bdd->query("SELECT * FROM housings;");
 
-$animal = "SELECT * FROM animals;";
-$resultAnimal = $bdd->query($animal);
+$resultAnimal = $bdd->query("SELECT * FROM animals;");
 
-$open = "SELECT * FROM opening;";
-$resultOpen = $bdd->query($open);
+$resultOpen = $bdd->query("SELECT * FROM opening;");
 
 try {
     // Connection MongoDB Database 
@@ -327,6 +332,11 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -343,7 +353,12 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
 
     <body>
         <header>
-            <a class="login" href="index.php">Se deconnecter</a>
+            <form id="logoutForm" method="post" action="veterPanel.php" style="display: none;">
+                <input type="hidden" name="logout" value="1">
+            </form>
+
+            <a href="#" onclick="confirmLogout(); return false;" class ="login">Se deconnecter</a>
+
             <h1 class="title">Administration</h1>
             <nav class="navbar">
                 <ul>
@@ -1439,6 +1454,12 @@ if (isset($_GET['report_animal_id']) && isset($_GET['report_date'])) {
                 });
             });
         });
+
+        function confirmLogout() {
+            if (confirm('Voulez-vous vous déconnecter ?')) {
+                document.getElementById('logoutForm').submit();
+            }
+        }
         </script>
 
     </body>
