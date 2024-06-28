@@ -16,28 +16,34 @@ try {
 }
 
 function redirectToRolePage($roleLabel) {
-    $currentUrl = basename($_SERVER['PHP_SELF']);
-
-    $rolePageMap = [
-        'Administrator' => 'adminPanel.php',
-        'Veterinarian' => 'veterPanel.php',
-        'Employee' => 'employPanel.php',
-    ];
-
-    if (array_key_exists($roleLabel, $rolePageMap) && $currentUrl != $rolePageMap[$roleLabel]) {
-        header('Location: ' . $rolePageMap[$roleLabel]);
-        exit;
+    switch ($roleLabel) {
+        case 'Administrator':
+            header('Location: adminPanel.php');
+            break;
+        case 'Veterinarian':
+            header('Location: veterPanel.php');
+            break;
+        case 'Employee':
+            header('Location: employPanel.php');
+            break;
+        default:
+            header('Location: index.php');
+            break;
     }
+    exit;
 }
 
 if (isset($_SESSION['userId'])) {
     $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
-    $stmtRole->bindParam(':userId', $_SESSION['userId'], PDO::PARAM_INT);
+    $stmtRole->bindParam(':userId', $_SESSION['userId']);
     $stmtRole->execute();
     $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
     if ($role) {
         redirectToRolePage($role['label']);
+    } else {
+        header('Location: login.php');
+        exit;
     }
 }
 
