@@ -1,31 +1,31 @@
 CREATE TABLE services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTO_INCREMENT, 
     name VARCHAR(100) NOT NULL UNIQUE, 
-    description VARCHAR(255) NOT NULL, 
+    description VARCHAR(500) NOT NULL, 
     slug VARCHAR(255) NOT NULL
     );
 
 CREATE TABLE comments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTO_INCREMENT, 
     pseudo VARCHAR(20) UNIQUE NOT NULL, 
     message VARCHAR(255) NOT NULL, 
     validate VARCHAR(5) NOT NULL
     );
 
 CREATE TABLE users (
-    userId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    userId INTEGER PRIMARY KEY AUTO_INCREMENT, 
     email VARCHAR(50) NOT NULL, 
     firstname VARCHAR(50) NOT NULL, 
-    password_hash VARCHAR(20) NOT NULL);
+    password_hash VARCHAR(60) NOT NULL);
 
 CREATE TABLE roles (
-    roleId INTEGER PRIMARY KEY AUTOINCREMENT, 
+    roleId INTEGER PRIMARY KEY AUTO_INCREMENT, 
     label VARCHAR(20) NOT NULL, 
     userId INTEGER NOT NULL, 
     FOREIGN KEY(userId) REFERENCES users(userId));
 
 CREATE TABLE housings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(20) UNIQUE NOT NULL, 
     description TEXT NOT NULL, 
     slug VARCHAR(255) NOT NULL, 
@@ -33,13 +33,13 @@ CREATE TABLE housings (
     );
 
 CREATE TABLE opening (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     day VARCHAR(10) UNIQUE, 
     hours VARCHAR(15) NOT NULL
     );
 
 CREATE TABLE reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     date VARCHAR(10) NOT NULL, 
     report TEXT NOT NULL, 
     animal_id INTEGER, 
@@ -47,7 +47,7 @@ CREATE TABLE reports (
     );
 
 CREATE TABLE animals (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTO_INCREMENT, 
     firstname VARCHAR(20) NOT NULL, 
     breed VARCHAR(50) NOT NULL, 
     slug VARCHAR(255) NOT NULL, 
@@ -57,7 +57,7 @@ CREATE TABLE animals (
     );
 
 CREATE TABLE foods (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTO_INCREMENT, 
     date VARCHAR(10) NOT NULL, 
     hours VARCHAR(5) NOT NULL,
     state VARCHAR(255), 
@@ -79,15 +79,15 @@ VALUES
 
 INSERT INTO users (userId, email, firstname, password_hash)
 VALUES 
-    ('', 'josearcadia@hotmail.fr', 'José', 'arcadmin');
-    ('', 'samheldib@gmail.fr', 'Samir', 'test');
-    ('', 'nadegeletelier@outlook.fr', 'Nadège', 'test');
+    ('josearcadia@hotmail.fr', 'José', 'arcadmin');
+    ('samheldib@gmail.fr', 'Samir', 'test');
+    ('nadegeletelier@outlook.fr', 'Nadège', 'test');
 
 INSERT INTO roles (roleId, label, userId)
 VALUES
-    ('', 'Administrator', 1);
-    ('', 'Employee', 2);
-    ('', 'Veterinarian', 3);
+    ('Administrator', 1);
+    ('Employee', 2);
+    ('Veterinarian', 3);
 
 INSERT INTO housings (name, description, slug)
 VALUES 

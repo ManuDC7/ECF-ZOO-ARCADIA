@@ -480,16 +480,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
         });
     });
 
-    var $modal = $('#myModal2');
-    var $form = $('.editServiceForm');
-    var service_id;
+    const $modal = $('#myModal2');
+    const $form = $('.editServiceForm');
+    let service_id;
 
         $('.serv_edit').click(function() {
         service_id = $(this).data('service_id');
-        var $row = $(this).closest('tr');
-        var name = $row.find('td:eq(0)').text();
-        var description = $row.find('td:eq(1)').text();
-        var img = $row.find('td:eq(2)').text();
+        const $row = $(this).closest('tr');
+        const name = $row.find('td:eq(0)').text();
+        const description = $row.find('td:eq(1)').text();
+        const img = $row.find('td:eq(2)').text();
 
         $form.find('input[name="Nom"]').val(name);
         $form.find('input[name="Description"]').val(description);
@@ -505,7 +505,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
     $form.on('submit', function(e) {
         e.preventDefault();
 
-        var url = $form.attr('action');
+        const url = $form.attr('action');
 
         $.ajax({
             type: "POST",
