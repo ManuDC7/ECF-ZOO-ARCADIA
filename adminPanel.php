@@ -22,10 +22,7 @@ $stmtRole->bindParam(':userId', $userId, PDO::PARAM_INT);
 $stmtRole->execute();
 $userRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-if (!$userRole || $userRole['label'] !== 'Administrator') {
-    header('Location: login.php');
-    exit;
-}
+
 
 $query = $bdd->prepare("SELECT firstname FROM users WHERE userId = :userId;");
 $query->bindValue(':userId', $userId, PDO::PARAM_INT);
@@ -353,7 +350,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
 
     <body>
         <header>
-            <form id="logoutForm" method="post" action="veterPanel.php" style="display: none;">
+            <form id="logoutForm" method="post" action="adminPanel.php" style="display: none;">
                 <input type="hidden" name="logout" value="1">
             </form>
 
