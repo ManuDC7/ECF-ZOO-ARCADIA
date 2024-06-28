@@ -3,10 +3,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-if (!isset($_SESSION['userId'])) {
-    header('Location: login.php');
-    exit;
-}
+
 
 require 'vendor/autoload.php';
 
@@ -22,7 +19,10 @@ $stmtRole->bindParam(':userId', $userId, PDO::PARAM_INT);
 $stmtRole->execute();
 $userRole = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-
+if (!$userRole || $userRole['label'] !== 'Administrator') {
+    header('Location: login.php');
+    exit;
+}
 
 $query = $bdd->prepare("SELECT firstname FROM users WHERE userId = :userId;");
 $query->bindValue(':userId', $userId, PDO::PARAM_INT);
