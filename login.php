@@ -16,18 +16,18 @@ try {
 }
 
 function redirectToRolePage($roleLabel) {
-    switch ($roleLabel) {
-        case 'Administrator':
-            header('Location: adminPanel.php');
-            break;
-        case 'Veterinarian':
-            header('Location: veterPanel.php');
-            break;
-        case 'Employee':
-            header('Location: employPanel.php');
-            break;
+    $currentUrl = basename($_SERVER['PHP_SELF']); // Récupère le nom du fichier actuel
+
+    $rolePageMap = [
+        'Administrator' => 'adminPanel.php',
+        'Veterinarian' => 'veterPanel.php',
+        'Employee' => 'employPanel.php',
+    ];
+
+    if (array_key_exists($roleLabel, $rolePageMap) && $currentUrl != $rolePageMap[$roleLabel]) {
+        header('Location: ' . $rolePageMap[$roleLabel]);
+        exit;
     }
-    exit;
 }
 
 if (isset($_SESSION['userId'])) {
