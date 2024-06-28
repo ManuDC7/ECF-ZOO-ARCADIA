@@ -16,7 +16,7 @@ try {
 }
 
 function redirectToRolePage($roleLabel) {
-    $currentUrl = basename($_SERVER['PHP_SELF']); // Récupère le nom du fichier actuel
+    $currentUrl = basename($_SERVER['PHP_SELF']);
 
     $rolePageMap = [
         'Administrator' => 'adminPanel.php',
@@ -32,15 +32,12 @@ function redirectToRolePage($roleLabel) {
 
 if (isset($_SESSION['userId'])) {
     $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
-    $stmtRole->bindParam(':userId', $_SESSION['userId']);
+    $stmtRole->bindParam(':userId', $_SESSION['userId'], PDO::PARAM_INT);
     $stmtRole->execute();
     $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
     if ($role) {
         redirectToRolePage($role['label']);
-    } else {
-        header('Location: login.php');
-        exit;
     }
 }
 
