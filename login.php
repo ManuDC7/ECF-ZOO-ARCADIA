@@ -26,9 +26,6 @@ function redirectToRolePage($roleLabel) {
         case 'Employee':
             header('Location: employPanel.php');
             break;
-        default:
-            header('Location: defaultPanel.php');
-            break;
     }
     exit;
 }
