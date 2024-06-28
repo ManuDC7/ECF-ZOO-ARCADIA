@@ -362,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logout'])) {
                     <input type="hidden" name="form_name" value="addServiceForm">
                     <input type="text" name="Nom" required placeholder="Le nom du service">
                     <input type="text" name="Description" required placeholder="La description - maximun 255 caractère">
-                    <input type="text" name="imageURL" required placeholder="https://maximum255caracteres.fr">
+                    <input type="text" name="imageURL" required placeholder="Image -https://maximum255caracteres.fr">
                     <input type="submit" value="Ajouter">
                 </form>
             </div>
