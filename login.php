@@ -30,26 +30,20 @@ function redirectToRolePage($roleLabel) {
     exit;
 }
 
+if (isset($_SESSION['userId'])) {
+    $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
+    $stmtRole->bindParam(':userId', $_SESSION['userId']);
+    $stmtRole->execute();
+    $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['pass']);
-
-    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email");
-    $stmtUser->bindParam(':email', $email);
-    $stmtUser->execute();
-
-    $user = $stmtUser->fetch();
-
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['userId'] = $user['userId'];
-
-        redirectToRolePage($user['role']); 
+    if ($role) {
+        redirectToRolePage($role['label']);
     } else {
-        echo "Email ou mot de passe incorrect";
+        header('Location: login.php');
+        exit;
     }
 }
+
 ?>
 
 <!DOCTYPE html>
