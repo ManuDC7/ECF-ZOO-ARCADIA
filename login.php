@@ -15,17 +15,6 @@ try {
     die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
 
-function redirectToRolePage($roleLabel) {
-    if ($roleLabel == 'Administrator') {
-        header('Location: adminPanel.php');
-    } elseif ($roleLabel == 'Veterinarian') {
-        header('Location: veterPanel.php');
-    } elseif ($roleLabel == 'Employee') {
-        header('Location: employPanel.php');
-    }
-    exit;
-}
-
 if (isset($_SESSION['userId'])) {
     $stmtRole = $bdd->prepare("SELECT label FROM roles WHERE userId = :userId");
     $stmtRole->bindParam(':userId', $_SESSION['userId']);
@@ -33,14 +22,20 @@ if (isset($_SESSION['userId'])) {
     $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
     if ($role) {
-        redirectToRolePage($role['label']);
+        $roleLabel = $role['label'];
+        if ($roleLabel == 'Administrator') {
+            header('Location: adminPanel.php');
+        } elseif ($roleLabel == 'Veterinarian') {
+            header('Location: veterPanel.php');
+        } elseif ($roleLabel == 'Employee') {
+            header('Location: employPanel.php');
+        }
+        exit;
     } else {
         header('Location: login.php');
         exit;
     }
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['pass']);
 
@@ -52,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['userId'] = $user['userId'];
-
-        redirectToRolePage($user['role']); 
+        header('Location: login.php');
+        exit;
     } else {
         echo "Email ou mot de passe incorrect";
     }
