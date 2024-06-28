@@ -16,19 +16,12 @@ try {
 }
 
 function redirectToRolePage($roleLabel) {
-    switch ($roleLabel) {
-        case 'Administrator':
-            header('Location: adminPanel.php');
-            break;
-        case 'Veterinarian':
-            header('Location: veterPanel.php');
-            break;
-        case 'Employee':
-            header('Location: employPanel.php');
-            break;
-        default:
-            header('Location: index.php');
-            break;
+    if ($roleLabel == 'Administrator') {
+        header('Location: adminPanel.php');
+    } elseif ($roleLabel == 'Veterinarian') {
+        header('Location: veterPanel.php');
+    } elseif ($roleLabel == 'Employee') {
+        header('Location: employPanel.php');
     }
     exit;
 }
