@@ -44,6 +44,24 @@ if (isset($_SESSION['userId'])) {
     }
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['pass']);
+
+    $stmtUser = $bdd->prepare("SELECT * FROM users WHERE email = :email");
+    $stmtUser->bindParam(':email', $email);
+    $stmtUser->execute();
+
+    $user = $stmtUser->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['userId'] = $user['userId'];
+
+        redirectToRolePage($user['role']); 
+    } else {
+        echo "Email ou mot de passe incorrect";
+    }
+}
 ?>
 
 <!DOCTYPE html>
